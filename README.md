@@ -1,276 +1,398 @@
-# 🎬 Vexalyn Anichin Scraper
+# 🚀 Vexalyn REST API
 
-> Professional Donghua scraping engine untuk Anichin.watch dengan Playwright bypass protection
+<div align="center">
 
-## 📋 Features
+![Status](https://img.shields.io/badge/status-active-success.svg)
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-00a393.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-✅ **Home Page Scraper** - Extract latest donghua dari halaman utama  
-✅ **Search Engine** - Cari donghua berdasarkan keyword  
-✅ **Episode Detection** - Auto-extract episode number dari title  
-✅ **Cloudflare Bypass** - Automatic landing page detection & bypass  
-✅ **Lazy Load Handler** - Aggressive scrolling untuk trigger lazy-load images  
-✅ **Clean Data** - Filter spam, duplikat, dan invalid data  
-✅ **Debug Mode** - Save HTML snapshot untuk debugging  
+**REST API Platform untuk Berbagai Kebutuhan Data**
+
+Platform API yang cepat, andal, dan mudah digunakan dengan berbagai endpoint untuk berbagai sumber data.
+
+[Dokumentasi](#-dokumentasi) • [Instalasi](#-instalasi) • [Endpoints](#-endpoints) • [Demo](#-demo)
+
+</div>
 
 ---
 
-## 🚀 Installation
+## 📋 Daftar Isi
 
-### Requirements:
-- Python 3.10+
-- Playwright browser drivers
+- [Tentang Project](#-tentang-project)
+- [Fitur Utama](#-fitur-utama)
+- [Teknologi](#-teknologi)
+- [Instalasi](#-instalasi)
+- [Penggunaan](#-penggunaan)
+- [Endpoints](#-endpoints)
+- [Dokumentasi](#-dokumentasi)
+- [Developer](#-developer)
+- [Lisensi & Peringatan](#-lisensi--peringatan)
 
-### Install Dependencies:
+---
 
+## 🎯 Tentang Project
+
+**Vexalyn Anichin API** adalah REST API yang dirancang khusus untuk melakukan scraping data anime dari website [Anichin.watch](https://anichin.watch/). API ini dibangun dengan teknologi modern dan menggunakan Playwright untuk bypass proteksi Cloudflare secara otomatis.
+
+### Mengapa Menggunakan API dari web Ini?
+
+- ✅ **Cepat & Efisien** - Response time rata-rata < 12 detik
+- ✅ **Bypass Cloudflare** - Otomatis menangani proteksi anti-bot
+- ✅ **Format JSON Rapi** - Struktur data yang konsisten dan mudah diparsing
+- ✅ **Dokumentasi Lengkap** - Swagger UI interaktif untuk testing
+- ✅ **Gratis & Open Source** - Bebas digunakan untuk project pribadi
+
+---
+
+## ✨ Fitur Utama
+
+### 🎬 Scraping Homepage
+Ambil daftar anime terbaru dari homepage Anichin dengan metadata lengkap (title, episode, thumbnail, URL).
+
+### 🔍 Search Engine
+Cari anime berdasarkan keyword dengan hasil yang akurat dan cepat.
+
+### 🎭 Database Genre
+Akses 46+ genre anime yang tersedia di Anichin untuk filtering konten.
+
+### 🔄 Auto-Bypass Cloudflare
+Sistem otomatis untuk melewati proteksi Cloudflare tanpa perlu konfigurasi manual.
+
+### 📊 Response Terstruktur
+Semua data dikembalikan dalam format JSON yang konsisten dan mudah diintegrasikan.
+
+### 🌐 Web Documentation
+Dokumentasi interaktif berbasis HTML dengan desain modern dan cyberpunk theme.
+
+---
+
+## 🛠️ Teknologi
+
+Project ini dibangun menggunakan teknologi berikut:
+
+| Teknologi | Versi | Deskripsi |
+|-----------|-------|-----------|
+| **Python** | 3.9+ | Bahasa pemrograman utama |
+| **FastAPI** | 0.104+ | Framework web modern untuk API |
+| **Playwright** | 1.40+ | Browser automation untuk scraping |
+| **BeautifulSoup4** | 4.12+ | HTML parsing dan data extraction |
+| **Uvicorn** | 0.24+ | ASGI server untuk production |
+
+---
+
+## 📦 Instalasi
+
+### Persyaratan Sistem
+
+- Python 3.9 atau lebih tinggi
+- pip (Python package manager)
+- Koneksi internet stabil
+
+### Langkah Instalasi
+
+1. **Clone Repository**
 ```bash
-pip install playwright beautifulsoup4
+git clone https://github.com/VexalynDev/Scraping_Anichin.git
+cd Scraping_Anichin
+```
+
+2. **Buat Virtual Environment (Opsional tapi Direkomendasikan)**
+```bash
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Linux/Mac
+source venv/bin/activate
+```
+
+3. **Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+4. **Install Playwright Browsers**
+```bash
 playwright install chromium
 ```
 
 ---
 
-## 📖 Usage
+## 🚀 Penggunaan
 
-### 1️⃣ Home Page Scraper
+### Menjalankan Server
 
-Extract donghua terbaru dari halaman utama:
-
-```bash
-python home.py
-```
-
-**Output Example:**
-```json
-{
-    "creator": "Vexalyn Developer",
-    "statusCode": 200,
-    "status": "success",
-    "total_data": 38,
-    "data": [
-        {
-            "title": "Renegade Immortal Episode 149 Subtitle Indonesia",
-            "url": "https://anichin.watch/renegade-immortal-episode-149-subtitle-indonesia/",
-            "latest_episode": "Episode 149",
-            "thumbnail": "https://i2.wp.com/anichin.watch/wp-content/uploads/2023/09/Renegade-Immortal.png?resize=247,350"
-        },
-        {
-            "title": "Martial Master Episode 674 Subtitle Indonesia",
-            "url": "https://anichin.watch/martial-master-episode-674-subtitle-indonesia/",
-            "latest_episode": "Episode 674",
-            "thumbnail": "https://anichin.watch/wp-content/uploads/2023/08/Wushen-Zhuzai.webp"
-        }
-    ]
-}
-```
-
----
-
-### 2️⃣ Search Scraper
-
-Cari donghua berdasarkan keyword:
+Jalankan server API dengan perintah berikut:
 
 ```bash
-python search.py "martial master"
-python search.py "immortal"
-python search.py "god emperor"
+python api.py
 ```
 
-**Output Example:**
+Server akan berjalan di **http://localhost:8000**
+
+### Akses Dokumentasi
+
+Setelah server berjalan, buka browser dan akses:
+
+- **Web Documentation**: http://localhost:8000/docs/index.html
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+
+---
+
+## 🔌 Endpoints
+
+### 1. Root Endpoint
+```http
+GET /
+```
+**Deskripsi**: Informasi dasar API
+
+**Response Time**: < 1s
+
+**Example Response**:
 ```json
 {
-    "creator": "Vexalyn Developer",
-    "statusCode": 200,
-    "status": "success",
-    "query": "martial master",
-    "total_data": 1,
-    "data": [
-        {
-            "title": "Martial Master",
-            "url": "https://anichin.watch/donghua/martial-master/",
-            "latest_episode": "Full Series",
-            "status": "Completed",
-            "thumbnail": "https://anichin.watch/wp-content/uploads/2023/08/Wushen-Zhuzai.webp"
-        }
-    ]
+  "message": "Welcome to Vexalyn Anichin Scraper API",
+  "version": "1.0.0",
+  "endpoints": {
+    "home": "/api/home",
+    "search": "/api/search",
+    "genres": "/api/genres",
+    "docs": "/docs"
+  }
 }
 ```
 
 ---
 
-## 🔧 Configuration
-
-### Target URL
-Default target: `https://anichin.watch/`
-
-Untuk mengubah target, edit di file:
-- `home.py` → line 46
-- `search.py` → line 106
-
-### Timeout & Wait Time
-Edit di `core/browser.py`:
-- `wait_for_load_state`: Line 30 (default: 90s)
-- `wait_for_selector`: Line 35 (default: 15s)
-- `scroll_delay`: Line 42-47 (default: 800ms per scroll)
-
----
-
-## 📁 Project Structure
-
+### 2. Home Feed
+```http
+GET /api/home
 ```
-Scraping_Anichin/
-│
-├── core/
-│   ├── __init__.py           # Core package init
-│   └── browser.py            # Playwright browser handler + bypass logic
-│
-├── home.py                   # Home page scraper (main)
-├── search.py                 # Search scraper
-├── debug_anichin.html        # Debug HTML snapshot (auto-generated)
-├── debug_search.html         # Search debug snapshot (auto-generated)
-└── README.md                 # This file
-```
+**Deskripsi**: Ambil daftar anime terbaru dari homepage Anichin
 
----
+**Response Time**: ~12s
 
-## 🛡️ Bypass Protection Features
-
-### Automatic Landing Page Detection
-Scraper otomatis mendeteksi landing page countdown dan melakukan auto-click untuk bypass:
-
-```python
-bypass_button = page.locator("a:has-text('Klik Menuju'), a:has-text('Click to'), button:has-text('Enter')")
-if await bypass_button.count() > 0:
-    await bypass_button.first.click()
-```
-
-### Lazy Load Handler
-Aggressive scrolling untuk memuat semua gambar:
-
-```python
-for i in range(5):
-    await page.evaluate(f"window.scrollBy(0, 1000)")
-    await page.wait_for_timeout(800)
-```
-
----
-
-## 🐛 Debugging
-
-### Enable Debug Mode
-Debug HTML otomatis disimpan ke:
-- `debug_anichin.html` (home scraper) - Auto-generated
-- `debug_search.html` (search scraper) - Auto-generated
-
-**Note:** File HTML debug tidak di-commit ke repository (ada di `.gitignore`)
-
-### Check Browser Visibility
-Edit `core/browser.py` line 16:
-```python
-# Headless mode (production)
-browser = await p.chromium.launch(headless=True)
-
-# Visible mode (debugging)
-browser = await p.chromium.launch(headless=False)
-```
-
----
-
-## 📊 Data Structure
-
-### Home Scraper Response:
-```typescript
+**Example Response**:
+```json
 {
-    creator: string,
-    statusCode: number,
-    status: "success" | "error",
-    message: string,
-    ok: boolean,
-    total_data: number,
-    data: Array<{
-        title: string,           // Judul donghua + episode
-        url: string,             // URL detail page
-        latest_episode: string,  // "Episode 123" | "Full Series"
-        thumbnail: string        // Image URL
-    }>
+  "status": "success",
+  "data": [
+    {
+      "title": "One Piece Episode 1087",
+      "episode": "Episode 1087",
+      "image": "https://anichin.watch/image.jpg",
+      "url": "https://anichin.watch/anime/one-piece-1087"
+    }
+  ],
+  "total": 24,
+  "scraped_at": "2026-07-16T10:30:00"
 }
 ```
 
-### Search Response:
-```typescript
+---
+
+### 3. Search Anime
+```http
+GET /api/search?query={keyword}
+```
+**Deskripsi**: Cari anime berdasarkan keyword
+
+**Parameters**:
+- `query` (required): Keyword pencarian
+
+**Response Time**: ~10s
+
+**Example Request**:
+```http
+GET /api/search?query=naruto
+```
+
+**Example Response**:
+```json
 {
-    creator: string,
-    statusCode: number,
-    status: "success" | "error",
-    message: string,
-    ok: boolean,
-    query: string,              // Search keyword
-    total_data: number,
-    data: Array<{
-        title: string,
-        url: string,
-        latest_episode: string,
-        status: string,          // "Ongoing" | "Completed" | "N/A"
-        thumbnail: string
-    }>
+  "status": "success",
+  "query": "naruto",
+  "data": [
+    {
+      "title": "Naruto Shippuden",
+      "image": "https://anichin.watch/naruto.jpg",
+      "url": "https://anichin.watch/anime/naruto-shippuden"
+    }
+  ],
+  "total": 8,
+  "scraped_at": "2026-07-16T10:32:00"
 }
 ```
 
 ---
 
-## ⚡ Performance
+### 4. Genres List
+```http
+GET /api/genres
+```
+**Deskripsi**: Ambil daftar semua genre yang tersedia
 
-- **Home Scraper**: ~20-25 seconds
-- **Search Scraper**: ~20-25 seconds
-- **Average Data**: 30-40 items per scrape
+**Response Time**: ~12s
+
+**Example Response**:
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "name": "Action",
+      "url": "https://anichin.watch/genre/action"
+    },
+    {
+      "name": "Adventure",
+      "url": "https://anichin.watch/genre/adventure"
+    }
+  ],
+  "total": 46,
+  "scraped_at": "2026-07-16T10:35:00"
+}
+```
 
 ---
 
-## 🚨 Error Handling
+## 📚 Dokumentasi
 
-### Common Errors:
+### Web Documentation
 
-**1. Timeout Error**
-```
-Solution: Tingkatkan timeout di browser.py line 30
-await page.goto(url, wait_until="load", timeout=120000)
-```
+API ini dilengkapi dengan dokumentasi web interaktif yang dapat diakses di `/docs/index.html`. Fitur dokumentasi meliputi:
 
-**2. No Data Extracted**
-```
-Solution: Check debug HTML file dan update selector di home.py/search.py
-```
+- 🎨 **Desain Modern Cyberpunk** - UI yang elegan dan futuristik
+- 📱 **Responsive Design** - Kompatibel di semua device
+- 🔗 **Live Testing** - Test endpoint langsung dari browser
+- 📊 **Example Responses** - Contoh response untuk setiap endpoint
+- ⚡ **Performance Stats** - Informasi response time real-time
 
-**3. Encoding Error (Windows)**
-```
-Solution: Sudah diatasi dengan ASCII-safe characters di banner
-```
+### Swagger UI
 
----
+Untuk testing interaktif, gunakan Swagger UI di `/docs`:
 
-## 📝 License
-
-Created by **Vexalyn Developer**  
-For educational purposes only.
+1. Buka http://localhost:8000/docs
+2. Pilih endpoint yang ingin dicoba
+3. Klik "Try it out"
+4. Input parameter (jika ada)
+5. Klik "Execute"
+6. Lihat response langsung
 
 ---
 
-## 🤝 Contributing
+## 👨‍💻 Developer
 
-Contributions are welcome! Untuk bug reports atau feature requests:
-1. Check debug HTML files
-2. Test dengan berbagai keywords
-3. Document expected vs actual behavior
+<div align="center">
+
+### **VexalynDev**
+
+[![GitHub](https://img.shields.io/badge/GitHub-VexalynDev-181717?style=for-the-badge&logo=github)](https://github.com/VexalynDev)
+[![Email](https://img.shields.io/badge/Email-Contact-EA4335?style=for-the-badge&logo=gmail)](mailto:vexalyndev@gmail.com)
+
+**Full-Stack Developer | API Specialist | Web Scraping Expert**
+
+</div>
+
+Project ini dikembangkan dan dimaintain oleh **VexalynDev** dengan fokus pada performance, reliability, dan user experience. Jika ada pertanyaan atau saran, silakan hubungi melalui:
+
+- 📧 Email: vexalyndev@gmail.com
+- 🐙 GitHub: [@VexalynDev](https://github.com/VexalynDev)
+- 💬 Discord: VexalynDev#0001
 
 ---
 
-## 📞 Support
+## ⚠️ Lisensi & Peringatan
 
-Jika ada masalah:
-1. ✅ Check debug HTML files first
-2. ✅ Test dengan URL yang berbeda
-3. ✅ Enable headless=False untuk visual debugging
-4. ✅ Check selector patterns di BeautifulSoup section
+### 📜 Lisensi
+
+Project ini menggunakan **MIT License** - Anda bebas menggunakan, memodifikasi, dan mendistribusikan code ini untuk **keperluan pribadi dan edukasi**.
+
+### 🚫 PERINGATAN PENTING
+
+```
+⚠️ DILARANG KERAS UNTUK DIPERJUALBELIKAN ⚠️
+
+Project ini dibuat untuk tujuan edukasi dan penggunaan pribadi.
+DILARANG menjual, mengkomersialkan, atau mendistribusikan ulang
+API ini dalam bentuk apapun dengan tujuan profit.
+
+Pelanggaran akan dikenakan tindakan hukum sesuai undang-undang
+yang berlaku terkait hak cipta dan kekayaan intelektual.
+```
+
+### ✅ Boleh Dilakukan
+
+- ✅ Menggunakan untuk project pribadi
+- ✅ Menggunakan untuk pembelajaran
+- ✅ Memodifikasi sesuai kebutuhan
+- ✅ Fork dan kontribusi ke project
+- ✅ Sharing pengetahuan secara gratis
+
+### ❌ TIDAK Boleh Dilakukan
+
+- ❌ Menjual API atau source code
+- ❌ Mengkomersialkan dalam bentuk apapun
+- ❌ Claim sebagai karya sendiri
+- ❌ Menghilangkan credit developer
+- ❌ Mendistribusikan ulang dengan tujuan profit
+
+### 📖 Disclaimer
+
+- API ini melakukan scraping dari website pihak ketiga (Anichin.watch)
+- Developer tidak bertanggung jawab atas penyalahgunaan API
+- Gunakan dengan bijak dan hormati terms of service website target
+- Scraping berlebihan dapat menyebabkan IP banned
+- Data yang diambil adalah property dari website sumber
 
 ---
 
-**Happy Scraping! 🎬**
+## 🤝 Kontribusi
+
+Kontribusi selalu diterima! Jika Anda ingin berkontribusi:
+
+1. Fork repository ini
+2. Buat branch baru (`git checkout -b feature/AmazingFeature`)
+3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
+4. Push ke branch (`git push origin feature/AmazingFeature`)
+5. Buat Pull Request
+
+---
+
+## 📝 Changelog
+
+### Version 1.0.0 (2026-07-16)
+- ✨ Initial release
+- ✨ Home feed scraper
+- ✨ Search functionality
+- ✨ Genres database
+- ✨ Auto Cloudflare bypass
+- ✨ Web documentation
+- ✨ Swagger UI integration
+- ⚡ Optimized response time (~12s avg)
+
+---
+
+## 🙏 Acknowledgments
+
+Terima kasih kepada:
+
+- **Anichin.watch** - Sumber data anime
+- **FastAPI** - Framework yang luar biasa
+- **Playwright** - Browser automation yang powerful
+- **Python Community** - Dukungan dan resources
+
+---
+
+<div align="center">
+
+### ⭐ Jika project ini membantu, berikan star!
+
+**Made with ❤️ by VexalynDev**
+
+© 2026 VexalynDev. All Rights Reserved.
+
+</div>
