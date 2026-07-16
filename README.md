@@ -33,28 +33,32 @@ Platform API yang cepat, andal, dan mudah digunakan dengan berbagai endpoint unt
 
 ## 🎯 Tentang Project
 
-**Vexalyn Anichin API** adalah REST API yang dirancang khusus untuk melakukan scraping data anime dari website [Anichin.watch](https://anichin.watch/). API ini dibangun dengan teknologi modern dan menggunakan Playwright untuk bypass proteksi Cloudflare secara otomatis.
+**Vexalyn REST API** adalah platform REST API yang dirancang untuk menyediakan berbagai endpoint data dari berbagai sumber. Saat ini, API ini menyediakan endpoint untuk scraping data donghua/anime dan akan terus berkembang dengan menambahkan endpoint lainnya di masa depan.
 
-### Mengapa Menggunakan API dari web Ini?
+API ini dibangun dengan teknologi modern dan menggunakan Playwright untuk bypass proteksi Cloudflare secara otomatis.
+
+### Mengapa Menggunakan API Ini?
 
 - ✅ **Cepat & Efisien** - Response time rata-rata < 12 detik
+- ✅ **Multi-Source** - Mendukung berbagai sumber data (dan terus bertambah)
 - ✅ **Bypass Cloudflare** - Otomatis menangani proteksi anti-bot
 - ✅ **Format JSON Rapi** - Struktur data yang konsisten dan mudah diparsing
 - ✅ **Dokumentasi Lengkap** - Swagger UI interaktif untuk testing
 - ✅ **Gratis & Open Source** - Bebas digunakan untuk project pribadi
+- ✅ **Scalable** - Mudah menambahkan endpoint baru
 
 ---
 
 ## ✨ Fitur Utama
 
-### 🎬 Scraping Homepage
-Ambil daftar anime terbaru dari homepage Anichin dengan metadata lengkap (title, episode, thumbnail, URL).
+### 🌐 Multi-Source Data
+Mendukung berbagai sumber data dengan endpoint yang berbeda-beda. Saat ini tersedia endpoint untuk donghua/anime, dan akan terus berkembang.
 
-### 🔍 Search Engine
-Cari anime berdasarkan keyword dengan hasil yang akurat dan cepat.
+### 🎬 Data Scraping
+Ambil data dari berbagai website dengan metadata lengkap (title, episode, thumbnail, URL, dan lainnya).
 
-### 🎭 Database Genre
-Akses 46+ genre anime yang tersedia di Anichin untuk filtering konten.
+### 🔍 Search Functionality
+Cari data berdasarkan keyword dengan hasil yang akurat dan cepat.
 
 ### 🔄 Auto-Bypass Cloudflare
 Sistem otomatis untuk melewati proteksi Cloudflare tanpa perlu konfigurasi manual.
@@ -63,7 +67,10 @@ Sistem otomatis untuk melewati proteksi Cloudflare tanpa perlu konfigurasi manua
 Semua data dikembalikan dalam format JSON yang konsisten dan mudah diintegrasikan.
 
 ### 🌐 Web Documentation
-Dokumentasi interaktif berbasis HTML dengan desain modern dan cyberpunk theme.
+Dokumentasi interaktif berbasis HTML dengan desain modern, playful, dan neobrutalism theme dengan warna-warna pastel yang eye-friendly.
+
+### 🔌 Easy Integration
+API yang mudah diintegrasikan dengan berbagai platform dan bahasa pemrograman.
 
 ---
 
@@ -93,8 +100,8 @@ Project ini dibangun menggunakan teknologi berikut:
 
 1. **Clone Repository**
 ```bash
-git clone https://github.com/VexalynDev/Scraping_Anichin.git
-cd Scraping_Anichin
+git clone https://github.com/vexalyn-dev/Vexalyn-Api.git
+cd Vexalyn-Api
 ```
 
 2. **Buat Virtual Environment (Opsional tapi Direkomendasikan)**
@@ -144,7 +151,11 @@ Setelah server berjalan, buka browser dan akses:
 
 ## 🔌 Endpoints
 
-### 1. Root Endpoint
+### 📌 Donghua/Anime Endpoints
+
+API endpoint untuk data donghua dan anime:
+
+#### 1. Root Endpoint
 ```http
 GET /
 ```
@@ -155,82 +166,109 @@ GET /
 **Example Response**:
 ```json
 {
-  "message": "Welcome to Vexalyn Anichin Scraper API",
+  "creator": "Vexalyn Developer",
+  "statusCode": 200,
+  "status": "success",
+  "message": "Welcome to Vexalyn REST API",
+  "ok": true,
   "version": "1.0.0",
+  "available_sources": ["donghua"],
   "endpoints": {
-    "home": "/api/home",
-    "search": "/api/search",
-    "genres": "/api/genres",
-    "docs": "/docs"
-  }
+    "home": "/api/home - Get latest donghua from homepage",
+    "search": "/api/search?q=keyword - Search donghua by keyword",
+    "genres": "/api/genres - Get all available genres"
+  },
+  "documentation": "/docs",
+  "status": "online"
 }
 ```
 
 ---
 
-### 2. Home Feed
+#### 2. Home Feed
 ```http
 GET /api/home
 ```
-**Deskripsi**: Ambil daftar anime terbaru dari homepage Anichin
+**Deskripsi**: Ambil daftar donghua/anime terbaru dari homepage
 
 **Response Time**: ~12s
 
 **Example Response**:
 ```json
 {
+  "creator": "Vexalyn Developer",
+  "statusCode": 200,
   "status": "success",
+  "message": "Data fetched successfully",
+  "ok": true,
+  "total_data": 24,
   "data": [
     {
-      "title": "One Piece Episode 1087",
-      "episode": "Episode 1087",
-      "image": "https://anichin.watch/image.jpg",
-      "url": "https://anichin.watch/anime/one-piece-1087"
+      "title": "Perfect World Episode 214",
+      "url": "https://example.com/anime/perfect-world-214",
+      "latest_episode": "Episode 214",
+      "thumbnail": "https://example.com/uploads/perfect-world.jpg"
+    },
+    {
+      "title": "Battle Through The Heavens Season 6 Episode 12",
+      "url": "https://example.com/anime/btth-s6-12",
+      "latest_episode": "Episode 12",
+      "thumbnail": "https://example.com/uploads/btth-s6.jpg"
     }
-  ],
-  "total": 24,
-  "scraped_at": "2026-07-16T10:30:00"
+  ]
 }
 ```
 
 ---
 
-### 3. Search Anime
+#### 3. Search Donghua/Anime
 ```http
-GET /api/search?query={keyword}
+GET /api/search?q={keyword}
 ```
-**Deskripsi**: Cari anime berdasarkan keyword
+**Deskripsi**: Cari donghua/anime berdasarkan keyword
 
 **Parameters**:
-- `query` (required): Keyword pencarian
+- `q` (required): Keyword pencarian
 
 **Response Time**: ~10s
 
 **Example Request**:
 ```http
-GET /api/search?query=naruto
+GET /api/search?q=martial
 ```
 
 **Example Response**:
 ```json
 {
+  "creator": "Vexalyn Developer",
+  "statusCode": 200,
   "status": "success",
-  "query": "naruto",
+  "message": "Search results for: 'martial'",
+  "ok": true,
+  "query": "martial",
+  "total_data": 12,
   "data": [
     {
-      "title": "Naruto Shippuden",
-      "image": "https://anichin.watch/naruto.jpg",
-      "url": "https://anichin.watch/anime/naruto-shippuden"
+      "title": "Martial Master Season 4",
+      "url": "https://example.com/anime/martial-master-s4",
+      "latest_episode": "Episode 8",
+      "status": "Ongoing",
+      "thumbnail": "https://example.com/uploads/martial-master.jpg"
+    },
+    {
+      "title": "Martial Universe Season 3",
+      "url": "https://example.com/anime/martial-universe-s3",
+      "latest_episode": "Full Series",
+      "status": "Completed",
+      "thumbnail": "https://example.com/uploads/martial-universe.jpg"
     }
-  ],
-  "total": 8,
-  "scraped_at": "2026-07-16T10:32:00"
+  ]
 }
 ```
 
 ---
 
-### 4. Genres List
+#### 4. Genres List
 ```http
 GET /api/genres
 ```
@@ -241,21 +279,42 @@ GET /api/genres
 **Example Response**:
 ```json
 {
+  "creator": "Vexalyn Developer",
+  "statusCode": 200,
   "status": "success",
+  "message": "Genre list fetched successfully",
+  "ok": true,
+  "total_genres": 46,
   "data": [
     {
       "name": "Action",
-      "url": "https://anichin.watch/genre/action"
+      "url": "https://example.com/genre/action"
     },
     {
       "name": "Adventure",
-      "url": "https://anichin.watch/genre/adventure"
+      "url": "https://example.com/genre/adventure"
+    },
+    {
+      "name": "Comedy",
+      "url": "https://example.com/genre/comedy"
+    },
+    {
+      "name": "Drama",
+      "url": "https://example.com/genre/drama"
+    },
+    {
+      "name": "Fantasy",
+      "url": "https://example.com/genre/fantasy"
     }
-  ],
-  "total": 46,
-  "scraped_at": "2026-07-16T10:35:00"
+  ]
 }
 ```
+
+---
+
+### 📌 Coming Soon
+
+Endpoint lainnya akan segera ditambahkan! Stay tuned untuk update selanjutnya.
 
 ---
 
@@ -265,7 +324,7 @@ GET /api/genres
 
 API ini dilengkapi dengan dokumentasi web interaktif yang dapat diakses di `/docs/index.html`. Fitur dokumentasi meliputi:
 
-- 🎨 **Desain Modern Cyberpunk** - UI yang elegan dan futuristik
+- 🎨 **Desain Modern Neobrutalism** - UI playful dengan warna pastel yang eye-friendly
 - 📱 **Responsive Design** - Kompatibel di semua device
 - 🔗 **Live Testing** - Test endpoint langsung dari browser
 - 📊 **Example Responses** - Contoh response untuk setiap endpoint
@@ -290,18 +349,18 @@ Untuk testing interaktif, gunakan Swagger UI di `/docs`:
 
 ### **VexalynDev**
 
-[![GitHub](https://img.shields.io/badge/GitHub-VexalynDev-181717?style=for-the-badge&logo=github)](https://github.com/VexalynDev)
-[![Email](https://img.shields.io/badge/Email-Contact-EA4335?style=for-the-badge&logo=gmail)](mailto:vexalyndev@gmail.com)
+[![GitHub](https://img.shields.io/badge/GitHub-vexalyn--dev-181717?style=for-the-badge&logo=github)](https://github.com/vexalyn-dev)
+[![Email](https://img.shields.io/badge/Email-Contact-EA4335?style=for-the-badge&logo=gmail)](mailto:vioatmajaya@gmail.com)
 
-**Full-Stack Developer | API Specialist | Web Scraping Expert**
+**Full-Stack Developer | Hanya Pemula | Web Scraping Expert**
 
 </div>
 
 Project ini dikembangkan dan dimaintain oleh **VexalynDev** dengan fokus pada performance, reliability, dan user experience. Jika ada pertanyaan atau saran, silakan hubungi melalui:
 
-- 📧 Email: vexalyndev@gmail.com
-- 🐙 GitHub: [@VexalynDev](https://github.com/VexalynDev)
-- 💬 Discord: VexalynDev#0001
+- 📧 Email: vioatmajaya@gmail.com
+- 🐙 GitHub: [@vexalyn-dev](https://github.com/vexalyn-dev)
+- 💬 Website: https://vexalyndev.my.id
 
 ---
 
@@ -342,11 +401,12 @@ yang berlaku terkait hak cipta dan kekayaan intelektual.
 
 ### 📖 Disclaimer
 
-- API ini melakukan scraping dari website pihak ketiga (Anichin.watch)
+- API ini dapat melakukan scraping dari berbagai website pihak ketiga
 - Developer tidak bertanggung jawab atas penyalahgunaan API
 - Gunakan dengan bijak dan hormati terms of service website target
 - Scraping berlebihan dapat menyebabkan IP banned
 - Data yang diambil adalah property dari website sumber
+- Pastikan mematuhi aturan hukum dan etika dalam penggunaan data
 
 ---
 
@@ -366,13 +426,12 @@ Kontribusi selalu diterima! Jika Anda ingin berkontribusi:
 
 ### Version 1.0.0 (2026-07-16)
 - ✨ Initial release
-- ✨ Home feed scraper
-- ✨ Search functionality
-- ✨ Genres database
+- ✨ Endpoints: Home feed, Search, Genres
 - ✨ Auto Cloudflare bypass
-- ✨ Web documentation
+- ✨ Web documentation dengan modern neobrutalism theme
 - ✨ Swagger UI integration
 - ⚡ Optimized response time (~12s avg)
+- 🔄 Scalable architecture untuk menambah endpoint baru
 
 ---
 
@@ -380,10 +439,11 @@ Kontribusi selalu diterima! Jika Anda ingin berkontribusi:
 
 Terima kasih kepada:
 
-- **Anichin.watch** - Sumber data anime
+- **Sumber Data** - Website yang menyediakan konten
 - **FastAPI** - Framework yang luar biasa
 - **Playwright** - Browser automation yang powerful
 - **Python Community** - Dukungan dan resources
+- **Open Source Community** - Inspirasi dan kontribusi
 
 ---
 
