@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vexalyn API</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#15181F;
+  --cream:#FBF1E3;
+  --white:#FFFFFF;
+  --salmon:#FFAB92;
+  --salmon-soft:#FFE4D9;
+  --sky:#9BD8F4;
+  --sky-soft:#DCF0FB;
+  --lav:#CBC0F5;
+  --lav-soft:#EAE5FC;
+  --mint:#9BE3BC;
+  --mint-soft:#DFF7EA;
+  --green:#33B96A;
+  --green-dark:#1D7A46;
+  --gray:#6B7280;
+  --gray-soft:#9AA0AC;
+  --star:#FFC93C;
+  --shadow: 6px 6px 0 var(--ink);
+  --shadow-sm: 4px 4px 0 var(--ink);
+  --shadow-lg: 8px 8px 0 var(--ink);
+  --radius: 24px;
+  --radius-sm: 16px;
+  --radius-pill: 100px;
+  --border: 3px solid var(--ink);
+}
+
+/* ===== Loading Screen ===== */
+#loading-screen{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:var(--cream);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  transition:opacity .4s ease, visibility .4s ease;
+}
+#loading-screen.hide{opacity:0;visibility:hidden;}
+
+.loader-logo{
+  width:100px;height:100px;
+  background:var(--green);
+  border:var(--border);
+  border-radius:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:32px;
+  animation:float 2s ease-in-out infinite;
+}
+.loader-logo svg{width:50px;height:50px;stroke:var(--ink);stroke-width:2.5;}
+
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  50%{transform:translateY(-15px) rotate(5deg);}
+}
+
+.loader-text{
+  font-family:'Fredoka',sans-serif;
+  font-size:24px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:20px;
+}
+
+.loader-dots{display:flex;gap:10px;}
+.loader-dots span{
+  width:14px;height:14px;
+  background:var(--ink);
+  border-radius:50%;
+  animation:dot-bounce 1.4s ease infinite;
+}
+.loader-dots span:nth-child(2){animation-delay:.2s;}
+.loader-dots span:nth-child(3){animation-delay:.4s;}
+
+@keyframes dot-bounce{
+  0%,100%{transform:translateY(0);opacity:1;}
+  50%{transform:translateY(-20px);opacity:.5;}
+}
+
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.brand,.display{font-family:'Fredoka',sans-serif;}
+a{text-decoration:none;color:inherit;}
+img,svg{display:block;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+/* ===== Buttons ===== */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:15px;
+  padding:14px 26px;border-radius:var(--radius-pill);border:var(--border);
+  box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s ease, box-shadow .15s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink);}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:7px 7px 0 var(--ink);}
+.btn-green{background:var(--green);color:#fff;}
+.btn-sky{background:var(--sky-soft);color:var(--ink);}
+.btn-white{background:#fff;color:var(--ink);}
+.btn-outline{background:transparent;color:#fff;border-color:#fff;box-shadow:4px 4px 0 rgba(0,0,0,.25);}
+
+/* ===== Badge pill ===== */
+.pill{
+  display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:var(--radius-pill);
+  border:2.5px solid var(--ink);font-weight:700;font-size:13.5px;
+}
+.pill-dot{width:7px;height:7px;border-radius:50%;background:var(--green-dark);}
+.pill-green{background:var(--mint-soft);color:var(--green-dark);}
+.pill-blue{background:var(--sky-soft);color:#0B5E82;}
+.pill-salmon{background:var(--salmon-soft);color:#B5401D;}
+
+/* ===== Header ===== */
+.header-outer{padding:22px 24px 0;}
+header{
+  max-width:1180px;margin:0 auto;background:#fff;border:var(--border);border-radius:var(--radius-pill);
+  box-shadow:var(--shadow);padding:12px 14px 12px 20px;display:flex;align-items:center;justify-content:space-between;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;}
+.brand-icon{
+  width:38px;height:38px;background:var(--salmon);border:2.5px solid var(--ink);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+}
+.brand-icon svg{width:19px;height:19px;stroke:var(--ink);}
+.nav-links{display:flex;gap:30px;align-items:center;}
+.nav-links a{
+  font-weight:600;
+  font-size:14.5px;
+  color:var(--ink);
+  opacity:.75;
+  transition:all .2s ease;
+  position:relative;
+  padding:8px 4px;
+}
+.nav-links a:hover{
+  opacity:1;
+  transform:translateY(-2px);
+}
+.nav-links a:active{transform:translateY(0);}
+.nav-links a::after{
+  content:'';
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:0;
+  height:2.5px;
+  background:var(--green);
+  transition:width .3s ease;
+}
+.nav-links a:hover::after{width:100%;}
+.header-right{display:flex;align-items:center;gap:18px;}
+.login-link{font-weight:700;font-size:14.5px;}
+.btn-small{padding:11px 22px;font-size:14px;}
+
+/* ===== Hero ===== */
+.hero{padding:80px 24px 90px;}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;}
+.hero-copy{text-align:left;}
+.hero .pill{margin-bottom:26px;}
+.hero h1{font-size:52px;line-height:1.12;font-weight:700;margin-bottom:22px;letter-spacing:-.5px;}
+.hero h1 .accent{color:var(--green);}
+.hero p{max-width:520px;margin:0 0 34px;color:var(--gray);font-size:17px;font-weight:500;}
+.hero-actions{display:flex;gap:16px;margin-bottom:56px;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:50px;flex-wrap:wrap;}
+.hero-stats .stat b{display:block;font-family:'Fredoka',sans-serif;font-size:32px;font-weight:700;}
+.hero-stats .stat span{color:var(--gray);font-weight:600;font-size:13.5px;}
+
+/* ===== Hero visual card ===== */
+.hero-visual{position:relative;padding:20px;}
+.hero-card{
+  position:relative;background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);
+  padding:26px;max-width:420px;margin:0 auto;
+}
+.hero-card-top{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+.hero-card-icon{width:48px;height:48px;border-radius:14px;background:var(--sky);border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-card-icon svg{width:22px;height:22px;stroke:var(--ink);}
+.hero-card-top h4{font-family:'Fredoka',sans-serif;font-size:17px;font-weight:600;}
+.hero-card-top span{color:var(--gray);font-size:13px;font-weight:600;}
+.hero-card-progress{margin-bottom:20px;}
+.hero-card-progress .row{display:flex;justify-content:space-between;font-weight:700;font-size:13.5px;margin-bottom:8px;}
+.hero-card-progress .row b{color:var(--green-dark);}
+.progress-track{height:12px;background:var(--cream);border:2px solid var(--ink);border-radius:var(--radius-pill);overflow:hidden;}
+.progress-fill{height:100%;background:var(--green);border-radius:var(--radius-pill);}
+.hero-card .btn{width:100%;justify-content:center;}
+.float-badge{position:absolute;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;}
+.float-badge svg{stroke:var(--ink);}
+.float-badge.fb1{top:-24px;right:-18px;width:64px;height:64px;background:var(--salmon);border-radius:18px;box-shadow:var(--shadow-sm);}
+.float-badge.fb1 svg{width:28px;height:28px;}
+.float-badge.fb2{bottom:14px;left:-30px;width:56px;height:56px;background:var(--lav);border-radius:16px;box-shadow:var(--shadow-sm);}
+.float-badge.fb2 svg{width:24px;height:24px;}
+.float-badge.fb3{bottom:-20px;right:-16px;width:48px;height:48px;background:var(--mint);border-radius:50%;box-shadow:var(--shadow-sm);}
+.float-badge.fb3 svg{width:20px;height:20px;fill:var(--star);stroke:var(--ink);}
+
+/* ===== Section shared ===== */
+section.block{padding:80px 24px;}
+.block.white{background:var(--white);}
+.section-head{text-align:center;max-width:600px;margin:0 auto 46px;}
+.section-head .pill{margin-bottom:18px;}
+.section-head h2{font-size:36px;font-weight:700;margin-bottom:12px;letter-spacing:-.5px;}
+.section-head p{color:var(--gray);font-size:15.5px;font-weight:500;}
+
+/* ===== Endpoint / course cards ===== */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:920px;margin:0 auto;}
+.grid-3{display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;max-width:1180px;margin:0 auto;}
+.grid-3 .ep-card:nth-last-child(-n+2):first-child,
+.grid-3 .ep-card:nth-last-child(-n+2):first-child ~ .ep-card {
+  grid-column: span 1;
+}
+.grid-3:has(.ep-card:nth-child(5)) .ep-card:nth-child(4),
+.grid-3:has(.ep-card:nth-child(5)) .ep-card:nth-child(5) {
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+}
+.ep-card{
+  display:block;background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:26px;transition:transform .2s ease, box-shadow .2s ease;cursor:pointer;position:relative;
+}
+.ep-card:hover{transform:translate(-3px,-3px);box-shadow:var(--shadow-lg);}
+.ep-card:active{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink);}
+.ep-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;}
+.ep-icon{width:52px;height:52px;border-radius:14px;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;}
+.ep-icon svg{width:24px;height:24px;stroke:var(--ink);}
+.ep-icon.c1{background:var(--salmon);}
+.ep-icon.c2{background:var(--sky);}
+.ep-icon.c3{background:var(--lav);}
+.ep-icon.c4{background:var(--mint);}
+.ep-status{display:flex;align-items:center;gap:6px;background:var(--mint-soft);border:2px solid var(--ink);border-radius:var(--radius-pill);padding:5px 12px;font-size:12.5px;font-weight:700;color:var(--green-dark);}
+.ep-status .dot{width:6px;height:6px;border-radius:50%;background:var(--green-dark);}
+.ep-path-row{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.method-badge{
+  display:inline-flex;align-items:center;background:var(--ink);color:#fff;font-family:'Inter',sans-serif;
+  font-weight:800;font-size:11.5px;letter-spacing:.5px;padding:5px 10px;border-radius:8px;
+}
+.method-badge.post{background:var(--green-dark);}
+.ep-path-code{font-family:'Courier New',monospace;font-weight:700;font-size:14.5px;color:var(--ink);}
+.ep-card h3{font-size:18px;font-weight:700;margin-bottom:4px;font-family:'Fredoka',sans-serif;}
+.ep-card .by{color:var(--gray-soft);font-size:13.5px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:6px;}
+.ep-card .by svg{width:13px;height:13px;stroke:var(--gray-soft);}
+.ep-meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--gray);font-size:13px;font-weight:600;}
+.ep-meta span{display:flex;align-items:center;gap:5px;}
+.ep-meta svg{width:14px;height:14px;stroke:var(--gray);}
+.view-all{text-align:center;margin-top:40px;}
+
+/* ===== Anichin source section ===== */
+.anichin-card{
+  max-width:1000px;margin:0 auto;background:#fff;border:var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:40px;display:grid;grid-template-columns:1.2fr auto 0.8fr;gap:32px;align-items:center;
+}
+.anichin-logo{width:74px;height:74px;border-radius:20px;background:var(--salmon);border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.anichin-logo svg{width:34px;height:34px;stroke:var(--ink);}
+.anichin-info h3{font-size:22px;font-weight:700;margin-bottom:8px;font-family:'Fredoka',sans-serif;}
+.anichin-info p{color:var(--gray);font-size:14.5px;font-weight:500;max-width:520px;}
+.anichin-stats{display:flex;gap:28px;flex-shrink:0;}
+.anichin-stats .stat b{display:block;font-family:'Fredoka',sans-serif;font-size:24px;font-weight:700;}
+.anichin-stats .stat span{color:var(--gray);font-weight:600;font-size:12.5px;}
+@media(max-width:860px){
+  .anichin-card{grid-template-columns:1fr;text-align:center;padding:32px 24px;}
+  .anichin-logo{margin:0 auto;}
+  .anichin-stats{justify-content:center;}
+}
+
+/* ===== Feature cards ===== */
+.grid-2-feat{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:920px;margin:0 auto;}
+.grid-3-feat{display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;max-width:1180px;margin:0 auto;}
+.feat-card{background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:32px;text-align:center;transition:transform .2s ease, box-shadow .2s ease;}
+.feat-card:hover{transform:translate(-3px,-3px);box-shadow:var(--shadow);}
+.feat-icon{width:60px;height:60px;border-radius:16px;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+.feat-icon svg{width:26px;height:26px;stroke:var(--ink);}
+.feat-icon.c1{background:var(--salmon);}
+.feat-icon.c2{background:var(--sky);}
+.feat-icon.c3{background:var(--lav);}
+.feat-icon.c4{background:var(--mint);}
+.feat-card h3{font-size:18.5px;font-weight:700;margin-bottom:8px;}
+.feat-card p{color:var(--gray);font-size:14px;font-weight:500;line-height:1.6;}
+
+/* ===== Testimonials ===== */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:1080px;margin:0 auto;}
+.test-card{background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:26px;transition:transform .2s ease, box-shadow .2s ease;}
+.test-card:hover{transform:translate(-3px,-3px);box-shadow:var(--shadow);}
+.stars{display:flex;gap:3px;margin-bottom:14px;}
+.stars svg{width:16px;height:16px;fill:var(--star);stroke:var(--star);}
+.test-card p.quote{font-size:14.5px;font-weight:500;color:var(--ink);margin-bottom:20px;line-height:1.6;}
+.test-person{display:flex;align-items:center;gap:12px;padding-top:16px;border-top:2px dashed var(--ink);opacity:.9;}
+.avatar{width:38px;height:38px;border-radius:50%;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--ink);}
+.test-person b{display:block;font-size:14px;}
+.test-person span{color:var(--gray-soft);font-size:12.5px;font-weight:600;}
+
+/* ===== CTA ===== */
+.cta-outer{background:var(--sky);padding:70px 24px;}
+.cta-card{
+  max-width:820px;margin:0 auto;background:#fff;border:var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);padding:56px 40px;text-align:center;
+}
+.cta-card h2{font-size:32px;font-weight:700;margin-bottom:14px;letter-spacing:-.5px;}
+.cta-card p{color:var(--gray);font-size:15.5px;margin-bottom:30px;font-weight:500;}
+.cta-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:26px;}
+.cta-check{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;color:var(--gray);font-size:13.5px;font-weight:600;}
+.cta-check span{display:flex;align-items:center;gap:6px;}
+.cta-check svg{width:16px;height:16px;stroke:var(--green-dark);}
+
+/* ===== Footer ===== */
+footer{padding:70px 24px 30px;}
+
+/* ===== FAQ Section ===== */
+.faq-section{padding:80px 24px;background:var(--white);}
+.faq-container{max-width:820px;margin:0 auto;}
+.faq-item{
+  background:#fff;
+  border:var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);
+  margin-bottom:18px;
+  overflow:hidden;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.faq-item:hover{transform:translate(-2px,-2px);box-shadow:var(--shadow);}
+.faq-question{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:24px 28px;
+  cursor:pointer;
+  font-family:'Fredoka',sans-serif;
+  font-size:17px;
+  font-weight:700;
+  color:var(--ink);
+  background:var(--cream);
+  border-bottom:var(--border);
+  transition:background .2s;
+}
+.faq-question:hover{background:var(--mint-soft);}
+.faq-question.active{background:var(--sky-soft);}
+.faq-icon{
+  width:32px;height:32px;
+  border:2.5px solid var(--ink);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform .3s ease, background .2s;
+  background:#fff;
+  flex-shrink:0;
+}
+.faq-question.active .faq-icon{transform:rotate(180deg);background:var(--green);}
+.faq-icon svg{width:16px;height:16px;stroke:var(--ink);stroke-width:3;}
+.faq-answer{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .3s ease, padding .3s ease;
+  padding:0 28px;
+}
+.faq-answer.open{max-height:500px;padding:24px 28px;}
+.faq-answer p{color:var(--gray);font-size:15px;font-weight:500;line-height:1.7;}
+
+/* ===== Contact Section ===== */
+.contact-section{padding:80px 24px;background:var(--cream);}
+.contact-container{max-width:1080px;margin:0 auto;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:42px;}
+.contact-card{
+  background:#fff;
+  border:var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);
+  padding:32px;
+  text-align:center;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.contact-card:hover{transform:translate(-3px,-3px);box-shadow:var(--shadow);}
+.contact-icon{
+  width:64px;height:64px;
+  border:var(--border);
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 20px;
+}
+.contact-icon svg{width:28px;height:28px;stroke:var(--ink);}
+.contact-icon.email{background:var(--salmon);}
+.contact-icon.github{background:var(--lav);}
+.contact-icon.discord{background:var(--sky);}
+.contact-icon.web{background:var(--mint);}
+.contact-card h3{font-family:'Fredoka',sans-serif;font-size:19px;font-weight:700;margin-bottom:10px;}
+.contact-card p{color:var(--gray);font-size:14px;font-weight:500;margin-bottom:18px;}
+.contact-card a.btn{text-decoration:none;}
+
+@media(max-width:768px){
+  .contact-grid{grid-template-columns:1fr;}
+}
+
+/* ===== Footer ===== */
+.footer-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;max-width:1180px;margin:0 auto 46px;}
+.footer-brand p{color:var(--gray);font-size:14px;margin:16px 0 20px;max-width:260px;font-weight:500;}
+.social-row{display:flex;gap:10px;}
+.social-btn{width:38px;height:38px;border-radius:50%;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;background:#fff;transition:transform .2s;}
+.social-btn:hover{transform:translateY(-3px);background:var(--mint-soft);}
+.social-btn svg{width:16px;height:16px;stroke:var(--ink);}
+.footer-col h4{font-size:14.5px;font-weight:700;margin-bottom:16px;}
+.footer-col a{display:block;color:var(--gray);font-size:14px;font-weight:500;margin-bottom:12px;transition:color .2s;}
+.footer-col a:hover{color:var(--ink);}
+.footer-bottom{max-width:1180px;margin:0 auto;border-top:2.5px solid var(--ink);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-bottom p{color:var(--gray-soft);font-size:13px;font-weight:500;}
+.footer-bottom .links{display:flex;gap:22px;}
+.footer-bottom .links a{color:var(--gray-soft);font-size:13px;font-weight:500;}
+
+/* ===== Responsive ===== */
+@media(max-width:900px){
+  .hero .wrap{grid-template-columns:1fr;}
+  .hero-copy{text-align:center;}
+  .hero p{margin:0 auto 34px;}
+  .hero-actions{justify-content:center;}
+  .hero-stats{justify-content:center;}
+  .hero-visual{max-width:420px;margin:0 auto;}
+}
+@media(max-width:860px){
+  .grid-2,.grid-2-feat{grid-template-columns:1fr;}
+  .grid-3,.grid-3-feat{grid-template-columns:1fr 1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .nav-links{display:none;}
+  .hero h1{font-size:38px;}
+  .hero-stats{gap:34px;}
+}
+@media(max-width:600px){
+  .grid-3,.grid-3-feat{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Loading Screen ===== -->
+<div id="loading-screen">
+  <div class="loader-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+      <path d="M2 17l10 5 10-5"></path>
+      <path d="M2 12l10 5 10-5"></path>
+    </svg>
+  </div>
+  <div class="loader-text">Loading Vexalyn API...</div>
+  <div class="loader-dots">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<!-- ===== Header ===== -->
+<div class="header-outer">
+  <header>
+    <div class="brand">
+      <span class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+      </span>
+      VEXALYN API
+    </div>
+    <nav class="nav-links">
+      <a href="#endpoints">Endpoint</a>
+      <a href="#fitur">Fitur</a>
+      <a href="#faq">FAQ</a>
+      <a href="#kontak">Kontak</a>
+      <a href="http://localhost:8000/docs" target="_blank">Docs</a>
+    </nav>
+    <div class="header-right">
+      <a href="/login" class="login-link">Masuk</a>
+      <a href="http://localhost:8000/docs" target="_blank" class="btn btn-green btn-small">Coba Gratis</a>
+    </div>
+  </header>
+</div>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="pill pill-green"><span class="pill-dot"></span> REST API By Vexalyn Dev</span>
+      <h1>Akses Data Real-Time,<br><span class="accent">Cepat & Mudah,</span><br>Tanpa Batasan!</h1>
+      <p>Platform API terpercaya untuk developer. Integrasi mudah dengan dokumentasi lengkap dan performa tinggi.</p>
+      <div class="hero-actions">
+        <a href="http://localhost:8000/docs" target="_blank" class="btn btn-green">Coba API Sekarang →</a>
+        <a href="#endpoints" class="btn btn-sky">Lihat Endpoint</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>4</b><span>Endpoint</span></div>
+        <div class="stat"><b>24/7</b><span>Uptime</span></div>
+        <div class="stat"><b>0</b><span>Rate Limit</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <span class="float-badge fb1"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></span>
+        <div class="hero-card-top">
+          <span class="hero-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></span>
+          <div>
+            <h4>Home Feed API</h4>
+            <span>GET /anichin/home · ~4s respons</span>
+          </div>
+        </div>
+        <div class="hero-card-progress">
+          <div class="row"><span>Uptime</span><b>99.9%</b></div>
+          <div class="progress-track"><div class="progress-fill" style="width:99%;"></div></div>
+        </div>
+        <a href="http://localhost:8000/anichin/home" target="_blank" class="btn btn-green">Coba Endpoint Ini</a>
+        <span class="float-badge fb2"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
+        <span class="float-badge fb3"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Endpoints (Popular Courses layout) ===== -->
+<section class="block white" id="endpoints">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="pill pill-blue">Endpoint Populer</span>
+      <h2>Jelajahi Endpoint API</h2>
+      <p>Setiap endpoint dirancang cepat dan mudah diintegrasikan ke proyekmu.</p>
+    </div>
+
+    <!-- ===== Anichin Info Section (moved here) ===== -->
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px;">
+      <span style="width: 52px; height: 52px; border-radius: 14px; background: var(--salmon); border: 2.5px solid var(--ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; stroke: var(--ink);">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+          <path d="M2 17l10 5 10-5"></path>
+          <path d="M2 12l10 5 10-5"></path>
+        </svg>
+      </span>
+      <h3 style="font-family: 'Fredoka', sans-serif; font-size: 28px; font-weight: 700; margin: 0; color: var(--ink); letter-spacing: -0.3px;">Endpoints</h3>
+      <h3 style="font-family: 'Fredoka', sans-serif; font-size: 28px; font-weight: 700; margin: 0 0 0 8px; color: var(--ink);">Anichin</h3>
+    </div>
+
+    <div class="grid-3">
+      <a class="ep-card" href="http://localhost:8000/anichin/home">
+        <div class="ep-top">
+          <span class="ep-icon c1"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span>
+          <span class="ep-status"><span class="dot"></span> Stable</span>
+        </div>
+        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/home</span></div>
+        <h3>Home Feed</h3>
+        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
+        <div class="ep-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~12s respons</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> Homepage feed</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 12.5K panggilan</span>
+        </div>
+      </a>
+      <a class="ep-card" href="http://localhost:8000/anichin/search?q=renegade">
+        <div class="ep-top">
+          <span class="ep-icon c2"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+          <span class="ep-status"><span class="dot"></span> Stable</span>
+        </div>
+        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/search</span></div>
+        <h3>Pencarian Donghua</h3>
+        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
+        <div class="ep-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~10s respons</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> param <code>q</code> wajib</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 8.2K panggilan</span>
+        </div>
+      </a>
+      <a class="ep-card" href="http://localhost:8000/anichin/genres">
+        <div class="ep-top">
+          <span class="ep-icon c1"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
+          <span class="ep-status"><span class="dot"></span> Stable</span>
+        </div>
+        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/genres</span></div>
+        <h3>List Genres</h3>
+        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
+        <div class="ep-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~12s respons</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> 46 genre list</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 2.8K panggilan</span>
+        </div>
+      </a>
+      <a class="ep-card" href="http://localhost:8000/anichin/ongoing-series">
+        <div class="ep-top">
+          <span class="ep-icon c3"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
+          <span class="ep-status"><span class="dot"></span> Stable</span>
+        </div>
+        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/ongoing-series</span></div>
+        <h3>Ongoing Series</h3>
+        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
+        <div class="ep-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~35s respons</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> 25 series + thumbnail</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 5.4K panggilan</span>
+        </div>
+      </a>
+    </div>
+    <div class="view-all">
+      <a href="http://localhost:8000/docs" target="_blank" class="btn btn-sky">Lihat Semua Endpoint →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Fitur (Why Choose Us layout) ===== -->
+<section class="block" id="fitur">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="pill pill-salmon">Kenapa Pilih Kami</span>
+      <h2>Semua yang Developer Butuhkan</h2>
+      <p>Infrastruktur yang dirancang supaya kamu fokus membangun, bukan memperbaiki.</p>
+    </div>
+    <div class="grid-3">
+      <div class="feat-card">
+        <span class="feat-icon c1"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></span>
+        <h3>Respons Kilat</h3>
+        <p>Mesin scraping teroptimasi dengan waktu respons rata-rata di bawah 5 detik.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon c2"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+        <h3>Cloudflare Bypass</h3>
+        <p>Sistem bypass proteksi otomatis untuk menangani anti-bot dan landing page.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon c3"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>
+        <h3>Format JSON Rapi</h3>
+        <p>Struktur respons yang konsisten dan mudah diparsing di aplikasi manapun.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon c4"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+        <h3>Dukungan Komunitas</h3>
+        <p>Gabung komunitas developer, tanya jawab, dan berbagi proyek yang dibangun.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon c1"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <h3>Uptime 99.9%</h3>
+        <p>Infrastruktur yang stabil dengan monitoring 24/7 untuk memastikan layanan selalu tersedia.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon c2"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
+        <h3>Dokumentasi Lengkap</h3>
+        <p>Swagger UI interaktif dengan contoh kode dan respons detail untuk setiap endpoint.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Testimonials ===== -->
+<section class="block white">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="pill pill-green">Kata Developer</span>
+      <h2>Apa Kata Developer Kami</h2>
+      <p>Ratusan developer sudah membangun produk mereka pakai Vexalyn API.</p>
+    </div>
+    <div class="grid-3">
+      <div class="test-card">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+        </div>
+        <p class="quote">"Vexalyn API bantu aku mempercepat development aplikasi streaming pribadi. Dokumentasinya jelas dan endpointnya stabil banget!"</p>
+        <div class="test-person">
+          <span class="avatar" style="background:var(--salmon-soft);">R</span>
+          <div><b>Rafi Pratama</b><span>Fullstack Developer</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+        </div>
+        <p class="quote">"Endpoint search-nya persis yang aku butuhin buat bot Telegram. Ga ada rate limit jadi bebas testing tanpa was-was."</p>
+        <div class="test-person">
+          <span class="avatar" style="background:var(--sky-soft);">D</span>
+          <div><b>Dinda Ayu</b><span>Bot Developer</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg>
+        </div>
+        <p class="quote">"Investasi waktu terbaik buat proyek kuliahku. Swagger UI-nya bikin aku ngerti struktur data cuma dalam 5 menit."</p>
+        <div class="test-person">
+          <span class="avatar" style="background:var(--lav-soft);">M</span>
+          <div><b>Miko Aditya</b><span>Mahasiswa Informatika</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ Section ===== -->
+<section class="faq-section" id="faq">
+  <div class="faq-container">
+    <div class="section-head">
+      <span class="pill pill-salmon">FAQ</span>
+      <h2>Pertanyaan yang Sering Ditanyakan</h2>
+      <p>Temukan jawaban untuk pertanyaan umum tentang Vexalyn API.</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Apakah Vexalyn API gratis untuk digunakan?</span>
+        <div class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <p>Ya, Vexalyn API 100% gratis tanpa batasan rate limit. Kamu bisa menggunakan semua endpoint tanpa perlu API key atau sistem pembayaran.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Apakah perlu API key untuk mengakses endpoint?</span>
+        <div class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <p>Tidak perlu! Semua endpoint Vexalyn API dapat diakses langsung tanpa autentikasi atau API key. Cukup panggil endpoint-nya dan kamu akan langsung mendapat response.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Berapa response time rata-rata API ini?</span>
+        <div class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <p>Response time bervariasi per endpoint: Home Feed (~12s), Search (~10s), Genres (~12s), Ongoing Series (~35s dengan thumbnail). Kami terus mengoptimasi performa untuk pengalaman terbaik.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Apakah ada rate limit atau quota harian?</span>
+        <div class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <p>Tidak ada rate limit atau quota! Kamu bebas melakukan request sebanyak yang kamu butuhkan untuk development, testing, atau production.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Bagaimana cara melaporkan bug atau request fitur baru?</span>
+        <div class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <p>Kamu bisa menghubungi kami melalui email di vioatmajaya@gmail.com atau melalui GitHub repository kami. Kami sangat menghargai feedback dan kontribusi dari komunitas!</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Format data apa yang digunakan dalam response?</span>
+        <div class="faq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+      <div class="faq-answer">
+        <p>Semua response dalam format JSON yang clean dan mudah diparsing. Setiap endpoint memiliki struktur data yang konsisten dan terdokumentasi lengkap di Swagger UI kami.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Contact Section ===== -->
+<section class="contact-section" id="kontak">
+  <div class="contact-container">
+    <div class="section-head">
+      <span class="pill pill-green">Hubungi Kami</span>
+      <h2>Mari Terhubung</h2>
+      <p>Punya pertanyaan atau ingin berkolaborasi? Jangan ragu untuk menghubungi kami!</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon email">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="M22 6l-10 7L2 6"></path>
+          </svg>
+        </div>
+        <h3>Email</h3>
+        <p>Kirim email untuk inquiry atau support</p>
+        <a href="mailto:vioatmajaya@gmail.com" class="btn btn-sky">vioatmajaya@gmail.com</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon github">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"></path>
+          </svg>
+        </div>
+        <h3>GitHub</h3>
+        <p>Kontribusi atau report issues di repo kami</p>
+        <a href="https://github.com/vexalyn-dev" target="_blank" class="btn btn-sky">GitHub Repository</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon discord">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </div>
+        <h3>Discord</h3>
+        <p>Gabung komunitas developer Vexalyn</p>
+        <a href="#" class="btn btn-sky">Join Discord</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon web">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </div>
+        <h3>Website</h3>
+        <p>Kunjungi website portfolio kami</p>
+        <a href="https://vexalyndev.my.id" target="_blank" class="btn btn-sky">vexalyndev.my.id</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-outer">
+  <div class="cta-card">
+    <h2>Siap Mulai Integrasi?</h2>
+    <p>Gabung bareng ratusan developer dan mulai ambil data anime hari ini. Gratis selamanya, tanpa syarat ribet.</p>
+    <div class="cta-actions">
+      <a href="http://localhost:8000/docs" target="_blank" class="btn btn-green">Mulai Sekarang →</a>
+      <a href="http://localhost:8000/docs" target="_blank" class="btn btn-white">Lihat Dokumentasi</a>
+    </div>
+    <div class="cta-check">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Tanpa perlu API key</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Batalkan kapan saja</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="brand">
+        <span class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+        </span>
+        Vexalyn API
+      </div>
+      <p>Menyediakan akses data anime dari Anichin secara cepat dan konsisten untuk seluruh developer.</p>
+      <div class="social-row">
+        <a href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+        <a href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"></path></svg></a>
+        <a href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.5 8.5l6 3.5-6 3.5z"></path></svg></a>
+        <a href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84 0 0 0 .497-3.753C20.18 7.773 21.692 5.25 22 4.009z"></path></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Endpoint</h4>
+      <a href="#">Home Feed</a>
+      <a href="#">Search</a>
+      <a href="#">Docs</a>
+      <a href="#">Status</a>
+    </div>
+    <div class="footer-col">
+      <h4>Perusahaan</h4>
+      <a href="#">Tentang</a>
+      <a href="#">Karier</a>
+      <a href="#">Blog</a>
+      <a href="#">Kontak</a>
+    </div>
+    <div class="footer-col">
+      <h4>Bantuan</h4>
+      <a href="#">Pusat Bantuan</a>
+      <a href="#">Kontak</a>
+      <a href="#">Komunitas</a>
+      <a href="#">FAQ</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Vexalyn API. Seluruh hak cipta dilindungi.</p>
+    <div class="links">
+      <a href="#">Privasi</a>
+      <a href="#">Ketentuan</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Hide loading screen when page is fully loaded
+window.addEventListener('load', function() {
+  const loadingScreen = document.getElementById('loading-screen');
+  setTimeout(function() {
+    loadingScreen.classList.add('hide');
+  }, 300);
+});
+
+// FAQ Toggle Function
+function toggleFAQ(element) {
+  const faqItem = element.parentElement;
+  const answer = element.nextElementSibling;
+  const isActive = element.classList.contains('active');
+  
+  // Close all FAQ items
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.classList.remove('active');
+    q.nextElementSibling.classList.remove('open');
+  });
+  
+  // Open clicked item if it wasn't active
+  if (!isActive) {
+    element.classList.add('active');
+    answer.classList.add('open');
+  }
+}
+
+// Dynamic Login Button - Check if user is logged in
+function updateLoginButton() {
+  const user = localStorage.getItem('user');
+  const loginLink = document.querySelector('.login-link');
+  
+  if (user) {
+    try {
+      const userData = JSON.parse(user);
+      loginLink.textContent = `Halo, ${userData.name.split(' ')[0]}`;
+      loginLink.href = '#';
+      loginLink.onclick = function(e) {
+        e.preventDefault();
+        if (confirm('Logout dari akun Anda?')) {
+          localStorage.removeItem('user');
+          window.location.reload();
+        }
+      };
+    } catch (e) {
+      console.error('Error parsing user data:', e);
+    }
+  }
+}
+
+// Run on page load
+updateLoginButton();
+</script>
+
+</body>
+</html>

@@ -6,7 +6,10 @@ __pycache__/
 
 # Debug HTML files (auto-generated)
 debug_*.html
-*.html
+
+# Environment variables
+.env
+.env.local
 
 # Test files
 test_*.py
