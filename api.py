@@ -305,8 +305,11 @@ async def rate_limit_middleware(request: Request, call_next):
 
 # Mount static files (public folder untuk UI)
 public_path = os.path.join(os.path.dirname(__file__), "public")
-if os.path.exists(public_path):
-    app.mount("/assets", StaticFiles(directory=public_path), name="assets")
+assets_path = os.path.join(public_path, "assets")
+
+# Mount public/assets folder to /assets route
+if os.path.exists(assets_path):
+    app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
 
 # ===== WEB UI ROUTES =====
 
