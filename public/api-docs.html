@@ -1,145 +1,761 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>API Documentation - Vexalyn API</title>
-<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-:root{
-  --ink:#15181F;--cream:#FBF1E3;--white:#FFFFFF;
-  --salmon:#FFAB92;--salmon-soft:#FFE4D9;
-  --sky:#9BD8F4;--sky-soft:#DCF0FB;
-  --lav:#CBC0F5;--lav-soft:#EAE5FC;
-  --mint:#9BE3BC;--mint-soft:#DFF7EA;
-  --green:#33B96A;--green-dark:#1D7A46;
-  --gray:#6B7280;--gray-soft:#9AA0AC;
-  --shadow:6px 6px 0 var(--ink);--shadow-sm:4px 4px 0 var(--ink);
-  --radius:24px;--radius-sm:16px;--radius-pill:100px;--border:3px solid var(--ink);
-}
-body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;}
-h1,h2,h3,.brand{font-family:'Fredoka',sans-serif;}
-a{text-decoration:none;color:inherit;}
-img,svg{display:block;}
-.wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Vexalyn API</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* Loading */
-#loading-screen{
-  position:fixed;top:0;left:0;right:0;bottom:0;background:var(--cream);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:9999;transition:opacity .4s ease,visibility .4s ease;
-}
-#loading-screen.hide{opacity:0;visibility:hidden;}
-.loader-logo{
-  width:80px;height:80px;background:var(--sky);border:var(--border);
-  border-radius:20px;display:flex;align-items:center;justify-content:center;
-  margin-bottom:24px;animation:float 2s ease-in-out infinite;
-}
-.loader-logo svg{width:40px;height:40px;stroke:var(--ink);stroke-width:2.5;}
-@keyframes float{
-  0%,100%{transform:translateY(0) rotate(0deg);}
-  50%{transform:translateY(-15px) rotate(5deg);}
-}
-.loader-text{
-  font-family:'Fredoka',sans-serif;font-size:20px;font-weight:700;
-  color:var(--ink);margin-bottom:16px;
-}
-.loader-dots{display:flex;gap:8px;}
-.loader-dots span{
-  width:12px;height:12px;background:var(--ink);border-radius:50%;
-  animation:dot-bounce 1.4s ease infinite;
-}
-.loader-dots span:nth-child(2){animation-delay:.2s;}
-.loader-dots span:nth-child(3){animation-delay:.4s;}
-@keyframes dot-bounce{
-  0%,100%{transform:translateY(0);opacity:1;}
-  50%{transform:translateY(-20px);opacity:.5;}
-}
+        :root {
+            --ink: #15181F;
+            --cream: #FBF1E3;
+            --white: #FFFFFF;
+            --salmon: #FFAB92;
+            --sky: #9BD8F4;
+            --mint: #9BE3BC;
+            --green: #33B96A;
+            --gray: #6B7280;
+            --shadow: 6px 6px 0 var(--ink);
+            --shadow-sm: 4px 4px 0 var(--ink);
+            --radius: 24px;
+            --radius-sm: 16px;
+            --border: 3px solid var(--ink);
+        }
 
-/* Buttons */
-.btn{
-  display:inline-flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;
-  font-weight:700;font-size:15px;padding:14px 26px;border-radius:var(--radius-pill);
-  border:var(--border);box-shadow:var(--shadow-sm);cursor:pointer;
-  transition:transform .15s ease,box-shadow .15s ease;white-space:nowrap;
-}
-.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink);}
-.btn:hover{transform:translate(-1px,-1px);box-shadow:7px 7px 0 var(--ink);}
-.btn-green{background:var(--green);color:#fff;}
-.btn-white{background:#fff;color:var(--ink);}
+        html {
+            scroll-behavior: smooth;
+        }
 
-/* Header */
-.header-outer{padding:22px 24px 0;}
-header{
-  max-width:1180px;margin:0 auto;background:#fff;border:var(--border);
-  border-radius:var(--radius-pill);box-shadow:var(--shadow);
-  padding:12px 14px 12px 20px;display:flex;align-items:center;justify-content:space-between;
-}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;}
-.header-right{display:flex;align-items:center;gap:18px;}
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            line-height: 1.6;
+        }
 
-/* Hero */
-.docs-hero{padding:80px 24px 60px;text-align:center;}
-.docs-hero h1{font-size:48px;font-weight:700;letter-spacing:-.5px;margin-bottom:16px;}
-.docs-hero p{color:var(--gray);font-size:17px;font-weight:500;max-width:620px;margin:0 auto 32px;}
-.docs-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+        /* ===== HEADER ===== */
+        .header-outer{
+            padding: 22px 24px 0;
+        }
 
-@media(max-width:600px){
-  .docs-hero h1{font-size:32px;}
-}
-</style>
+        header {
+            max-width: 1180px;
+            margin: 0 auto;
+            background: var(--white);
+            border: var(--border);
+            border-radius: var(--radius-pill);
+            box-shadow: var(--shadow);
+            padding: 12px 14px 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 22px;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+            text-decoration: none;
+            color: var(--ink);
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--salmon);
+            border: 2.5px solid var(--ink);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-icon svg {
+            width: 19px;
+            height: 19px;
+            stroke: var(--ink);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 14.5px;
+            color: var(--ink);
+            opacity: 0.75;
+            transition: all 0.15s ease;
+            position: relative;
+            padding: 8px 14px;
+            border-radius: var(--radius-pill);
+            border: 2.5px solid transparent;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+            background: var(--mint-soft);
+            border-color: var(--ink);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--ink);
+        }
+
+        .nav-links a:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0 var(--ink);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 24px;
+            text-align: center;
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--sky);
+            border: var(--border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hero-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: var(--ink);
+            stroke-width: 2;
+        }
+
+        h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--gray);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== SECTION ===== */
+        .section {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .section-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--salmon);
+            border: var(--border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+        }
+
+        .section-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: var(--white);
+            stroke-width: 2;
+        }
+
+        .section-title-group h2 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .section-title-group p {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        /* ===== ENDPOINTS GRID ===== */
+        .endpoints-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .endpoint-card {
+            display: block;
+            background: var(--white);
+            border: var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .endpoint-card:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .endpoint-card:active {
+            transform: translate(1px, 1px);
+            box-shadow: 2px 2px 0 var(--ink);
+        }
+
+        .ep-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .ep-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            border: 2.5px solid var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ep-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--ink);
+        }
+
+        .ep-icon.c1 {
+            background: var(--salmon);
+        }
+
+        .ep-icon.c2 {
+            background: var(--sky);
+        }
+
+        .ep-icon.c3 {
+            background: var(--lav);
+        }
+
+        .ep-icon.c4 {
+            background: var(--mint);
+        }
+
+        .ep-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--mint-soft);
+            border: 2px solid var(--ink);
+            border-radius: var(--radius-pill);
+            padding: 5px 12px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--green-dark);
+        }
+
+        .ep-status .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green-dark);
+        }
+
+        .method-badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--ink);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 11.5px;
+            letter-spacing: 0.5px;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+
+        .method-badge.get {
+            background: #9BE3BC;
+            color: var(--ink);
+        }
+
+        .method-badge.post {
+            background: var(--green-dark);
+            color: var(--white);
+        }
+
+        .method-badge.delete {
+            background: #FFD4D4;
+            color: var(--ink);
+        }
+
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 14.5px;
+            color: var(--ink);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .endpoint-path-code {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 14.5px;
+            color: var(--ink);
+        }
+
+        .endpoint-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .endpoint-description {
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .endpoint-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            color: var(--gray);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .endpoint-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .endpoint-meta svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--gray);
+        }
+
+        .meta-badge {
+            background: var(--cream);
+            border: 1px solid var(--ink);
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--ink);
+            color: var(--white);
+            margin-top: 100px;
+            padding: 40px 24px;
+            text-align: center;
+            border-top: var(--border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: var(--salmon);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--sky);
+        }
+
+        .footer-divider {
+            height: 2px;
+            background: var(--salmon);
+            margin: 20px 0;
+            opacity: 0.3;
+        }
+
+        .footer-credit {
+            font-size: 12px;
+            color: var(--cream);
+            opacity: 0.7;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 12px;
+            }
+
+            .nav-links {
+                gap: 12px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .section-title-group h2 {
+                font-size: 24px;
+            }
+
+            .endpoints-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-outer {
+                padding: 16px 24px 0;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px;
+                top: 16px;
+            }
+
+            .nav-links {
+                gap: 8px;
+                font-size: 12px;
+            }
+
+            .nav-links a {
+                padding: 6px 10px;
+                font-size: 13px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .section {
+                margin: 60px auto;
+                padding: 0 16px;
+            }
+
+            .section-title-group h2 {
+                font-size: 22px;
+            }
+
+            .endpoints-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .endpoint-card {
+                padding: 20px;
+            }
+        }
+
+        /* ===== SCROLL ANIMATIONS ===== */
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- Loading Screen -->
-<div id="loading-screen">
-  <div class="loader-logo">
-    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-      <path d="M2 17l10 5 10-5"></path>
-      <path d="M2 12l10 5 10-5"></path>
-    </svg>
-  </div>
-  <div class="loader-text">Loading API Docs...</div>
-  <div class="loader-dots"><span></span><span></span><span></span></div>
-</div>
-
-<!-- Header -->
-<div class="header-outer">
-  <header>
-    <a href="/" class="brand">
-      <img src="/assets/logo-horizontal.svg" alt="Vexalyn API" height="40" style="display:block;">
-    </a>
-    <div class="header-right">
-      <a href="/" class="btn btn-white">← Kembali</a>
+    <!-- Header -->
+    <div class="header-outer">
+        <header>
+            <a href="/" class="brand">
+                <img src="/assets/logo-horizontal.svg" alt="Vexalyn API" height="40" style="display:block;">
+            </a>
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/api-docs">API Docs</a>
+                <a href="/docs">Swagger</a>
+                <a href="/report">Report</a>
+            </nav>
+        </header>
     </div>
-  </header>
-</div>
 
-<!-- Hero Section -->
-<section class="docs-hero">
-  <h1>API Documentation</h1>
-  <p>Dokumentasi lengkap semua endpoint Vexalyn API dengan Swagger UI interaktif. Test endpoint langsung dari browser!</p>
-  <div class="docs-actions">
-    <a href="/docs" class="btn btn-green">Buka Swagger UI →</a>
-    <a href="/" class="btn btn-white">Ke Beranda</a>
-  </div>
-</section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"></polyline>
+                <line x1="12" y1="12" x2="20" y2="7.5"></line>
+                <line x1="12" y1="12" x2="12" y2="21"></line>
+                <line x1="12" y1="12" x2="4" y2="7.5"></line>
+            </svg>
+        </div>
+        <h1>API Documentation</h1>
+        <p class="hero-subtitle">
+            Complete reference untuk Vexalyn REST API. Semua endpoints, parameter, dan response format yang kamu butuhkan untuk integrate dengan Anichin donghua data.
+        </p>
+    </section>
 
-<script>
-// Hide loading screen after page loads
-window.addEventListener('load', function() {
-  const loadingScreen = document.getElementById('loading-screen');
-  setTimeout(function() {
-    loadingScreen.classList.add('hide');
-  }, 300);
-});
-</script>
+    <!-- Anichin Endpoints Section -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5"></path>
+                    <path d="M2 12l10 5 10-5"></path>
+                </svg>
+            </div>
+            <div class="section-title-group">
+                <h2>Anichin Endpoints</h2>
+                <p>Scraping donghua data dari Anichin streaming platform</p>
+            </div>
+        </div>
 
+        <div class="endpoints-grid">
+            <!-- GET /anichin/home -->
+            <a href="/anichin/home" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+                <div class="ep-top">
+                    <span class="ep-icon c1">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    </span>
+                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                </div>
+                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
+                    <span class="method-badge get">GET</span>
+                </div>
+                <div class="endpoint-path">
+                    <span class="endpoint-path-code">/anichin/home</span>
+                </div>
+                <h3>Home Feed API</h3>
+                <p class="endpoint-description">Dapatkan data donghua terbaru dari homepage Anichin termasuk featured, trending, dan recommendations.</p>
+                <div class="endpoint-meta">
+                    <span><span class="meta-badge">Cache: 5m</span></span>
+                    <span><span class="meta-badge">Speed: ~3-5s</span></span>
+                </div>
+            </a>
+
+            <!-- GET /anichin/search -->
+            <a href="/anichin/search?q=naruto" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+                <div class="ep-top">
+                    <span class="ep-icon c2">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </span>
+                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                </div>
+                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
+                    <span class="method-badge get">GET</span>
+                </div>
+                <div class="endpoint-path">
+                    <span class="endpoint-path-code">/anichin/search?q=query</span>
+                </div>
+                <h3>Search Endpoint</h3>
+                <p class="endpoint-description">Search donghua berdasarkan keyword atau judul. Parameter wajib: <code>q</code> (minimum 1 karakter).</p>
+                <div class="endpoint-meta">
+                    <span><span class="meta-badge">Cache: 3m</span></span>
+                    <span><span class="meta-badge">Dynamic</span></span>
+                </div>
+            </a>
+
+            <!-- GET /anichin/genres -->
+            <a href="/anichin/genres" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+                <div class="ep-top">
+                    <span class="ep-icon c3">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </span>
+                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                </div>
+                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
+                    <span class="method-badge get">GET</span>
+                </div>
+                <div class="endpoint-path">
+                    <span class="endpoint-path-code">/anichin/genres</span>
+                </div>
+                <h3>Genres Endpoint</h3>
+                <p class="endpoint-description">Daftar lengkap semua genre donghua yang tersedia di Anichin. Jarang berubah, cache lama.</p>
+                <div class="endpoint-meta">
+                    <span><span class="meta-badge">Cache: 1h</span></span>
+                    <span><span class="meta-badge">Static</span></span>
+                </div>
+            </a>
+
+            <!-- GET /anichin/ongoing-series -->
+            <a href="/anichin/ongoing-series" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+                <div class="ep-top">
+                    <span class="ep-icon c4">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    </span>
+                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                </div>
+                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
+                    <span class="method-badge get">GET</span>
+                </div>
+                <div class="endpoint-path">
+                    <span class="endpoint-path-code">/anichin/ongoing-series</span>
+                </div>
+                <h3>Ongoing Series</h3>
+                <p class="endpoint-description">Daftar donghua yang sedang ongoing atau sedang tayang. Update berkala sesuai jadwal rilis.</p>
+                <div class="endpoint-meta">
+                    <span><span class="meta-badge">Cache: 5m</span></span>
+                    <span><span class="meta-badge">Live</span></span>
+                </div>
+            </a>
+
+            <!-- GET /anichin/popular-series -->
+            <a href="/anichin/popular-series?filter=weekly" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+                <div class="ep-top">
+                    <span class="ep-icon c1">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                    </span>
+                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                </div>
+                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
+                    <span class="method-badge get">GET</span>
+                </div>
+                <div class="endpoint-path">
+                    <span class="endpoint-path-code">/anichin/popular-series?filter=weekly</span>
+                </div>
+                <h3>Popular Series</h3>
+                <p class="endpoint-description">Ranking donghua paling populer. Filter: <code>weekly</code>, <code>monthly</code>, atau <code>all</code>.</p>
+                <div class="endpoint-meta">
+                    <span><span class="meta-badge">Cache: 10m</span></span>
+                    <span><span class="meta-badge">3 filters</span></span>
+                </div>
+            </a>
+
+            <!-- GET /anichin/new-movie -->
+            <a href="/anichin/new-movie" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+                <div class="ep-top">
+                    <span class="ep-icon c2">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                    </span>
+                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                </div>
+                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
+                    <span class="method-badge get">GET</span>
+                </div>
+                <div class="endpoint-path">
+                    <span class="endpoint-path-code">/anichin/new-movie</span>
+                </div>
+                <h3>New Movie Endpoint</h3>
+                <p class="endpoint-description">Film donghua terbaru dan dirilis baru dari Anichin NEW MOVIE section.</p>
+                <div class="endpoint-meta">
+                    <span><span class="meta-badge">Cache: 10m</span></span>
+                    <span><span class="meta-badge">Movie</span></span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-text">
+                Vexalyn REST API - Free Anichin Donghua Streaming Data
+            </div>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/rate-limit-status">Rate Limit</a>
+                <a href="/docs">Swagger</a>
+                <a href="/report">Report Bug</a>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-credit">
+                Built with ❤️ by Vexalyn Developer | vioatmajaya@gmail.com
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = `${Array.from(entry.target.parentNode.children).indexOf(entry.target) * 0.1}s`;
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>
