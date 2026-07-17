@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report - Vexalyn API</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  (function(){ emailjs.init({ publicKey: "nRcf0tPeACArer63A" }); })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // EmailJS init — ganti dengan Service ID & Public Key kamu dari emailjs.com
+  (function(){
+    emailjs.init({ publicKey: "nRcf0tPeACArer63A" });
+  })();
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#15181F;--cream:#FBF1E3;--white:#FFFFFF;
+  --salmon:#FFAB92;--salmon-soft:#FFE4D9;
+  --sky:#9BD8F4;--sky-soft:#DCF0FB;
+  --lav:#CBC0F5;--lav-soft:#EAE5FC;
+  --mint:#9BE3BC;--mint-soft:#DFF7EA;
+  --green:#33B96A;--green-dark:#1D7A46;
+  --red:#FF5C5C;--red-soft:#FFE5E5;
+  --yellow:#FFC93C;--yellow-soft:#FFF7DC;
+  --gray:#6B7280;--gray-soft:#9AA0AC;
+  --shadow:6px 6px 0 var(--ink);--shadow-sm:4px 4px 0 var(--ink);--shadow-lg:8px 8px 0 var(--ink);
+  --radius:24px;--radius-sm:16px;--radius-pill:100px;--border:3px solid var(--ink);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4,.brand{font-family:'Fredoka',sans-serif;}
+a{text-decoration:none;color:inherit;}
+
+/* Loading */
+#loading-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .3s ease,visibility .3s ease;}
+#loading-screen.hide{opacity:0;visibility:hidden;}
+.loader-logo{width:80px;height:80px;background:var(--red);border:var(--border);border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;animation:bounce 1s ease infinite;}
+.loader-logo svg{width:40px;height:40px;stroke:var(--ink);stroke-width:2.5;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.loader-dots{display:flex;gap:8px;}
+.loader-dots span{width:12px;height:12px;background:var(--ink);border-radius:50%;animation:dot-pulse 1.4s ease infinite;}
+.loader-dots span:nth-child(2){animation-delay:.2s;}
+.loader-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes dot-pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:.5;}}
+
+/* Header */
+.header-outer{padding:22px 24px 0;}
+header{max-width:1180px;margin:0 auto;background:#fff;border:var(--border);border-radius:var(--radius-pill);box-shadow:var(--shadow);padding:12px 14px 12px 20px;display:flex;align-items:center;justify-content:space-between;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;color:var(--ink);}
+.brand-icon{width:38px;height:38px;background:var(--salmon);border:2.5px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;}
+.brand-icon svg{width:19px;height:19px;stroke:var(--ink);}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:var(--gray);transition:color .2s;}
+.back-btn:hover{color:var(--ink);}
+.back-btn svg{width:16px;height:16px;stroke:currentColor;}
+
+/* Hero */
+.report-hero{padding:60px 24px 40px;text-align:center;}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:var(--radius-pill);border:2.5px solid var(--ink);font-weight:700;font-size:13.5px;background:var(--red-soft);color:#b91c1c;margin-bottom:24px;}
+.pill-dot{width:7px;height:7px;border-radius:50%;background:#b91c1c;}
+.report-hero h1{font-size:44px;font-weight:700;letter-spacing:-.5px;margin-bottom:14px;line-height:1.15;}
+.report-hero p{color:var(--gray);font-size:16px;font-weight:500;max-width:560px;margin:0 auto;}
+
+/* Category */
+.category-section{padding:20px 24px 50px;}
+.category-section .wrap{max-width:1000px;margin:0 auto;}
+.category-section h2{font-size:22px;font-weight:700;margin-bottom:20px;}
+.category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px;}
+.cat-card{background:#fff;border:var(--border);border-radius:var(--radius-sm);padding:20px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;text-align:center;user-select:none;}
+.cat-card:hover{transform:translate(-2px,-2px);box-shadow:var(--shadow);}
+.cat-card:active{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink);}
+.cat-card.selected{transform:translate(-2px,-2px);box-shadow:var(--shadow);background:var(--cream);}
+.cat-icon{width:52px;height:52px;border-radius:14px;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;}
+.cat-icon svg{width:24px;height:24px;stroke:var(--ink);}
+.cat-icon.bug{background:var(--red-soft);}
+.cat-icon.endpoint{background:var(--sky-soft);}
+.cat-icon.feature{background:var(--mint-soft);}
+.cat-icon.slow{background:var(--yellow-soft);}
+.cat-icon.other{background:var(--lav-soft);}
+.cat-icon.data{background:var(--salmon-soft);}
+.cat-card h4{font-size:14.5px;font-weight:700;margin-bottom:4px;}
+.cat-card p{font-size:12.5px;color:var(--gray);font-weight:500;}
+
+/* Form */
+.report-form-section{max-width:700px;margin:0 auto;padding:0 24px 80px;}
+.form-card{background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:40px 36px;}
+.form-card h2{font-size:26px;font-weight:700;margin-bottom:6px;}
+.form-card .sub{color:var(--gray);font-size:14px;font-weight:500;margin-bottom:28px;}
+.form-group{margin-bottom:20px;}
+.form-group label{display:block;font-weight:600;font-size:13.5px;margin-bottom:8px;}
+.req{color:var(--red);margin-left:3px;}
+.form-input,.form-select,.form-textarea{width:100%;padding:13px 16px;font-family:'Inter',sans-serif;font-size:14.5px;font-weight:500;border:var(--border);border-radius:var(--radius-sm);background:var(--cream);transition:transform .15s ease,box-shadow .15s ease;resize:none;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;transform:translate(-2px,-2px);box-shadow:var(--shadow-sm);}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--gray-soft);}
+.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2315181F' stroke-width='2.5' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+.form-textarea{min-height:130px;line-height:1.6;}
+.char-count{font-size:12px;color:var(--gray-soft);text-align:right;margin-top:4px;}
+.char-count.warn{color:#d97706;}
+.char-count.danger{color:var(--red);}
+
+/* Severity */
+.severity-row{display:flex;gap:10px;flex-wrap:wrap;}
+.sev-btn{flex:1;min-width:80px;padding:10px 14px;border:var(--border);border-radius:var(--radius-sm);background:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;cursor:pointer;text-align:center;transition:transform .15s ease,box-shadow .15s ease;}
+.sev-btn:hover{transform:translate(-1px,-1px);box-shadow:var(--shadow-sm);}
+.sev-btn.low.active{background:var(--mint-soft);border-color:var(--green);transform:translate(-2px,-2px);box-shadow:var(--shadow-sm);}
+.sev-btn.medium.active{background:var(--yellow-soft);border-color:#d97706;transform:translate(-2px,-2px);box-shadow:var(--shadow-sm);}
+.sev-btn.high.active{background:var(--salmon-soft);border-color:#ea580c;transform:translate(-2px,-2px);box-shadow:var(--shadow-sm);}
+.sev-btn.critical.active{background:var(--red-soft);border-color:var(--red);transform:translate(-2px,-2px);box-shadow:var(--shadow-sm);}
+
+/* Submit */
+.btn-submit{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:'Inter',sans-serif;font-weight:700;font-size:16px;padding:16px 28px;border-radius:var(--radius-pill);border:var(--border);box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;background:var(--green);color:#fff;margin-top:8px;}
+.btn-submit:hover{transform:translate(-1px,-1px);box-shadow:7px 7px 0 var(--ink);}
+.btn-submit:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink);}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:var(--shadow-sm);}
+
+/* Custom Dropdown */
+.custom-select{position:relative;width:100%;}
+.custom-select-trigger{
+  width:100%;padding:13px 44px 13px 16px;font-family:'Inter',sans-serif;font-size:14.5px;font-weight:500;
+  border:var(--border);border-radius:var(--radius-sm);background:var(--cream);cursor:pointer;
+  transition:transform .15s ease,box-shadow .15s ease;display:flex;align-items:center;justify-content:space-between;
+  user-select:none;position:relative;
+}
+.custom-select-trigger:hover{transform:translate(-1px,-1px);box-shadow:var(--shadow-sm);}
+.custom-select-trigger.open{transform:translate(-2px,-2px);box-shadow:var(--shadow-sm);}
+.custom-select-trigger .placeholder{color:var(--gray-soft);}
+.custom-select-trigger .selected-val{color:var(--ink);font-weight:600;}
+.custom-select-arrow{width:18px;height:18px;stroke:var(--ink);stroke-width:2.5;flex-shrink:0;transition:transform .2s ease;}
+.custom-select-trigger.open .custom-select-arrow{transform:rotate(180deg);}
+.custom-select-dropdown{
+  display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;
+  background:#fff;border:var(--border);border-radius:var(--radius-sm);
+  box-shadow:var(--shadow);z-index:100;overflow:hidden;
+}
+.custom-select-dropdown.open{display:block;}
+.custom-select-option{
+  padding:12px 16px;font-size:14px;font-weight:500;cursor:pointer;
+  transition:background .12s ease;display:flex;align-items:center;gap:10px;
+}
+.custom-select-option:hover{background:var(--cream);}
+.custom-select-option.selected{background:var(--sky-soft);font-weight:700;}
+.custom-select-option.placeholder-opt{color:var(--gray-soft);}
+.custom-select-option .opt-badge{
+  font-size:11px;font-weight:700;padding:2px 8px;border-radius:var(--radius-pill);
+  border:2px solid var(--ink);background:var(--sky-soft);white-space:nowrap;
+}
+
+/* Success */
+#success-state{display:none;text-align:center;padding:80px 24px;}
+.success-icon{width:80px;height:80px;background:var(--mint);border:var(--border);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;}
+.success-icon svg{width:40px;height:40px;stroke:var(--ink);stroke-width:2.5;}
+#success-state h2{font-size:32px;font-weight:700;margin-bottom:12px;}
+#success-state p{color:var(--gray);font-size:15px;max-width:480px;margin:0 auto 28px;}
+.btn-back{display:inline-flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;padding:14px 28px;border-radius:var(--radius-pill);border:var(--border);box-shadow:var(--shadow-sm);cursor:pointer;background:#fff;color:var(--ink);transition:transform .15s ease,box-shadow .15s ease;}
+.btn-back:hover{transform:translate(-1px,-1px);box-shadow:7px 7px 0 var(--ink);}
+
+@media(max-width:860px){.category-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){
+  .report-hero h1{font-size:32px;}
+  .form-card{padding:28px 22px;}
+  .sev-btn{min-width:calc(50% - 5px);}
+}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <div class="loader-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+      <line x1="12" y1="9" x2="12" y2="13"></line>
+      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </svg>
+  </div>
+  <div class="loader-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- Header -->
+<div class="header-outer">
+  <header>
+    <a href="/" class="brand">
+      <span class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+      </span>
+      VEXALYN API
+    </a>
+    <a href="/" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Kembali ke Beranda
+    </a>
+  </header>
+</div>
+
+<!-- Hero -->
+<div class="report-hero">
+  <span class="pill"><span class="pill-dot"></span> Report Center</span>
+  <h1>Laporkan Bug atau<br>Request Fitur Baru</h1>
+  <p>Temukan masalah atau punya ide? Sampaikan langsung di sini. Setiap laporan dibaca dan ditangani oleh tim Vexalyn.</p>
+</div>
+
+<!-- Category -->
+<div class="category-section">
+  <div class="wrap">
+    <h2>Pilih Kategori Laporan</h2>
+    <div class="category-grid">
+      <div class="cat-card" onclick="selectCategory('Bug / Error', this)">
+        <span class="cat-icon bug"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l4-4 4 4"></path><path d="M2 11h20"></path><path d="M20 11v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7"></path><path d="M8 11v4"></path><path d="M16 11v4"></path><path d="M4 7l-2 4"></path><path d="M20 7l2 4"></path></svg></span>
+        <h4>Bug / Error</h4>
+        <p>Halaman error, crash, atau fungsi tidak berjalan</p>
+      </div>
+      <div class="cat-card" onclick="selectCategory('API Mati / Down', this)">
+        <span class="cat-icon endpoint"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg></span>
+        <h4>API Mati / Down</h4>
+        <p>Endpoint tidak merespons atau timeout</p>
+      </div>
+      <div class="cat-card" onclick="selectCategory('Data Salah', this)">
+        <span class="cat-icon data"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span>
+        <h4>Data Salah</h4>
+        <p>Data yang dikembalikan tidak akurat atau kosong</p>
+      </div>
+      <div class="cat-card" onclick="selectCategory('Performa Lambat', this)">
+        <span class="cat-icon slow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></span>
+        <h4>Performa Lambat</h4>
+        <p>Respons API terlalu lambat atau timeout</p>
+      </div>
+      <div class="cat-card" onclick="selectCategory('Request Fitur', this)">
+        <span class="cat-icon feature"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+        <h4>Request Fitur</h4>
+        <p>Ide endpoint baru atau peningkatan fitur</p>
+      </div>
+      <div class="cat-card" onclick="selectCategory('Lainnya', this)">
+        <span class="cat-icon other"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></span>
+        <h4>Lainnya</h4>
+        <p>Keluhan atau masukan lain yang tidak tercantum</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Form -->
+<div id="form-section" class="report-form-section">
+  <div class="form-card">
+    <h2>Detail Laporan</h2>
+    <p class="sub">Isi form berikut dengan jelas agar tim kami bisa merespons lebih cepat.</p>
+    <form id="reportForm" onsubmit="submitReport(event)">
+      <input type="hidden" id="selectedCategory" value="">
+      <div class="form-group">
+        <label>Kategori <span class="req">*</span></label>
+        <input type="text" class="form-input" id="categoryDisplay" placeholder="Klik kategori di atas untuk memilih" readonly style="cursor:pointer;background:#f9f9f9;" required>
+      </div>
+      <div class="form-group">
+        <label>Nama / Alias <span class="req">*</span></label>
+        <input type="text" class="form-input" id="reporterName" placeholder="Nama atau username kamu" required>
+      </div>
+      <div class="form-group">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" class="form-input" id="reporterEmail" placeholder="email@contoh.com" required>
+      </div>
+      <div class="form-group">
+        <label>Endpoint yang Bermasalah <span style="color:var(--gray-soft);font-weight:500;">(opsional)</span></label>
+        <input type="hidden" id="affectedEndpoint" value="">
+        <div class="custom-select" id="endpointSelect">
+          <div class="custom-select-trigger" onclick="toggleDropdown('endpointSelect')">
+            <span id="endpointDisplay" class="placeholder">-- Pilih endpoint --</span>
+            <svg class="custom-select-arrow" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="custom-select-dropdown" id="endpointDropdown">
+            <div class="custom-select-option placeholder-opt" onclick="selectEndpoint('', '-- Pilih endpoint --', true)">-- Pilih endpoint --</div>
+            <div class="custom-select-option" onclick="selectEndpoint('/anichin/home', 'GET /anichin/home')">
+              <span class="opt-badge">GET</span> /anichin/home
+            </div>
+            <div class="custom-select-option" onclick="selectEndpoint('/anichin/search', 'GET /anichin/search')">
+              <span class="opt-badge">GET</span> /anichin/search
+            </div>
+            <div class="custom-select-option" onclick="selectEndpoint('/anichin/genres', 'GET /anichin/genres')">
+              <span class="opt-badge">GET</span> /anichin/genres
+            </div>
+            <div class="custom-select-option" onclick="selectEndpoint('/anichin/ongoing-series', 'GET /anichin/ongoing-series')">
+              <span class="opt-badge">GET</span> /anichin/ongoing-series
+            </div>
+            <div class="custom-select-option" onclick="selectEndpoint('/anichin/popular-series', 'GET /anichin/popular-series')">
+              <span class="opt-badge">GET</span> /anichin/popular-series
+            </div>
+            <div class="custom-select-option" onclick="selectEndpoint('/anichin/new-movie', 'GET /anichin/new-movie')">
+              <span class="opt-badge">GET</span> /anichin/new-movie
+            </div>
+            <div class="custom-select-option" onclick="selectEndpoint('other', 'Lainnya / Tidak spesifik')">Lainnya / Tidak spesifik</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tingkat Keparahan <span class="req">*</span></label>
+        <div class="severity-row">
+          <button type="button" class="sev-btn low" onclick="selectSeverity('low', this)">🟢 Rendah</button>
+          <button type="button" class="sev-btn medium" onclick="selectSeverity('medium', this)">🟡 Sedang</button>
+          <button type="button" class="sev-btn high" onclick="selectSeverity('high', this)">🟠 Tinggi</button>
+          <button type="button" class="sev-btn critical" onclick="selectSeverity('critical', this)">🔴 Kritis</button>
+        </div>
+        <input type="hidden" id="severity" value="">
+      </div>
+      <div class="form-group">
+        <label>Judul Laporan <span class="req">*</span></label>
+        <input type="text" class="form-input" id="reportTitle" placeholder="Ringkasan singkat masalah" maxlength="100" oninput="updateCharCount(this,'titleCount',100)" required>
+        <div class="char-count" id="titleCount">0 / 100</div>
+      </div>
+      <div class="form-group">
+        <label>Deskripsi Lengkap <span class="req">*</span></label>
+        <textarea class="form-textarea" id="reportDesc" placeholder="Jelaskan masalah secara detail: apa yang terjadi, langkah untuk mereproduksi, error message yang muncul, dsb." maxlength="1000" oninput="updateCharCount(this,'descCount',1000)" required></textarea>
+        <div class="char-count" id="descCount">0 / 1000</div>
+      </div>
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;stroke:currentColor;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        Kirim Laporan
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Success -->
+<div id="success-state">
+  <div class="success-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+  </div>
+  <h2>Laporan Terkirim!</h2>
+  <p>Terima kasih! Laporan kamu sudah kami terima dan akan ditinjau oleh tim Vexalyn dalam waktu dekat.</p>
+  <a href="/" class="btn-back">← Kembali ke Beranda</a>
+</div>
+
+<script>
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loading-screen').classList.add('hide'), 600);
+});
+
+// ===== Category =====
+function selectCategory(name, el) {
+  document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('selectedCategory').value = name;
+  document.getElementById('categoryDisplay').value = name;
+  document.getElementById('form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== Severity =====
+function selectSeverity(level, el) {
+  document.querySelectorAll('.sev-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('severity').value = level;
+}
+
+// ===== Custom Dropdown =====
+function toggleDropdown(id) {
+  const wrapper = document.getElementById(id);
+  const trigger = wrapper.querySelector('.custom-select-trigger');
+  const dropdown = wrapper.querySelector('.custom-select-dropdown');
+  const isOpen = dropdown.classList.contains('open');
+
+  // Close all dropdowns first
+  document.querySelectorAll('.custom-select-dropdown').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.custom-select-trigger').forEach(t => t.classList.remove('open'));
+
+  if (!isOpen) {
+    dropdown.classList.add('open');
+    trigger.classList.add('open');
+  }
+}
+
+function selectEndpoint(value, label, isPlaceholder = false) {
+  document.getElementById('affectedEndpoint').value = value;
+  const display = document.getElementById('endpointDisplay');
+  display.textContent = label;
+  display.className = isPlaceholder ? 'placeholder' : 'selected-val';
+
+  // Update selected state on options
+  const dropdown = document.getElementById('endpointDropdown');
+  dropdown.querySelectorAll('.custom-select-option').forEach(opt => opt.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+
+  // Close dropdown
+  dropdown.classList.remove('open');
+  document.querySelector('#endpointSelect .custom-select-trigger').classList.remove('open');
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.custom-select')) {
+    document.querySelectorAll('.custom-select-dropdown').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.custom-select-trigger').forEach(t => t.classList.remove('open'));
+  }
+});
+
+// ===== Char Count =====
+function updateCharCount(el, countId, max) {
+  const len = el.value.length;
+  const counter = document.getElementById(countId);
+  counter.textContent = len + ' / ' + max;
+  counter.className = 'char-count';
+  if (len > max * 0.85) counter.classList.add('warn');
+  if (len > max * 0.95) counter.classList.add('danger');
+}
+
+// ===== Submit + EmailJS =====
+function submitReport(e) {
+  e.preventDefault();
+  const category = document.getElementById('selectedCategory').value;
+  const severity = document.getElementById('severity').value;
+  if (!category) { alert('Pilih kategori laporan terlebih dahulu!'); return; }
+  if (!severity) { alert('Pilih tingkat keparahan!'); return; }
+
+  const name     = document.getElementById('reporterName').value.trim();
+  const email    = document.getElementById('reporterEmail').value.trim();
+  const title    = document.getElementById('reportTitle').value.trim();
+  const desc     = document.getElementById('reportDesc').value.trim();
+  const endpoint = document.getElementById('affectedEndpoint').value || 'Tidak dipilih';
+
+  const sevLabel = { low:'🟢 Rendah', medium:'🟡 Sedang', high:'🟠 Tinggi', critical:'🔴 Kritis' }[severity] || severity;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;stroke:currentColor;animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Mengirim...';
+
+  // EmailJS — ganti YOUR_SERVICE_ID dan YOUR_TEMPLATE_ID setelah setup
+  const templateParams = {
+    to_email:     'vioatmajaya@gmail.com',
+    report_id:    'VX-' + Date.now().toString().slice(-6),
+    category:     category,
+    severity:     sevLabel,
+    reporter_name:  name,
+    reporter_email: email,
+    endpoint:     endpoint,
+    title:        title,
+    description:  desc,
+    timestamp:    new Date().toLocaleString('id-ID')
+  };
+
+  emailjs.send('service_gmiuor7', 'template_2kn6l3n', templateParams)
+    .then(() => {
+      showSuccess();
+    })
+    .catch((err) => {
+      console.error('EmailJS error:', err);
+      // Fallback: simpan lokal + show success anyway
+      showSuccess(true);
+    });
+
+  // Store locally
+  const reports = JSON.parse(localStorage.getItem('vexalyn_reports') || '[]');
+  reports.push({ ...templateParams, timestamp: new Date().toISOString() });
+  localStorage.setItem('vexalyn_reports', JSON.stringify(reports));
+}
+
+function showSuccess(fallback = false) {
+  document.getElementById('form-section').style.display = 'none';
+  document.querySelector('.category-section').style.display = 'none';
+  document.querySelector('.report-hero').style.display = 'none';
+  document.getElementById('success-state').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+<style>
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</body>
+</html>

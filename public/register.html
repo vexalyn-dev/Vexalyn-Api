@@ -2,18 +2,8 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<parameter name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daftar - Vexalyn API</title>
-<!-- 
-  GOOGLE OAUTH SETUP:
-  1. Buka Google Cloud Console: https://console.cloud.google.com
-  2. Buat project baru atau pilih existing project
-  3. Enable "Google+ API" di APIs & Services
-  4. Buat OAuth 2.0 Client ID di Credentials
-  5. Tambahkan authorized JavaScript origins: http://localhost:8000
-  6. Copy Client ID dan ganti YOUR_GOOGLE_CLIENT_ID di meta tag & script
-  7. Set demoMode = false di handleGoogleSignUp()
--->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com">
@@ -25,13 +15,8 @@
   --cream:#FBF1E3;
   --white:#FFFFFF;
   --salmon:#FFAB92;
-  --salmon-soft:#FFE4D9;
   --sky:#9BD8F4;
-  --sky-soft:#DCF0FB;
-  --lav:#CBC0F5;
-  --lav-soft:#EAE5FC;
   --mint:#9BE3BC;
-  --mint-soft:#DFF7EA;
   --green:#33B96A;
   --green-dark:#1D7A46;
   --gray:#6B7280;
@@ -54,10 +39,12 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:40px 24px;
+  padding:30px 20px;
+  -webkit-font-smoothing:antialiased;
+  overflow-y:auto;
 }
 
-h1,h2,h3,.brand{font-family:'Fredoka',sans-serif;}
+h1,h2,h3{font-family:'Fredoka',sans-serif;}
 
 /* Loading Screen */
 #loading-screen{
@@ -106,62 +93,78 @@ h1,h2,h3,.brand{font-family:'Fredoka',sans-serif;}
   50%{transform:scale(1.5);opacity:.5;}
 }
 
-/* Register Container */
-.register-container{
+/* Register Layout */
+.register-wrapper{
   width:100%;
-  max-width:540px;
+  max-width:380px;
   background:var(--white);
   border:var(--border);
   border-radius:var(--radius);
   box-shadow:var(--shadow-lg);
-  padding:48px 44px;
+  padding:36px 30px;
   text-align:center;
 }
 
-.brand-icon{
-  width:60px;height:60px;
+.brand-home{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:'Fredoka',sans-serif;
+  font-weight:700;
+  font-size:16px;
+  color:var(--ink);
+  text-decoration:none;
+  margin-bottom:32px;
+  transition:transform .2s ease;
+}
+.brand-home:hover{transform:translateX(-3px);}
+
+.brand-home svg{width:16px;height:16px;stroke:currentColor;}
+
+.container-icon{
+  width:52px;height:52px;
   background:var(--sky);
   border:var(--border);
   border-radius:16px;
   display:flex;
   align-items:center;
   justify-content:center;
-  margin:0 auto 24px;
+  margin:0 auto 20px;
 }
-.brand-icon svg{width:30px;height:30px;stroke:var(--ink);stroke-width:2.3;}
+.container-icon svg{width:26px;height:26px;stroke:var(--ink);stroke-width:2.3;}
 
 h1{
-  font-size:32px;
+  font-size:28px;
   font-weight:700;
-  margin-bottom:12px;
+  margin-bottom:10px;
   letter-spacing:-.5px;
 }
 
 .subtitle{
   color:var(--gray);
-  font-size:15px;
+  font-size:14px;
   font-weight:500;
-  margin-bottom:36px;
+  margin-bottom:30px;
 }
 
 /* Form */
 .form-group{
   text-align:left;
-  margin-bottom:20px;
+  margin-bottom:16px;
 }
 
 .form-group label{
   display:block;
   font-weight:600;
-  font-size:14px;
-  margin-bottom:8px;
+  font-size:13.5px;
+  margin-bottom:7px;
 }
 
 .form-input{
   width:100%;
-  padding:14px 18px;
+  padding:12px 16px;
   font-family:'Inter',sans-serif;
-  font-size:15px;
+  font-size:14px;
   font-weight:500;
   border:var(--border);
   border-radius:var(--radius-sm);
@@ -231,14 +234,14 @@ h1{
   gap:10px;
   font-family:'Inter',sans-serif;
   font-weight:700;
-  font-size:16px;
-  padding:16px 28px;
+  font-size:14.5px;
+  padding:13px 24px;
   border-radius:var(--radius-pill);
   border:var(--border);
   box-shadow:var(--shadow-sm);
   cursor:pointer;
   transition:transform .15s ease, box-shadow .15s ease;
-  margin-bottom:16px;
+  margin-bottom:14px;
 }
 
 .btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink);}
@@ -299,205 +302,178 @@ h1{
   color:var(--green-dark);
 }
 
-.back-home{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  color:var(--gray);
-  font-size:14px;
-  font-weight:600;
-  text-decoration:none;
-  margin-top:20px;
-  transition:color .2s;
-}
-
-.back-home:hover{
-  color:var(--ink);
-}
-
-.back-home svg{
-  width:16px;
-  height:16px;
-  stroke:currentColor;
-}
-
-/* ===== Responsive Design ===== */
-
-/* Desktop Large (1200px+) */
-@media(min-width:1200px){
-  .register-container{
-    max-width:600px;
-    padding:60px 52px;
-  }
-  h1{font-size:38px;}
-  .subtitle{font-size:16.5px;}
-  .form-input{padding:17px 22px;font-size:16px;}
-  .btn{padding:18px 34px;font-size:17px;}
-  .form-row{gap:22px;}
-}
-
-/* Desktop Medium (992px - 1199px) */
-@media(min-width:992px) and (max-width:1199px){
-  .register-container{
-    max-width:560px;
-    padding:52px 46px;
-  }
-  h1{font-size:34px;}
-  .subtitle{font-size:16px;}
-  .form-input{padding:16px 20px;font-size:15.5px;}
-  .btn{padding:17px 30px;font-size:16.5px;}
-  .form-row{gap:18px;}
-}
-
-/* Tablet (768px - 1024px) */
-@media(min-width:768px) and (max-width:1024px){
-  .register-container{
-    max-width:500px;
-    padding:44px 36px;
-  }
-  h1{font-size:30px;}
-  .subtitle{font-size:15px;}
-  .form-row{gap:14px;}
-}
-
-/* Mobile Landscape (576px - 767px) */
-@media(min-width:576px) and (max-width:767px){
-  .register-container{
-    max-width:440px;
-    padding:40px 32px;
-  }
-  h1{font-size:28px;}
-  .subtitle{font-size:14.5px;margin-bottom:28px;}
-  .brand-icon{width:56px;height:56px;}
-  .brand-icon svg{width:28px;height:28px;}
-  .form-row{gap:12px;}
-}
-
-/* Mobile Portrait (max-width: 575px) */
-@media(max-width:575px){
-  body{padding:16px;}
-  
-  .register-container{
-    padding:32px 24px;
-    border-radius:20px;
+/* ===== Responsive - Landscape for Desktop/Tablet ===== */
+@media(min-width:900px) and (orientation:landscape){
+  body{
+    padding:30px 24px;
   }
   
-  h1{font-size:26px;margin-bottom:10px;}
-  .subtitle{font-size:14px;margin-bottom:24px;}
-  
-  .brand-icon{
-    width:52px;
-    height:52px;
-    margin-bottom:20px;
+  .register-wrapper{
+    max-width:680px;
+    display:grid;
+    grid-template-columns:1fr 0.85fr;
+    gap:30px;
+    padding:32px 30px;
+    align-items:center;
+    text-align:left;
   }
-  .brand-icon svg{width:26px;height:26px;}
+  
+  .brand-home{
+    grid-column:1 / -1;
+    justify-self:flex-start;
+    margin-bottom:16px;
+    font-size:14.5px;
+  }
+  
+  .register-left{
+    order:1;
+  }
+  
+  .register-right{
+    order:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px 20px;
+    background:var(--cream);
+    border-radius:18px;
+    border:var(--border);
+  }
+  
+  .register-right .info-icon{
+    width:56px;
+    height:56px;
+    background:var(--sky);
+    border:var(--border);
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:14px;
+  }
+  
+  .register-right .info-icon svg{
+    width:28px;
+    height:28px;
+    stroke:var(--ink);
+  }
+  
+  .register-right h3{
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  
+  .register-right p{
+    color:var(--gray);
+    font-size:12.5px;
+    font-weight:500;
+    line-height:1.5;
+  }
+  
+  .container-icon{
+    margin:0 0 16px 0;
+    width:48px;
+    height:48px;
+  }
+  
+  .container-icon svg{
+    width:24px;
+    height:24px;
+  }
+  
+  h1{
+    text-align:left;
+    font-size:24px;
+    margin-bottom:8px;
+  }
+  
+  .subtitle{
+    text-align:left;
+    font-size:13px;
+    margin-bottom:24px;
+  }
+  
+  .form-group{
+    margin-bottom:12px;
+  }
+  
+  .form-group label{
+    font-size:12.5px;
+  }
+  
+  .form-input{
+    padding:10px 14px;
+    font-size:13px;
+  }
+  
+  .btn{
+    padding:12px 20px;
+    font-size:13.5px;
+  }
+  
+  .divider{
+    margin:16px 0;
+    font-size:11.5px;
+  }
+  
+  .footer-text{
+    font-size:12.5px;
+    margin-top:14px;
+  }
+  
+  .checkbox-group{
+    margin-bottom:16px;
+  }
+  
+  .checkbox-group label{
+    font-size:11.5px;
+  }
+}
+
+/* Mobile */
+@media(max-width:899px), (orientation:portrait){
+  .register-right{
+    display:none;
+  }
   
   .form-row{
     grid-template-columns:1fr;
     gap:0;
   }
+}
+
+@media(max-width:480px){
+  body{padding:24px 16px;}
   
-  .form-group{margin-bottom:16px;}
-  .form-group label{font-size:13.5px;margin-bottom:6px;}
+  .register-wrapper{
+    padding:36px 28px;
+    border-radius:20px;
+  }
+  
+  h1{font-size:26px;}
+  .subtitle{font-size:14px;}
+  
+  .container-icon{
+    width:52px;height:52px;
+  }
+  .container-icon svg{width:26px;height:26px;}
+  
   .form-input{
-    padding:12px 16px;
-    font-size:14px;
-    border-radius:14px;
+    padding:13px 16px;
+    font-size:14.5px;
   }
-  
-  .checkbox-group{
-    margin-bottom:20px;
-    gap:8px;
-  }
-  .checkbox-group input[type="checkbox"]{
-    width:18px;
-    height:18px;
-  }
-  .checkbox-group label{font-size:12.5px;}
   
   .btn{
     padding:14px 24px;
     font-size:15px;
-    margin-bottom:12px;
   }
   
-  .divider{margin:20px 0;font-size:12.5px;}
-  .divider span{padding:0 12px;}
-  
-  .footer-text{font-size:13.5px;margin-top:20px;}
-  .back-home{font-size:13.5px;margin-top:16px;}
-}
-
-/* Mobile Small (max-width: 400px) */
-@media(max-width:400px){
-  .register-container{
-    padding:28px 20px;
-    border-radius:18px;
+  .checkbox-group label{
+    font-size:12.5px;
   }
-  
-  h1{font-size:24px;}
-  .subtitle{font-size:13.5px;}
-  
-  .brand-icon{
-    width:48px;
-    height:48px;
-    border-radius:14px;
-    margin-bottom:18px;
-  }
-  .brand-icon svg{width:24px;height:24px;}
-  
-  .form-input{
-    padding:11px 14px;
-    font-size:13.5px;
-  }
-  
-  .btn{
-    padding:13px 20px;
-    font-size:14.5px;
-  }
-  
-  .btn-google img{width:18px;height:18px;}
-  
-  .checkbox-group input[type="checkbox"]{
-    width:16px;
-    height:16px;
-  }
-  .checkbox-group label{font-size:12px;}
-  
-  .divider{font-size:12px;}
-  .footer-text{font-size:13px;}
-  .back-home{font-size:13px;}
-}
-
-/* Landscape orientation for mobile */
-@media(max-height:600px) and (orientation:landscape){
-  body{padding:12px;}
-  
-  .register-container{
-    padding:24px 28px;
-    max-width:90%;
-  }
-  
-  .brand-icon{
-    width:44px;
-    height:44px;
-    margin-bottom:12px;
-  }
-  .brand-icon svg{width:22px;height:22px;}
-  
-  h1{font-size:22px;margin-bottom:8px;}
-  .subtitle{font-size:13px;margin-bottom:16px;}
-  
-  .form-row{gap:10px;}
-  .form-group{margin-bottom:12px;}
-  .form-input{padding:10px 14px;}
-  .checkbox-group{margin-bottom:14px;gap:6px;}
-  .checkbox-group input[type="checkbox"]{width:16px;height:16px;}
-  .checkbox-group label{font-size:11.5px;}
-  .btn{padding:12px 20px;margin-bottom:10px;}
-  .divider{margin:12px 0;}
-  .footer-text{margin-top:12px;}
-  .back-home{margin-top:10px;}
 }
 </style>
 </head>
@@ -519,117 +495,132 @@ h1{
   </div>
 </div>
 
-<!-- Register Container -->
-<div class="register-container">
-  <div class="brand-icon">
-    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-      <circle cx="8.5" cy="7" r="4"></circle>
-      <polyline points="17 11 19 13 23 9"></polyline>
-    </svg>
-  </div>
-
-  <h1>Buat Akun Baru</h1>
-  <p class="subtitle">Daftar dan mulai gunakan Vexalyn API</p>
-
-  <!-- Google Sign Up Button -->
-  <button class="btn btn-google" onclick="handleGoogleSignUp()">
-    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-    Daftar dengan Google
-  </button>
-
-  <div class="divider">
-    <span>atau daftar dengan email</span>
-  </div>
-
-  <!-- Register Form -->
-  <form id="registerForm" onsubmit="handleRegister(event)">
-    <div class="form-row">
-      <div class="form-group">
-        <label for="firstname">Nama Depan</label>
-        <input 
-          type="text" 
-          id="firstname" 
-          name="firstname" 
-          class="form-input" 
-          placeholder="Nama"
-          required
-        >
-      </div>
-
-      <div class="form-group">
-        <label for="lastname">Nama Belakang</label>
-        <input 
-          type="text" 
-          id="lastname" 
-          name="lastname" 
-          class="form-input" 
-          placeholder="Kamu"
-          required
-        >
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input 
-        type="email" 
-        id="email" 
-        name="email" 
-        class="form-input" 
-        placeholder="nama@email.com"
-        required
-      >
-    </div>
-
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input 
-        type="password" 
-        id="password" 
-        name="password" 
-        class="form-input" 
-        placeholder="Min. 8 karakter"
-        minlength="8"
-        required
-      >
-    </div>
-
-    <div class="form-group">
-      <label for="confirm-password">Konfirmasi Password</label>
-      <input 
-        type="password" 
-        id="confirm-password" 
-        name="confirm-password" 
-        class="form-input" 
-        placeholder="Ketik ulang password"
-        minlength="8"
-        required
-      >
-    </div>
-
-    <div class="checkbox-group">
-      <input type="checkbox" id="terms" name="terms" required>
-      <label for="terms">
-        Saya setuju dengan <a href="#" target="_blank">Syarat & Ketentuan</a> dan <a href="#" target="_blank">Kebijakan Privasi</a>
-      </label>
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-      Buat Akun
-    </button>
-  </form>
-
-  <p class="footer-text">
-    Sudah punya akun? <a href="/login">Masuk di sini</a>
-  </p>
-
-  <a href="/" class="back-home">
+<!-- Main Register Wrapper -->
+<div class="register-wrapper">
+  <!-- Back to Home Link -->
+  <a href="/" class="brand-home">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M19 12H5M12 19l-7-7 7-7"/>
     </svg>
     Kembali ke Beranda
   </a>
+  
+  <!-- Left: Form -->
+  <div class="register-left">
+    <div class="container-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="8.5" cy="7" r="4"></circle>
+        <polyline points="17 11 19 13 23 9"></polyline>
+      </svg>
+    </div>
+
+    <h1>Buat Akun Baru</h1>
+    <p class="subtitle">Daftar dan mulai gunakan Vexalyn API</p>
+
+    <!-- Google Sign Up Button -->
+    <button class="btn btn-google" onclick="handleGoogleSignUp()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+      Daftar dengan Google
+    </button>
+
+    <div class="divider">
+      <span>atau daftar dengan email</span>
+    </div>
+
+    <!-- Register Form -->
+    <form id="registerForm" onsubmit="handleRegister(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstname">Nama Depan</label>
+          <input 
+            type="text" 
+            id="firstname" 
+            name="firstname" 
+            class="form-input" 
+            placeholder="Nama"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="lastname">Nama Belakang</label>
+          <input 
+            type="text" 
+            id="lastname" 
+            name="lastname" 
+            class="form-input" 
+            placeholder="Kamu"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-input" 
+          placeholder="nama@email.com"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-input" 
+          placeholder="Min. 8 karakter"
+          minlength="8"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="confirm-password">Konfirmasi Password</label>
+        <input 
+          type="password" 
+          id="confirm-password" 
+          name="confirm-password" 
+          class="form-input" 
+          placeholder="Ketik ulang password"
+          minlength="8"
+          required
+        >
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="terms" name="terms" required>
+        <label for="terms">
+          Saya setuju dengan <a href="#" target="_blank">Syarat & Ketentuan</a> dan <a href="#" target="_blank">Kebijakan Privasi</a>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        Buat Akun
+      </button>
+    </form>
+
+    <p class="footer-text">
+      Sudah punya akun? <a href="/login">Masuk di sini</a>
+    </p>
+  </div>
+  
+  <!-- Right: Info (only visible on landscape desktop/tablet) -->
+  <div class="register-right">
+    <div class="info-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+    </div>
+    <h3>50 Request/Jam</h3>
+    <p>Daftar sekali dan nikmati akses 50 request per jam ke semua endpoint Donghua API. Fair usage, gratis selamanya!</p>
+  </div>
 </div>
 
 <script>
@@ -642,13 +633,9 @@ window.addEventListener('load', () => {
 
 // Google Sign-Up Handler
 function handleGoogleSignUp() {
-  // Demo mode - simulate Google Sign-Up
-  // In production, user needs to setup Google OAuth Client ID
-  
-  const demoMode = true; // Set to false when you have real Google Client ID
+  const demoMode = true;
   
   if (demoMode) {
-    // Simulate Google sign-up with demo data
     const demoUser = {
       name: 'Demo User',
       email: 'demo@gmail.com',
@@ -657,18 +644,12 @@ function handleGoogleSignUp() {
     };
     
     console.log('Google Sign-Up (Demo Mode):', demoUser);
-    
-    // Store user data in localStorage
     localStorage.setItem('user', JSON.stringify(demoUser));
-    
-    // Redirect to homepage
     alert('Pendaftaran berhasil! (Demo Mode)\nSelamat datang, ' + demoUser.name);
     window.location.href = '/';
     return;
   }
   
-  // Production mode - requires valid Google Client ID
-  // Replace YOUR_GOOGLE_CLIENT_ID with your actual client ID from Google Cloud Console
   try {
     google.accounts.id.initialize({
       client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
@@ -689,13 +670,10 @@ function handleGoogleSignUp() {
 // Google Callback
 function handleGoogleCallback(response) {
   const credential = response.credential;
-  
-  // Decode JWT token to get user info
   const payload = JSON.parse(atob(credential.split('.')[1]));
   
   console.log('Google Sign-Up Success:', payload);
   
-  // Store user data in localStorage
   localStorage.setItem('user', JSON.stringify({
     name: payload.name,
     email: payload.email,
@@ -703,7 +681,6 @@ function handleGoogleCallback(response) {
     provider: 'google'
   }));
   
-  // Redirect to homepage
   alert('Pendaftaran berhasil! Selamat datang, ' + payload.name);
   window.location.href = '/';
 }
@@ -719,28 +696,18 @@ function handleRegister(event) {
   const confirmPassword = document.getElementById('confirm-password').value;
   const terms = document.getElementById('terms').checked;
   
-  // Validate password match
   if (password !== confirmPassword) {
     alert('Password tidak cocok!');
     return;
   }
   
-  // Validate terms
   if (!terms) {
     alert('Anda harus menyetujui Syarat & Ketentuan!');
     return;
   }
   
-  // TODO: Implement actual registration
-  // For now, just demo registration
-  console.log('Register attempt:', { 
-    firstname, 
-    lastname, 
-    email, 
-    password 
-  });
+  console.log('Register attempt:', { firstname, lastname, email, password });
   
-  // Simulate successful registration
   const fullName = `${firstname} ${lastname}`;
   localStorage.setItem('user', JSON.stringify({
     name: fullName,

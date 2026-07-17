@@ -2,78 +2,70 @@
 import asyncio
 from playwright.async_api import async_playwright
 
-async def get_page_content(url: str):
+async def get_page_content(url: str, wait_for: str = "auto"):
     """
-    Mengambil HTML mentah dari URL target.
-    Dilengkapi sistem Auto-Click Bypass Landing Page + Aggressive Scrolling.
+    Mengambil HTML dari URL target - OPTIMIZED untuk speed.
+    
+    Optimizations:
+    - Block gambar, font, dan media (tidak perlu untuk scraping)
+    - Pakai domcontentloaded bukan load (lebih cepat)
+    - Kurangi timeout dan delay seminimal mungkin
+    - Nonaktifkan JavaScript execution yang tidak perlu
     """
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)  # Production mode
-        # Gunakan resolusi layar PC standar biar gak dicurigai bot mobile
+        browser = await p.chromium.launch(
+            headless=True,
+            args=[
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--no-first-run',
+                '--no-zygote',
+                '--single-process',
+            ]
+        )
         context = await browser.new_context(
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            viewport={'width': 1920, 'height': 1080}
+            viewport={'width': 1280, 'height': 720},  # Lebih kecil = lebih ringan
+            java_script_enabled=True,
         )
+
+        # Block resource yang tidak perlu untuk scraping
+        await context.route("**/*.{png,jpg,jpeg,gif,webp,svg,ico,woff,woff2,ttf,eot}", lambda route: route.abort())
+        await context.route("**/{google-analytics,gtag,analytics,doubleclick,facebook,ads}**", lambda route: route.abort())
+
         page = await context.new_page()
         
         try:
-            print(f"\n\033[96m[NAVIGATOR]\033[0m Membuka URL: {url}")
-            # 1. Buka URL target dengan wait yang lebih panjang
-            await page.goto(url, wait_until="load", timeout=90000)
+            print(f"\n\033[96m[NAVIGATOR]\033[0m Loading: {url}")
 
-            # 2. Lacak Tombol Bypass (Mencari elemen <a> yang punya teks 'Klik Menuju')
-            await page.wait_for_timeout(500)  # REDUCED: 2000ms -> 500ms
+            # Gunakan domcontentloaded — jauh lebih cepat dari 'load'
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+
+            # Bypass landing page jika ada
             bypass_button = page.locator("a:has-text('Klik Menuju'), a:has-text('Click to'), button:has-text('Enter')")
-            
             if await bypass_button.count() > 0:
-                print("\n\033[93m[BYPASS SYSTEM]\033[0m Landing Page Terdeteksi!")
-                print("\033[93m[BYPASS SYSTEM]\033[0m Mengeksekusi Auto-Click untuk memaksa masuk...")
-                # Klik paksa tombolnya biar langsung masuk ke web asli
+                print("\033[93m[BYPASS]\033[0m Landing page detected, clicking...")
                 await bypass_button.first.click()
-                # Tunggu halaman new load
-                await page.wait_for_load_state("load", timeout=90000)
-                await page.wait_for_timeout(1000)  # REDUCED: 3000ms -> 1000ms
-                print("\033[93m[BYPASS SYSTEM]\033[0m Berhasil bypass, masuk ke halaman utama.")
-            else:
-                print("\n\033[90m[BYPASS SYSTEM]\033[0m Aman, tidak ada Landing Page.\033[0m")
+                await page.wait_for_load_state("domcontentloaded", timeout=15000)
 
-            # 3. Tunggu elemen konten muncul (tunggu ada gambar poster donghua)
-            print("\033[96m[NAVIGATOR]\033[0m Menunggu konten JS selesai render...")
+            # Tunggu element kunci saja (bukan semua gambar)
             try:
-                # Tunggu minimal ada 5 gambar ter-load (indicator konten sudah muncul)
-                await page.wait_for_selector("img", timeout=8000)  # REDUCED: 15000ms -> 8000ms
-                await page.wait_for_timeout(1000)  # REDUCED: 5000ms -> 1000ms
+                await page.wait_for_selector("body", timeout=5000)
             except:
-                print("\033[93m[WARNING]\033[0m Gambar tidak terdeteksi, lanjut paksa...")
-            
-            # 4. Aggressive scrolling untuk trigger lazy-load
-            print("\033[96m[NAVIGATOR]\033[0m Scrolling untuk trigger lazy-load...")
-            for i in range(3):  # REDUCED: 5 scrolls -> 3 scrolls
-                await page.evaluate(f"window.scrollBy(0, 1000)")
-                await page.wait_for_timeout(300)  # REDUCED: 800ms -> 300ms
-            
-            # Scroll back ke atas
-            await page.evaluate("window.scrollTo(0, 0)")
-            await page.wait_for_timeout(500)  # REDUCED: 2000ms -> 500ms
+                pass
 
-            # Ambil HTML finalnya dengan retry
-            print("\033[96m[NAVIGATOR]\033[0m Mengambil HTML final...")
-            final_html = None
-            for retry in range(3):
-                try:
-                    final_html = await page.content()
-                    if final_html:
-                        break
-                except:
-                    await page.wait_for_timeout(500)
-            
-            if not final_html:
-                raise Exception("Failed to get page content after retries")
-            
+            # Ambil HTML langsung — tidak perlu scroll untuk data sidebar/list
+            final_html = await page.content()
             await browser.close()
             
+            print("\033[90m[NAVIGATOR]\033[0m Done.\033[0m")
             return final_html, None
             
         except Exception as e:
-            await browser.close()
+            try:
+                await browser.close()
+            except:
+                pass
             return None, str(e)

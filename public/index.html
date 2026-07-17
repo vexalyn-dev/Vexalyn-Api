@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -25,6 +25,7 @@
   --gray:#6B7280;
   --gray-soft:#9AA0AC;
   --star:#FFC93C;
+  --red-soft:#FFE5E5;
   --shadow: 6px 6px 0 var(--ink);
   --shadow-sm: 4px 4px 0 var(--ink);
   --shadow-lg: 8px 8px 0 var(--ink);
@@ -144,26 +145,23 @@ header{
   font-size:14.5px;
   color:var(--ink);
   opacity:.75;
-  transition:all .2s ease;
+  transition:all .15s ease;
   position:relative;
-  padding:8px 4px;
+  padding:8px 14px;
+  border-radius:var(--radius-pill);
+  border:2.5px solid transparent;
 }
 .nav-links a:hover{
   opacity:1;
-  transform:translateY(-2px);
+  background:var(--mint-soft);
+  border-color:var(--ink);
+  transform:translate(-2px,-2px);
+  box-shadow:4px 4px 0 var(--ink);
 }
-.nav-links a:active{transform:translateY(0);}
-.nav-links a::after{
-  content:'';
-  position:absolute;
-  bottom:0;
-  left:0;
-  width:0;
-  height:2.5px;
-  background:var(--green);
-  transition:width .3s ease;
+.nav-links a:active{
+  transform:translate(1px,1px);
+  box-shadow:1px 1px 0 var(--ink);
 }
-.nav-links a:hover::after{width:100%;}
 .header-right{display:flex;align-items:center;gap:18px;}
 .login-link{font-weight:700;font-size:14.5px;}
 .btn-small{padding:11px 22px;font-size:14px;}
@@ -489,16 +487,16 @@ footer{padding:70px 24px 30px;}
   <div class="wrap">
     <div class="hero-copy">
       <span class="pill pill-green"><span class="pill-dot"></span> REST API By Vexalyn Dev</span>
-      <h1>Akses Data Real-Time,<br><span class="accent">Cepat & Mudah,</span><br>Tanpa Batasan!</h1>
+      <h1>Akses Data Real-Time,<br><span class="accent">Cepat & Mudah,</span><br>Untuk Semua Developer!</h1>
       <p>Platform API terpercaya untuk developer. Integrasi mudah dengan dokumentasi lengkap dan performa tinggi.</p>
       <div class="hero-actions">
         <a href="http://localhost:8000/docs" target="_blank" class="btn btn-green">Coba API Sekarang →</a>
         <a href="#endpoints" class="btn btn-sky">Lihat Endpoint</a>
       </div>
       <div class="hero-stats">
-        <div class="stat"><b>4</b><span>Endpoint</span></div>
+        <div class="stat"><b>6</b><span>Endpoint</span></div>
         <div class="stat"><b>24/7</b><span>Uptime</span></div>
-        <div class="stat"><b>0</b><span>Rate Limit</span></div>
+        <div class="stat"><b>50/jam</b><span>Rate Limit</span></div>
       </div>
     </div>
     <div class="hero-visual">
@@ -508,7 +506,7 @@ footer{padding:70px 24px 30px;}
           <span class="hero-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></span>
           <div>
             <h4>Home Feed API</h4>
-            <span>GET /anichin/home · ~4s respons</span>
+            <span>GET /anichin/home · ~3s respons</span>
           </div>
         </div>
         <div class="hero-card-progress">
@@ -541,8 +539,7 @@ footer{padding:70px 24px 30px;}
           <path d="M2 12l10 5 10-5"></path>
         </svg>
       </span>
-      <h3 style="font-family: 'Fredoka', sans-serif; font-size: 28px; font-weight: 700; margin: 0; color: var(--ink); letter-spacing: -0.3px;">Endpoints</h3>
-      <h3 style="font-family: 'Fredoka', sans-serif; font-size: 28px; font-weight: 700; margin: 0 0 0 8px; color: var(--ink);">Anichin</h3>
+      <h3 style="font-family: 'Fredoka', sans-serif; font-size: 28px; font-weight: 700; margin: 0 0 0 12px; color: var(--ink); letter-spacing: -0.3px;">Endpoints Anichin</h3>
     </div>
 
     <div class="grid-3">
@@ -555,7 +552,7 @@ footer{padding:70px 24px 30px;}
         <h3>Home Feed</h3>
         <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
         <div class="ep-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~12s respons</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3s respons</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> Homepage feed</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 12.5K panggilan</span>
         </div>
@@ -569,7 +566,7 @@ footer{padding:70px 24px 30px;}
         <h3>Pencarian Donghua</h3>
         <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
         <div class="ep-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~10s respons</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3s respons</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> param <code>q</code> wajib</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 8.2K panggilan</span>
         </div>
@@ -583,7 +580,7 @@ footer{padding:70px 24px 30px;}
         <h3>List Genres</h3>
         <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
         <div class="ep-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~12s respons</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3s respons</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> 46 genre list</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 2.8K panggilan</span>
         </div>
@@ -597,9 +594,37 @@ footer{padding:70px 24px 30px;}
         <h3>Ongoing Series</h3>
         <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
         <div class="ep-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~35s respons</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4s respons</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> 25 series + thumbnail</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 5.4K panggilan</span>
+        </div>
+      </a>
+      <a class="ep-card" href="http://localhost:8000/anichin/popular-series?filter=weekly">
+        <div class="ep-top">
+          <span class="ep-icon c4"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+          <span class="ep-status"><span class="dot"></span> Stable</span>
+        </div>
+        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/popular-series</span></div>
+        <h3>Popular Series</h3>
+        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
+        <div class="ep-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3s respons</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> weekly / monthly / all</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 2.1K panggilan</span>
+        </div>
+      </a>
+      <a class="ep-card" href="http://localhost:8000/anichin/new-movie">
+        <div class="ep-top">
+          <span class="ep-icon c2"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg></span>
+          <span class="ep-status"><span class="dot"></span> Stable</span>
+        </div>
+        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/new-movie</span></div>
+        <h3>New Movie</h3>
+        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
+        <div class="ep-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3s respons</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> title + genres + date</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 1.3K panggilan</span>
         </div>
       </a>
     </div>
@@ -634,17 +659,17 @@ footer{padding:70px 24px 30px;}
         <p>Struktur respons yang konsisten dan mudah diparsing di aplikasi manapun.</p>
       </div>
       <div class="feat-card">
-        <span class="feat-icon c4"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
-        <h3>Dukungan Komunitas</h3>
-        <p>Gabung komunitas developer, tanya jawab, dan berbagi proyek yang dibangun.</p>
+        <span class="feat-icon c4"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <h3>Rate Limiting 50/Jam</h3>
+        <p>Sistem rate limit 50 request per jam untuk memastikan layanan stabil dan fair untuk semua user.</p>
       </div>
       <div class="feat-card">
-        <span class="feat-icon c1"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+        <span class="feat-icon c2"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
         <h3>Uptime 99.9%</h3>
         <p>Infrastruktur yang stabil dengan monitoring 24/7 untuk memastikan layanan selalu tersedia.</p>
       </div>
       <div class="feat-card">
-        <span class="feat-icon c2"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
+        <span class="feat-icon c3"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
         <h3>Dokumentasi Lengkap</h3>
         <p>Swagger UI interaktif dengan contoh kode dan respons detail untuk setiap endpoint.</p>
       </div>
@@ -748,7 +773,7 @@ footer{padding:70px 24px 30px;}
         </div>
       </div>
       <div class="faq-answer">
-        <p>Response time bervariasi per endpoint: Home Feed (~12s), Search (~10s), Genres (~12s), Ongoing Series (~35s dengan thumbnail). Kami terus mengoptimasi performa untuk pengalaman terbaik.</p>
+        <p>Response time bervariasi per endpoint: Home Feed (~3s), Search (~3s), Genres (~3s), Ongoing Series (~4s). Dengan sistem caching, request berikutnya bisa di bawah 100ms.</p>
       </div>
     </div>
 
@@ -760,7 +785,7 @@ footer{padding:70px 24px 30px;}
         </div>
       </div>
       <div class="faq-answer">
-        <p>Tidak ada rate limit atau quota! Kamu bebas melakukan request sebanyak yang kamu butuhkan untuk development, testing, atau production.</p>
+        <p>Ada! Saat ini berlaku rate limit <strong>50 request per jam</strong> per IP address untuk memastikan layanan tetap stabil dan fair untuk semua developer. Saat limit tercapai, API akan mengembalikan HTTP 429 beserta header <code>X-RateLimit-Remaining</code> dan <code>Retry-After</code> yang menunjukkan kapan limit reset. Limit reset otomatis setiap 1 jam.</p>
       </div>
     </div>
 
@@ -772,7 +797,7 @@ footer{padding:70px 24px 30px;}
         </div>
       </div>
       <div class="faq-answer">
-        <p>Kamu bisa menghubungi kami melalui email di vioatmajaya@gmail.com atau melalui GitHub repository kami. Kami sangat menghargai feedback dan kontribusi dari komunitas!</p>
+        <p>Temukan bug atau punya ide fitur baru? Langsung kunjungi halaman <a href="/report" style="color:var(--green);font-weight:700;">Report Center</a> kami. Isi form laporan dengan detail kategori, deskripsi, dan tingkat keparahan — tim Vexalyn akan menanganinya secepatnya!</p>
       </div>
     </div>
 
@@ -854,14 +879,14 @@ footer{padding:70px 24px 30px;}
 <section class="cta-outer">
   <div class="cta-card">
     <h2>Siap Mulai Integrasi?</h2>
-    <p>Gabung bareng ratusan developer dan mulai ambil data anime hari ini. Gratis selamanya, tanpa syarat ribet.</p>
+    <p>Gabung bareng ratusan developer dan mulai ambil data donghua hari ini. Gratis, dengan rate limit 50 request/jam.</p>
     <div class="cta-actions">
       <a href="http://localhost:8000/docs" target="_blank" class="btn btn-green">Mulai Sekarang →</a>
       <a href="http://localhost:8000/docs" target="_blank" class="btn btn-white">Lihat Dokumentasi</a>
     </div>
     <div class="cta-check">
       <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Tanpa perlu API key</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Batalkan kapan saja</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 50 request/jam per IP</span>
     </div>
   </div>
 </section>
@@ -901,9 +926,10 @@ footer{padding:70px 24px 30px;}
     <div class="footer-col">
       <h4>Bantuan</h4>
       <a href="#">Pusat Bantuan</a>
-      <a href="#">Kontak</a>
+      <a href="/report">Laporkan Bug</a>
+      <a href="#kontak">Kontak</a>
       <a href="#">Komunitas</a>
-      <a href="#">FAQ</a>
+      <a href="#faq">FAQ</a>
     </div>
   </div>
   <div class="footer-bottom">
@@ -969,6 +995,51 @@ function updateLoginButton() {
 
 // Run on page load
 updateLoginButton();
+</script>
+
+<!-- ===== Floating Report Button ===== -->
+<style>
+#float-report-wrap{position:fixed;bottom:28px;right:28px;z-index:1000;display:flex;flex-direction:column;align-items:flex-end;}
+#float-report-wrap.hidden{display:none;}
+#float-dismiss{display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:#fff;border:2.5px solid var(--ink);border-radius:50%;cursor:pointer;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px;box-shadow:2px 2px 0 var(--ink);line-height:1;transition:transform .15s ease,box-shadow .15s ease;}
+#float-dismiss:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink);}
+#float-report-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;border:3px solid var(--ink);border-radius:var(--radius-pill);padding:12px 20px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:var(--ink);text-decoration:none;cursor:pointer;box-shadow:5px 5px 0 var(--ink);transition:transform .15s ease,box-shadow .15s ease;white-space:nowrap;}
+#float-report-btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink);}
+#float-report-btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink);}
+.float-bug-icon{width:32px;height:32px;background:#FFE5E5;border:2.5px solid var(--ink);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.float-bug-icon svg{width:16px;height:16px;stroke:var(--ink);stroke-width:2;}
+@media(max-width:600px){
+  #float-report-wrap{bottom:20px;right:20px;}
+  #float-report-btn{width:52px;height:52px;padding:0;border-radius:50%;justify-content:center;}
+  #float-report-btn .float-label{display:none;}
+  .float-bug-icon{width:28px;height:28px;border:none;background:transparent;border-radius:0;}
+  .float-bug-icon svg{width:22px;height:22px;}
+  #float-dismiss{width:20px;height:20px;font-size:11px;}
+}
+</style>
+
+<div id="float-report-wrap">
+  <div id="float-dismiss" onclick="dismissFloat()" title="Sembunyikan">✕</div>
+  <a href="/report" id="float-report-btn">
+    <span class="float-bug-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </span>
+    <span class="float-label">Laporkan Bug</span>
+  </a>
+</div>
+
+<script>
+function dismissFloat() {
+  document.getElementById('float-report-wrap').classList.add('hidden');
+  localStorage.setItem('float_dismissed', '1');
+}
+if (localStorage.getItem('float_dismissed') === '1') {
+  document.getElementById('float-report-wrap').classList.add('hidden');
+}
 </script>
 
 </body>

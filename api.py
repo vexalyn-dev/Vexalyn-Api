@@ -6,13 +6,17 @@ FastAPI server untuk expose scraper functions dari berbagai sumber
 import sys
 import asyncio
 import os
+import time
 from pathlib import Path
+from datetime import datetime, timedelta
+from collections import defaultdict
+from typing import Dict, Tuple
 
 # Fix asyncio event loop untuk Windows (support subprocess Playwright)
 if sys.platform == 'win32':
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -21,14 +25,229 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# ===== IN-MEMORY CACHE =====
+class SimpleCache:
+    """
+    Cache sederhana di memory.
+    TTL default 5 menit - data masih fresh, tapi request berikutnya instan.
+    """
+    def __init__(self):
+        self._store: Dict[str, dict] = {}
+
+    def get(self, key: str):
+        if key not in self._store:
+            return None
+        entry = self._store[key]
+        if time.time() > entry['expires']:
+            del self._store[key]
+            return None
+        return entry['data']
+
+    def set(self, key: str, data, ttl_seconds: int = 300):
+        self._store[key] = {
+            'data': data,
+            'expires': time.time() + ttl_seconds
+        }
+
+    def delete(self, key: str):
+        self._store.pop(key, None)
+
+    def clear(self):
+        self._store.clear()
+
+    def stats(self):
+        now = time.time()
+        active = {k: v for k, v in self._store.items() if v['expires'] > now}
+        return {"total_keys": len(active), "keys": list(active.keys())}
+
+cache = SimpleCache()
+
+# ===== RATE LIMITING SYSTEM =====
+class RateLimiter:
+    """
+    Real Rate Limiting System
+    50 requests per IP per hour
+    """
+    def __init__(self, max_requests: int = 50, window_seconds: int = 3600):
+        self.max_requests = max_requests
+        self.window_seconds = window_seconds
+        self.requests: Dict[str, list] = defaultdict(list)
+    
+    def is_allowed(self, client_ip: str) -> Tuple[bool, int]:
+        """
+        Check if request is allowed
+        Returns: (allowed, remaining_requests)
+        """
+        now = datetime.now()
+        window_start = now - timedelta(seconds=self.window_seconds)
+        
+        # Clean old requests
+        self.requests[client_ip] = [
+            req_time for req_time in self.requests[client_ip]
+            if req_time > window_start
+        ]
+        
+        # Check if limit exceeded
+        current_count = len(self.requests[client_ip])
+        
+        if current_count >= self.max_requests:
+            return False, 0
+        
+        # Add current request
+        self.requests[client_ip].append(now)
+        
+        remaining = self.max_requests - (current_count + 1)
+        return True, remaining
+    
+    def get_reset_time(self, client_ip: str) -> int:
+        """Get seconds until rate limit reset"""
+        if not self.requests[client_ip]:
+            return 0
+        
+        oldest_request = min(self.requests[client_ip])
+        reset_time = oldest_request + timedelta(seconds=self.window_seconds)
+        seconds_until_reset = int((reset_time - datetime.now()).total_seconds())
+        
+        return max(0, seconds_until_reset)
+
+# Initialize rate limiter
+rate_limiter = RateLimiter(max_requests=50, window_seconds=3600)
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Vexalyn REST API",
     description="Multi-Source REST API by Vexalyn Developer",
     version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc"
+    docs_url=None,  # Disable default docs
+    redoc_url="/redoc",
+    openapi_tags=[
+        {
+            "name": "Anichin",
+            "description": "Anichin donghua streaming scraper endpoints"
+        },
+        {
+            "name": "System",
+            "description": "System information and rate limit status"
+        }
+    ]
 )
+
+# Custom OpenAPI schema - keep schemas but hide in UI
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    
+    from fastapi.openapi.utils import get_openapi
+    
+    openapi_schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+        tags=app.openapi_tags
+    )
+    
+    # Don't delete schemas, just keep them for validation
+    # We'll hide the Schemas section using CSS in the UI
+    
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
+
+# Custom Swagger UI with hidden /openapi.json link
+from fastapi.responses import HTMLResponse
+
+@app.get("/docs", include_in_schema=False)
+async def custom_swagger_ui_html():
+    return HTMLResponse(content=f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{app.title}</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css" />
+        <style>
+            /* Hide topbar with /openapi.json link */
+            .topbar {{ display: none !important; }}
+            
+            /* Hide Schemas section at bottom */
+            .swagger-ui section.models {{ display: none !important; }}
+            #model-section {{ display: none !important; }}
+            
+            /* Hide ALL version badges */
+            .swagger-ui .info .title small {{ display: none !important; }}
+            .swagger-ui .info .title .version-stamp {{ display: none !important; }}
+            .swagger-ui .info hgroup.main small {{ display: none !important; }}
+            .swagger-ui .info hgroup.main a {{ display: none !important; }}
+            
+            /* Hide version badge pre (OAS 3.1) */
+            .swagger-ui .info .title small.version-stamp pre {{ display: none !important; }}
+            
+            /* Hide all small elements in title */
+            .swagger-ui .info hgroup.main small pre {{ display: none !important; }}
+            
+            /* Custom title styling - clean without badges */
+            .swagger-ui .info .title {{
+                font-size: 2.5rem !important;
+                font-weight: 700 !important;
+                margin-bottom: 0.5rem !important;
+            }}
+            
+            /* Make sure title stands alone */
+            .swagger-ui .info hgroup.main {{
+                margin: 0 0 20px 0 !important;
+            }}
+        </style>
+    </head>
+    <body>
+        <div id="swagger-ui"></div>
+        <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
+        <script>
+            window.onload = function() {{
+                window.ui = SwaggerUIBundle({{
+                    url: '/openapi.json',
+                    dom_id: '#swagger-ui',
+                    presets: [
+                        SwaggerUIBundle.presets.apis,
+                        SwaggerUIStandalonePreset
+                    ],
+                    layout: "BaseLayout",
+                    deepLinking: true,
+                    showExtensions: true,
+                    showCommonExtensions: true,
+                    displayRequestDuration: true,
+                    filter: true,
+                    defaultModelsExpandDepth: -1,  // Hide models/schemas
+                    syntaxHighlight: {{
+                        theme: "monokai"
+                    }}
+                }});
+                
+                // Additional JavaScript to remove badges and schemas after render
+                setTimeout(function() {{
+                    // Remove all small tags in title
+                    const titleSmalls = document.querySelectorAll('.swagger-ui .info .title small');
+                    titleSmalls.forEach(el => el.remove());
+                    
+                    // Remove version stamps
+                    const versionStamps = document.querySelectorAll('.version-stamp');
+                    versionStamps.forEach(el => el.remove());
+                    
+                    // Remove Schemas section
+                    const modelsSection = document.querySelector('.swagger-ui section.models');
+                    if (modelsSection) modelsSection.remove();
+                    
+                    const modelSection = document.getElementById('model-section');
+                    if (modelSection) modelSection.remove();
+                }}, 500);
+            }};
+        </script>
+    </body>
+    </html>
+    """, media_type="text/html")
 
 # CORS middleware
 app.add_middleware(
@@ -39,6 +258,51 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Rate Limiting Middleware
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    """Apply rate limiting to all API endpoints"""
+    
+    # Skip rate limiting for static files and web UI routes
+    skip_paths = ["/", "/login", "/register", "/report", "/assets", "/docs", "/redoc", "/openapi.json", "/vexalyn", "/rate-limit-status", "/cache/"]
+    
+    if any(request.url.path.startswith(path) for path in skip_paths):
+        return await call_next(request)
+    
+    # Get client IP
+    client_ip = request.client.host
+    
+    # Check rate limit
+    allowed, remaining = rate_limiter.is_allowed(client_ip)
+    
+    if not allowed:
+        reset_time = rate_limiter.get_reset_time(client_ip)
+        return JSONResponse(
+            status_code=429,
+            content={
+                "error": "Rate limit exceeded",
+                "message": f"Too many requests. Rate limit: 50 requests per hour.",
+                "retry_after_seconds": reset_time,
+                "client_ip": client_ip
+            },
+            headers={
+                "X-RateLimit-Limit": "50",
+                "X-RateLimit-Remaining": "0",
+                "X-RateLimit-Reset": str(reset_time),
+                "Retry-After": str(reset_time)
+            }
+        )
+    
+    # Process request
+    response = await call_next(request)
+    
+    # Add rate limit headers to response
+    response.headers["X-RateLimit-Limit"] = "50"
+    response.headers["X-RateLimit-Remaining"] = str(remaining)
+    response.headers["X-RateLimit-Reset"] = str(rate_limiter.get_reset_time(client_ip))
+    
+    return response
+
 # Mount static files (public folder untuk UI)
 public_path = os.path.join(os.path.dirname(__file__), "public")
 if os.path.exists(public_path):
@@ -46,7 +310,7 @@ if os.path.exists(public_path):
 
 # ===== WEB UI ROUTES =====
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 async def serve_index():
     """Serve main index/homepage"""
     index_file = os.path.join(os.path.dirname(__file__), "public", "index.html")
@@ -63,7 +327,7 @@ async def serve_index():
         }
     })
 
-@app.get("/login")
+@app.get("/login", include_in_schema=False)
 async def serve_login():
     """Serve login page with Google Client ID injected"""
     login_file = os.path.join(os.path.dirname(__file__), "public", "login.html")
@@ -82,7 +346,15 @@ async def serve_login():
         return HTMLResponse(content=html_content)
     raise HTTPException(status_code=404, detail="Login page not found")
 
-@app.get("/register")
+@app.get("/report", include_in_schema=False)
+async def serve_report():
+    """Serve report page"""
+    report_file = os.path.join(os.path.dirname(__file__), "public", "report.html")
+    if os.path.exists(report_file):
+        return FileResponse(report_file)
+    raise HTTPException(status_code=404, detail="Report page not found")
+
+@app.get("/register", include_in_schema=False)
 async def serve_register():
     """Serve register page with Google Client ID injected"""
     register_file = os.path.join(os.path.dirname(__file__), "public", "register.html")
@@ -103,7 +375,7 @@ async def serve_register():
 
 # ===== DEVELOPER INFO =====
 
-@app.get("/vexalyn")
+@app.get("/vexalyn", tags=["System"])
 async def vexalyn_info():
     """Developer & Project info"""
     return {
@@ -116,54 +388,183 @@ async def vexalyn_info():
             "version": "1.0.0",
             "description": "Multi-source data scraping REST API",
             "sources": ["anichin"]
+        },
+        "rate_limit": {
+            "max_requests": 50,
+            "window": "1 hour",
+            "note": "Rate limit applies to all /anichin/* endpoints"
         }
+    }
+
+@app.get("/cache/stats", tags=["System"])
+async def cache_stats():
+    """Lihat status cache saat ini"""
+    return {"cache": cache.stats()}
+
+@app.delete("/cache/clear", tags=["System"])
+async def cache_clear():
+    """Clear semua cache (admin)"""
+    cache.clear()
+    return {"message": "Cache cleared"}
+
+@app.get("/rate-limit-status", tags=["System"])
+async def rate_limit_status(request: Request):
+    """Check current rate limit status for your IP (does not count toward limit)"""
+    client_ip = request.client.host
+    
+    # Get current count WITHOUT adding a request
+    now = datetime.now()
+    window_start = now - timedelta(seconds=3600)
+    
+    # Clean and count (read-only, no modification)
+    valid_requests = [
+        req_time for req_time in rate_limiter.requests.get(client_ip, [])
+        if req_time > window_start
+    ]
+    
+    current_count = len(valid_requests)
+    reset_time = rate_limiter.get_reset_time(client_ip) if valid_requests else 0
+    
+    return {
+        "client_ip": client_ip,
+        "rate_limit": {
+            "max_requests": 50,
+            "window_seconds": 3600,
+            "window_text": "1 hour"
+        },
+        "current_usage": {
+            "requests_made": current_count,
+            "requests_remaining": 50 - current_count,
+            "reset_in_seconds": reset_time
+        },
+        "status": "ok" if current_count < 50 else "limit_reached"
     }
 
 # ===== ANICHIN ENDPOINTS =====
 
-@app.get("/anichin/home")
+@app.get("/anichin/home", tags=["Anichin"])
 async def anichin_home():
     """Get latest donghua from Anichin homepage"""
+    cache_key = "anichin:home"
+    cached = cache.get(cache_key)
+    if cached:
+        cached["_cached"] = True
+        return JSONResponse(content=cached)
     try:
         from Anichin.Home import scrape_home_data
         result = await scrape_home_data()
+        if result.get("ok"):
+            cache.set(cache_key, result, ttl_seconds=300)  # 5 menit
         return JSONResponse(content=result)
     except Exception as e:
         print(f"[ERROR] {e}")
         raise HTTPException(status_code=500, detail=f"Failed to load home data: {str(e)}")
 
-@app.get("/anichin/search")
+@app.get("/anichin/search", tags=["Anichin"])
 async def anichin_search(q: str = Query(..., description="Search keyword", min_length=1)):
     """Search donghua by keyword on Anichin"""
+    cache_key = f"anichin:search:{q.lower().strip()}"
+    cached = cache.get(cache_key)
+    if cached:
+        cached["_cached"] = True
+        return JSONResponse(content=cached)
     try:
         from Anichin.Search import scrape_search
         result = await scrape_search(q)
+        if result.get("ok"):
+            cache.set(cache_key, result, ttl_seconds=180)  # 3 menit
         return JSONResponse(content=result)
     except Exception as e:
         print(f"[ERROR] {e}")
         raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
 
-@app.get("/anichin/genres")
+@app.get("/anichin/genres", tags=["Anichin"])
 async def anichin_genres():
     """Get all available genres from Anichin"""
+    cache_key = "anichin:genres"
+    cached = cache.get(cache_key)
+    if cached:
+        cached["_cached"] = True
+        return JSONResponse(content=cached)
     try:
         from Anichin.Genres import scrape_genres
         result = await scrape_genres()
+        if result.get("ok"):
+            cache.set(cache_key, result, ttl_seconds=3600)  # 1 jam (genres jarang berubah)
         return JSONResponse(content=result)
     except Exception as e:
         print(f"[ERROR] {e}")
         raise HTTPException(status_code=500, detail=f"Failed to load genres: {str(e)}")
 
-@app.get("/anichin/ongoing-series")
+@app.get("/anichin/ongoing-series", tags=["Anichin"])
 async def anichin_ongoing_series():
     """Get ongoing series list from Anichin"""
+    cache_key = "anichin:ongoing-series"
+    cached = cache.get(cache_key)
+    if cached:
+        cached["_cached"] = True
+        return JSONResponse(content=cached)
     try:
         from Anichin.Ongoing_Series import scrape_ongoing_series
         result = await scrape_ongoing_series()
+        if result.get("ok"):
+            cache.set(cache_key, result, ttl_seconds=300)
         return JSONResponse(content=result)
     except Exception as e:
         print(f"[ERROR] {e}")
         raise HTTPException(status_code=500, detail=f"Failed to load ongoing series: {str(e)}")
+
+@app.get("/anichin/popular-series", tags=["Anichin"])
+async def anichin_popular_series(
+    filter: str = Query(
+        default="weekly",
+        description="Time range filter: weekly, monthly, or all",
+        regex="^(weekly|monthly|all|alltime)$"
+    )
+):
+    """
+    Get popular series ranking from Anichin.
+    
+    - **filter=weekly** : Top series this week (default)
+    - **filter=monthly** : Top series this month
+    - **filter=all** : Top series of all time
+    """
+    cache_key = f"anichin:popular-series:{filter}"
+    cached = cache.get(cache_key)
+    if cached:
+        cached["_cached"] = True
+        return JSONResponse(content=cached)
+    try:
+        from Anichin.Popular_Series import scrape_popular_series
+        result = await scrape_popular_series(filter)
+        if result.get("ok"):
+            cache.set(cache_key, result, ttl_seconds=600)  # 10 menit
+        return JSONResponse(content=result)
+    except Exception as e:
+        print(f"[ERROR] {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to load popular series: {str(e)}")
+
+@app.get("/anichin/new-movie", tags=["Anichin"])
+async def anichin_new_movie():
+    """
+    Get latest donghua movies from Anichin NEW MOVIE section.
+    
+    Returns list of new movies with title, url, thumbnail, genres, release_date.
+    """
+    cache_key = "anichin:new-movie"
+    cached = cache.get(cache_key)
+    if cached:
+        cached["_cached"] = True
+        return JSONResponse(content=cached)
+    try:
+        from Anichin.New_Movie import scrape_new_movie
+        result = await scrape_new_movie()
+        if result.get("ok"):
+            cache.set(cache_key, result, ttl_seconds=600)
+        return JSONResponse(content=result)
+    except Exception as e:
+        print(f"[ERROR] {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to load new movies: {str(e)}")
 
 # ===== SERVER START =====
 
@@ -178,7 +579,8 @@ if __name__ == "__main__":
     print(f"📍 Server: http://localhost:{port}")
     print(f"📚 Docs: http://localhost:{port}/docs")
     print(f"🔐 Login: http://localhost:{port}/login")
-    print(f"📝 Register: http://localhost:{port}/register\n")
+    print(f"📝 Register: http://localhost:{port}/register")
+    print(f"⏱️  Rate Limit Status: http://localhost:{port}/rate-limit-status\n")
     
     # Check if Google OAuth is configured
     google_client_id = os.getenv('GOOGLE_CLIENT_ID', '')
@@ -186,6 +588,9 @@ if __name__ == "__main__":
         print(f"✅ Google OAuth: Configured")
     else:
         print(f"⚠️  Google OAuth: Demo Mode (set GOOGLE_CLIENT_ID in .env for real OAuth)")
+    
+    # Rate limit info
+    print(f"🛡️  Rate Limiting: 50 requests/hour per IP (REAL)")
     print()
     
     uvicorn.run(
