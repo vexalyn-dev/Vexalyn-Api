@@ -1615,6 +1615,76 @@ footer{padding:70px 24px 30px;}
 </section>
 
 <script>
+// ===== DYNAMIC URL DETECTION =====
+// Auto-detect environment and set correct API base URL
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? `http://${window.location.host}`  // Development: http://localhost:8000
+  : 'https://api.vexalynapi.my.id';  // Production: https://api.vexalynapi.my.id
+
+console.log('🌐 Environment detected:', window.location.hostname);
+console.log('📡 API Base URL:', API_BASE_URL);
+
+// Update all terminal code examples with correct URL
+function updateCodeExamples() {
+  const exampleURL = `${API_BASE_URL}/anichin/home`;
+  
+  // Update cURL example
+  const curlCode = document.getElementById('code-curl');
+  if (curlCode) {
+    curlCode.innerHTML = curlCode.innerHTML.replace(
+      /https:\/\/api\.vexalynapi\.my\.id/g,
+      API_BASE_URL
+    );
+  }
+  
+  // Update JavaScript example
+  const jsCode = document.getElementById('code-javascript');
+  if (jsCode) {
+    jsCode.innerHTML = jsCode.innerHTML.replace(
+      /https:\/\/api\.vexalynapi\.my\.id/g,
+      API_BASE_URL
+    );
+  }
+  
+  // Update Python example
+  const pythonCode = document.getElementById('code-python');
+  if (pythonCode) {
+    pythonCode.innerHTML = pythonCode.innerHTML.replace(
+      /https:\/\/api\.vexalynapi\.my\.id/g,
+      API_BASE_URL
+    );
+  }
+  
+  // Update PHP example
+  const phpCode = document.getElementById('code-php');
+  if (phpCode) {
+    phpCode.innerHTML = phpCode.innerHTML.replace(
+      /https:\/\/api\.vexalynapi\.my\.id/g,
+      API_BASE_URL
+    );
+  }
+  
+  // Update Node.js example
+  const nodejsCode = document.getElementById('code-nodejs');
+  if (nodejsCode) {
+    nodejsCode.innerHTML = nodejsCode.innerHTML.replace(
+      /https:\/\/api\.vexalynapi\.my\.id/g,
+      API_BASE_URL
+    );
+  }
+  
+  // Update "Coba Endpoint Ini" button href
+  const tryButton = document.querySelector('a.btn.btn-green[href*="/anichin/home"]');
+  if (tryButton) {
+    tryButton.href = exampleURL;
+  }
+  
+  console.log('✅ Code examples updated with:', exampleURL);
+}
+
+// Run on page load
+updateCodeExamples();
+
 // Tab Switching
 function switchTab(lang) {
   // Hide all code blocks
