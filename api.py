@@ -439,6 +439,14 @@ async def serve_api_docs():
         return FileResponse(api_docs_file)
     raise HTTPException(status_code=404, detail="API docs page not found")
 
+@app.get("/endpoint-detail.html", include_in_schema=False)
+async def serve_endpoint_detail():
+    """Serve endpoint detail page"""
+    detail_file = os.path.join(os.path.dirname(__file__), "public", "endpoint-detail.html")
+    if os.path.exists(detail_file):
+        return FileResponse(detail_file)
+    raise HTTPException(status_code=404, detail="Endpoint detail page not found")
+
 @app.get("/privacy", include_in_schema=False)
 async def serve_privacy_policy():
     """Serve Privacy Policy page"""

@@ -22,6 +22,7 @@
             --sky: #9BD8F4;
             --mint: #9BE3BC;
             --green: #33B96A;
+            --green-dark: #2A9B57;
             --gray: #6B7280;
             --shadow: 6px 6px 0 var(--ink);
             --shadow-sm: 4px 4px 0 var(--ink);
@@ -525,15 +526,17 @@
             border: var(--border);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 26px;
+            padding: 24px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
             position: relative;
+            text-decoration: none;
+            color: inherit;
         }
 
         .endpoint-card:hover {
             transform: translate(-3px, -3px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 9px 9px 0 var(--ink);
         }
 
         .endpoint-card:active {
@@ -541,27 +544,66 @@
             box-shadow: 2px 2px 0 var(--ink);
         }
 
+        .btn-run {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--green);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 13px;
+            padding: 8px 16px;
+            border-radius: 50px;
+            border: 2.5px solid var(--ink);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 3px 3px 0 var(--ink);
+            margin-top: 16px;
+            width: fit-content;
+        }
+
+        .btn-run:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 var(--ink);
+            background: #2da058;
+        }
+
+        .btn-run:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0 var(--ink);
+        }
+
+        .btn-run svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--white);
+            stroke-width: 2.5;
+        }
+
         .ep-top {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         .ep-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
             border: 2.5px solid var(--ink);
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .ep-icon svg {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             stroke: var(--ink);
+            stroke-width: 2.5;
         }
 
         .ep-icon.c1 {
@@ -573,7 +615,7 @@
         }
 
         .ep-icon.c3 {
-            background: var(--lav);
+            background: #E9D5FF;
         }
 
         .ep-icon.c4 {
@@ -584,11 +626,11 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: var(--mint-soft);
+            background: #E8F7F0;
             border: 2px solid var(--ink);
-            border-radius: var(--radius-pill);
-            padding: 5px 12px;
-            font-size: 12.5px;
+            border-radius: 50px;
+            padding: 6px 12px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--green-dark);
         }
@@ -597,7 +639,7 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--green-dark);
+            background: var(--green);
         }
 
         .method-badge {
@@ -607,50 +649,50 @@
             color: var(--white);
             font-family: 'Inter', sans-serif;
             font-weight: 800;
-            font-size: 11.5px;
-            letter-spacing: 0.5px;
-            padding: 5px 10px;
+            font-size: 11px;
+            letter-spacing: 0.3px;
+            padding: 6px 12px;
             border-radius: 8px;
+            margin-bottom: 12px;
         }
 
         .method-badge.get {
-            background: #9BE3BC;
-            color: var(--ink);
-        }
-
-        .method-badge.post {
-            background: var(--green-dark);
+            background: var(--ink);
             color: var(--white);
-        }
-
-        .method-badge.delete {
-            background: #FFD4D4;
-            color: var(--ink);
         }
 
         .endpoint-path {
             font-family: 'Courier New', monospace;
-            font-weight: 700;
-            font-size: 14.5px;
+            font-weight: 600;
+            font-size: 13px;
             color: var(--ink);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
-
-        .endpoint-path-code {
-            font-family: 'Courier New', monospace;
-            font-weight: 700;
-            font-size: 14.5px;
-            color: var(--ink);
+            margin-bottom: 14px;
+            opacity: 0.8;
         }
 
         .endpoint-card h3 {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             font-family: 'Fredoka', sans-serif;
+            line-height: 1.2;
+        }
+
+        .endpoint-author {
+            color: var(--gray);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .endpoint-author svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--gray);
+            stroke-width: 2;
         }
 
         .endpoint-description {
@@ -658,7 +700,7 @@
             font-size: 14px;
             font-weight: 500;
             margin-bottom: 16px;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .endpoint-meta {
@@ -668,12 +710,61 @@
             color: var(--gray);
             font-size: 13px;
             font-weight: 600;
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid var(--cream);
         }
 
         .endpoint-meta span {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+        }
+
+        .endpoint-meta svg {
+            width: 15px;
+            height: 15px;
+            stroke: var(--gray);
+            stroke-width: 2;
+        }
+
+        .endpoint-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .api-calls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--gray);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .api-calls svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--gray);
+            stroke-width: 2;
+        }
+
+        .btn-run {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--green);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 13px;
+            padding: 10px 18px;
+            border-radius: 50px;
+            border: 2.5px solid var(--ink);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 3px 3px 0 var(--ink);
         }
 
         .endpoint-meta svg {
@@ -909,136 +1000,226 @@
 
         <div class="endpoints-grid">
             <!-- GET /anichin/home -->
-            <a href="/anichin/home" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+            <div class="endpoint-card" onclick="openEndpoint('/anichin/home', 'GET', 'Home Feed', 'Dapatkan data donghua terbaru dari homepage Anichin.')">
                 <div class="ep-top">
                     <span class="ep-icon c1">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                     </span>
-                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                    <span class="ep-status"><span class="dot"></span> Stable</span>
                 </div>
-                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
-                    <span class="method-badge get">GET</span>
-                </div>
-                <div class="endpoint-path">
-                    <span class="endpoint-path-code">/anichin/home</span>
-                </div>
-                <h3>Home Feed API</h3>
-                <p class="endpoint-description">Dapatkan data donghua terbaru dari homepage Anichin termasuk featured, trending, dan recommendations.</p>
+                <span class="method-badge get">GET</span>
+                <div class="endpoint-path">/anichin/home</div>
+                <h3>Home Feed</h3>
+                <p class="endpoint-author">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    oleh Vexalyn Dev
+                </p>
                 <div class="endpoint-meta">
-                    <span><span class="meta-badge">Cache: 5m</span></span>
-                    <span><span class="meta-badge">Speed: ~3-5s</span></span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ~12s respons
+                    </span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        Homepage feed
+                    </span>
                 </div>
-            </a>
+                <div class="endpoint-footer">
+                    <span class="api-calls">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        12.5K panggilan
+                    </span>
+                    <button class="btn-run" onclick="event.stopPropagation(); openEndpoint('/anichin/home', 'GET', 'Home Feed', 'Dapatkan data donghua terbaru dari homepage Anichin.')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Run
+                    </button>
+                </div>
+            </div>
 
             <!-- GET /anichin/search -->
-            <a href="/anichin/search?q=naruto" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+            <div class="endpoint-card" onclick="openEndpoint('/anichin/search', 'GET', 'Pencarian Donghua', 'Search donghua berdasarkan keyword atau judul.', [{name: 'q', required: true, type: 'string', description: 'Search keyword (minimum 1 karakter)'}])">
                 <div class="ep-top">
                     <span class="ep-icon c2">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     </span>
-                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                    <span class="ep-status"><span class="dot"></span> Stable</span>
                 </div>
-                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
-                    <span class="method-badge get">GET</span>
-                </div>
-                <div class="endpoint-path">
-                    <span class="endpoint-path-code">/anichin/search?q=query</span>
-                </div>
-                <h3>Search Endpoint</h3>
-                <p class="endpoint-description">Search donghua berdasarkan keyword atau judul. Parameter wajib: <code>q</code> (minimum 1 karakter).</p>
+                <span class="method-badge get">GET</span>
+                <div class="endpoint-path">/anichin/search</div>
+                <h3>Pencarian Donghua</h3>
+                <p class="endpoint-author">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    oleh Vexalyn Dev
+                </p>
                 <div class="endpoint-meta">
-                    <span><span class="meta-badge">Cache: 3m</span></span>
-                    <span><span class="meta-badge">Dynamic</span></span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ~10s respons
+                    </span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        param q wajib
+                    </span>
                 </div>
-            </a>
+                <div class="endpoint-footer">
+                    <span class="api-calls">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        8.2K panggilan
+                    </span>
+                    <button class="btn-run" onclick="event.stopPropagation(); openEndpoint('/anichin/search', 'GET', 'Pencarian Donghua', 'Search donghua berdasarkan keyword atau judul.', [{name: 'q', required: true, type: 'string', description: 'Search keyword (minimum 1 karakter)'}])">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Run
+                    </button>
+                </div>
+            </div>
 
             <!-- GET /anichin/genres -->
-            <a href="/anichin/genres" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+            <div class="endpoint-card" onclick="openEndpoint('/anichin/genres', 'GET', 'List Genres', 'Daftar lengkap semua genre donghua yang tersedia di Anichin.')">
                 <div class="ep-top">
                     <span class="ep-icon c3">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </span>
-                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                    <span class="ep-status"><span class="dot"></span> Stable</span>
                 </div>
-                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
-                    <span class="method-badge get">GET</span>
-                </div>
-                <div class="endpoint-path">
-                    <span class="endpoint-path-code">/anichin/genres</span>
-                </div>
-                <h3>Genres Endpoint</h3>
-                <p class="endpoint-description">Daftar lengkap semua genre donghua yang tersedia di Anichin. Jarang berubah, cache lama.</p>
+                <span class="method-badge get">GET</span>
+                <div class="endpoint-path">/anichin/genres</div>
+                <h3>List Genres</h3>
+                <p class="endpoint-author">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    oleh Vexalyn Dev
+                </p>
                 <div class="endpoint-meta">
-                    <span><span class="meta-badge">Cache: 1h</span></span>
-                    <span><span class="meta-badge">Static</span></span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ~12s respons
+                    </span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        46 genre list
+                    </span>
                 </div>
-            </a>
+                <div class="endpoint-footer">
+                    <span class="api-calls">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        2.8K panggilan
+                    </span>
+                    <button class="btn-run" onclick="event.stopPropagation(); openEndpoint('/anichin/genres', 'GET', 'List Genres', 'Daftar lengkap semua genre donghua.')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Run
+                    </button>
+                </div>
+            </div>
 
             <!-- GET /anichin/ongoing-series -->
-            <a href="/anichin/ongoing-series" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+            <div class="endpoint-card" onclick="openEndpoint('/anichin/ongoing-series', 'GET', 'Ongoing Series', 'Daftar donghua yang sedang ongoing atau sedang tayang.')">
                 <div class="ep-top">
                     <span class="ep-icon c4">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                     </span>
-                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                    <span class="ep-status"><span class="dot"></span> Stable</span>
                 </div>
-                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
-                    <span class="method-badge get">GET</span>
-                </div>
-                <div class="endpoint-path">
-                    <span class="endpoint-path-code">/anichin/ongoing-series</span>
-                </div>
+                <span class="method-badge get">GET</span>
+                <div class="endpoint-path">/anichin/ongoing-series</div>
                 <h3>Ongoing Series</h3>
-                <p class="endpoint-description">Daftar donghua yang sedang ongoing atau sedang tayang. Update berkala sesuai jadwal rilis.</p>
+                <p class="endpoint-author">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    oleh Vexalyn Dev
+                </p>
                 <div class="endpoint-meta">
-                    <span><span class="meta-badge">Cache: 5m</span></span>
-                    <span><span class="meta-badge">Live</span></span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ~15s respons
+                    </span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        Series ongoing
+                    </span>
                 </div>
-            </a>
+                <div class="endpoint-footer">
+                    <span class="api-calls">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        5.4K panggilan
+                    </span>
+                    <button class="btn-run" onclick="event.stopPropagation(); openEndpoint('/anichin/ongoing-series', 'GET', 'Ongoing Series', 'Daftar donghua ongoing.')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Run
+                    </button>
+                </div>
+            </div>
 
             <!-- GET /anichin/popular-series -->
-            <a href="/anichin/popular-series?filter=weekly" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+            <div class="endpoint-card" onclick="openEndpoint('/anichin/popular-series', 'GET', 'Popular Series', 'Ranking donghua paling populer dengan filter waktu.', [{name: 'filter', required: false, type: 'string', description: 'Filter: weekly, monthly, atau all (default: weekly)'}])">
                 <div class="ep-top">
                     <span class="ep-icon c1">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
                     </span>
-                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                    <span class="ep-status"><span class="dot"></span> Stable</span>
                 </div>
-                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
-                    <span class="method-badge get">GET</span>
-                </div>
-                <div class="endpoint-path">
-                    <span class="endpoint-path-code">/anichin/popular-series?filter=weekly</span>
-                </div>
+                <span class="method-badge get">GET</span>
+                <div class="endpoint-path">/anichin/popular-series</div>
                 <h3>Popular Series</h3>
-                <p class="endpoint-description">Ranking donghua paling populer. Filter: <code>weekly</code>, <code>monthly</code>, atau <code>all</code>.</p>
+                <p class="endpoint-author">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    oleh Vexalyn Dev
+                </p>
                 <div class="endpoint-meta">
-                    <span><span class="meta-badge">Cache: 10m</span></span>
-                    <span><span class="meta-badge">3 filters</span></span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ~14s respons
+                    </span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        3 filters
+                    </span>
                 </div>
-            </a>
+                <div class="endpoint-footer">
+                    <span class="api-calls">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        6.1K panggilan
+                    </span>
+                    <button class="btn-run" onclick="event.stopPropagation(); openEndpoint('/anichin/popular-series', 'GET', 'Popular Series', 'Ranking donghua paling populer.', [{name: 'filter', required: false, type: 'string', description: 'Filter: weekly, monthly, atau all (default: weekly)'}])">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Run
+                    </button>
+                </div>
+            </div>
 
             <!-- GET /anichin/new-movie -->
-            <a href="/anichin/new-movie" class="endpoint-card" style="text-decoration:none;color:inherit;display:block;">
+            <div class="endpoint-card" onclick="openEndpoint('/anichin/new-movie', 'GET', 'New Movie', 'Film donghua terbaru dan dirilis baru dari Anichin NEW MOVIE section.')">
                 <div class="ep-top">
                     <span class="ep-icon c2">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
                     </span>
-                    <span class="ep-status"><span class="dot"></span> Aktif</span>
+                    <span class="ep-status"><span class="dot"></span> Stable</span>
                 </div>
-                <div class="ep-path-row" style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
-                    <span class="method-badge get">GET</span>
-                </div>
-                <div class="endpoint-path">
-                    <span class="endpoint-path-code">/anichin/new-movie</span>
-                </div>
-                <h3>New Movie Endpoint</h3>
-                <p class="endpoint-description">Film donghua terbaru dan dirilis baru dari Anichin NEW MOVIE section.</p>
+                <span class="method-badge get">GET</span>
+                <div class="endpoint-path">/anichin/new-movie</div>
+                <h3>New Movie</h3>
+                <p class="endpoint-author">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    oleh Vexalyn Dev
+                </p>
                 <div class="endpoint-meta">
-                    <span><span class="meta-badge">Cache: 10m</span></span>
-                    <span><span class="meta-badge">Movie</span></span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ~13s respons
+                    </span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        Movie list
+                    </span>
                 </div>
-            </a>
+                <div class="endpoint-footer">
+                    <span class="api-calls">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        3.7K panggilan
+                    </span>
+                    <button class="btn-run" onclick="event.stopPropagation(); openEndpoint('/anichin/new-movie', 'GET', 'New Movie', 'Film donghua terbaru.')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Run
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1064,6 +1245,30 @@
     </footer>
 
     <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Open endpoint detail page
+        function openEndpoint(path, method, title, description, params = []) {
+            // Encode data untuk dikirim via URL
+            const data = {
+                path: path,
+                method: method,
+                title: title,
+                description: description,
+                params: params
+            };
+            
+            // Redirect ke halaman detail dengan data di URL
+            const encoded = encodeURIComponent(JSON.stringify(data));
+            window.location.href = `/endpoint-detail.html?data=${encoded}`;
+        }
+
         // Fade-in animation on scroll
         const observerOptions = {
             threshold: 0.1,
