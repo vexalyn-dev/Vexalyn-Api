@@ -221,6 +221,17 @@ h1{
   height:20px;
 }
 
+.btn-admin{
+  background:var(--salmon);
+  color:var(--ink);
+  border:var(--border);
+  font-weight:700;
+}
+
+.btn-admin:hover{
+  background:#ff9d82;
+}
+
 .divider{
   display:flex;
   align-items:center;
@@ -464,6 +475,14 @@ h1{
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
       Masuk dengan Google
     </button>
+
+    <!-- Admin Login Button -->
+    <a href="/admin/login" class="btn btn-admin" style="text-decoration: none; margin-top: 10px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V11H5V6.3l7-3.11v8.8z"/>
+      </svg>
+      Admin Login
+    </a>
 
     <div class="divider">
       <span>atau masuk dengan email</span>
