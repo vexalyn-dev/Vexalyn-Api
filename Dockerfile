@@ -1,5 +1,5 @@
 # Dockerfile for Railway deployment
-# Updated: 2026-07-17 10:30 - Force rebuild
+# Updated: 2026-07-17 10:50 - Trigger rebuild for health check fix
 FROM python:3.11-slim
 
 # Install system dependencies for Playwright
