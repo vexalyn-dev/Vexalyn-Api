@@ -1,4 +1,5 @@
-# Dockerfile for Railway/Render deployment
+# Dockerfile for Railway deployment
+# Updated: 2026-07-17 10:30 - Force rebuild
 FROM python:3.11-slim
 
 # Install system dependencies for Playwright
