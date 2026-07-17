@@ -43,9 +43,11 @@ RUN playwright install-deps chromium
 # Copy application code
 COPY . .
 
+# Make start script executable
+RUN chmod +x start.sh
+
 # Expose port
 EXPOSE 8000
 
-# Run the application
-# Menggunakan port 8000 secara eksplisit agar uvicorn tidak bingung
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the application using startup script
+CMD ["./start.sh"]
