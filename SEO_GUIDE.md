@@ -27,7 +27,7 @@
 ```
 Allow: /
 Disallow: /api/, /cache/
-Sitemap: https://vexalyn-api.up.railway.app/sitemap.xml
+Sitemap: https://api.vexalynapi.my.id/sitemap.xml
 ```
 
 ### 3. **sitemap.xml** (public/sitemap.xml)

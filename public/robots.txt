@@ -5,7 +5,7 @@ Disallow: /_next/
 Disallow: /admin/
 
 # Sitemap
-Sitemap: https://vexalynapi.my.id/sitemap.xml
+Sitemap: https://api.vexalynapi.my.id/sitemap.xml
 
 # Crawl-delay
 Crawl-delay: 1

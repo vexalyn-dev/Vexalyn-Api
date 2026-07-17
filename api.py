@@ -147,6 +147,18 @@ def custom_openapi():
         tags=app.openapi_tags
     )
     
+    # Add servers for production and local
+    openapi_schema["servers"] = [
+        {
+            "url": "https://api.vexalynapi.my.id",
+            "description": "Production Server"
+        },
+        {
+            "url": "http://localhost:8000",
+            "description": "Local Development Server"
+        }
+    ]
+    
     # Don't delete schemas, just keep them for validation
     # We'll hide the Schemas section using CSS in the UI
     
