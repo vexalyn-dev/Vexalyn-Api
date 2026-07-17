@@ -1,0 +1,13 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Neobrutalism Square with Shadow -->
+  <rect x="10" y="10" width="100" height="100" fill="#15181F"/>
+  <rect x="7" y="7" width="100" height="100" fill="#FFAB92" stroke="#15181F" stroke-width="3"/>
+  
+  <!-- V Letter -->
+  <path d="M 30 35 L 50 75 L 60 55 L 70 75 L 90 35 L 80 35 L 60 65 L 40 35 Z" 
+        fill="#FFFFFF"/>
+  
+  <!-- API Text -->
+  <text x="60" y="95" font-family="Arial, sans-serif" font-size="12" font-weight="bold" 
+        fill="#15181F" text-anchor="middle">API</text>
+</svg>

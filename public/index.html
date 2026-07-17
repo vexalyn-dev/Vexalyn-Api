@@ -1103,11 +1103,8 @@ updateLoginButton();
 </div>
 
 <script>
+// Dismiss floating button (only for current session)
 function dismissFloat() {
-  document.getElementById('float-report-wrap').classList.add('hidden');
-  localStorage.setItem('float_dismissed', '1');
-}
-if (localStorage.getItem('float_dismissed') === '1') {
   document.getElementById('float-report-wrap').classList.add('hidden');
 }
 </script>

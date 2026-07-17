@@ -1,0 +1,20 @@
+<svg width="240" height="60" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo Icon Part -->
+  <rect x="4" y="4" width="52" height="52" fill="#15181F"/>
+  <rect x="2" y="2" width="52" height="52" fill="#FFAB92" stroke="#15181F" stroke-width="2"/>
+  
+  <!-- V Letter -->
+  <path d="M 14 16 L 24 40 L 28 28 L 32 40 L 42 16 L 37 16 L 28 34 L 19 16 Z" 
+        fill="#FFFFFF"/>
+  
+  <!-- Text: VEXALYN -->
+  <text x="70" y="30" font-family="'Fredoka', sans-serif" font-size="22" font-weight="700" 
+        fill="#15181F" letter-spacing="0.5">VEXALYN</text>
+  
+  <!-- Text: API -->
+  <text x="70" y="48" font-family="'Inter', sans-serif" font-size="14" font-weight="600" 
+        fill="#6B7280" letter-spacing="2">API</text>
+  
+  <!-- Accent Line -->
+  <rect x="70" y="52" width="60" height="3" fill="#9BD8F4" rx="1.5"/>
+</svg>

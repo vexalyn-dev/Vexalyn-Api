@@ -1,0 +1,13 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Neobrutalism Border -->
+  <rect x="4" y="4" width="56" height="56" fill="#15181F"/>
+  <rect x="2" y="2" width="56" height="56" fill="#9BD8F4" stroke="#15181F" stroke-width="2"/>
+  
+  <!-- V + Brackets -->
+  <path d="M 18 20 L 28 42 L 32 32 L 36 42 L 46 20 L 40 20 L 32 36 L 24 20 Z" 
+        fill="#15181F"/>
+  
+  <!-- Decorative Dots -->
+  <circle cx="14" cy="50" r="2" fill="#FFAB92"/>
+  <circle cx="50" cy="50" r="2" fill="#CBC0F5"/>
+</svg>

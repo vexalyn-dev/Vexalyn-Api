@@ -582,6 +582,51 @@ async def anichin_new_movie():
         print(f"[ERROR] {e}")
         raise HTTPException(status_code=500, detail=f"Failed to load new movies: {str(e)}")
 
+# ===== CUSTOM ERROR HANDLERS =====
+
+@app.exception_handler(404)
+async def custom_404_handler(request: Request, exc):
+    """Custom 404 page"""
+    # Check if request wants JSON (API call) or HTML (browser)
+    accept = request.headers.get('accept', '')
+    
+    if 'application/json' in accept or '/anichin/' in request.url.path:
+        # Return JSON for API requests
+        return JSONResponse(
+            status_code=404,
+            content={
+                "error": "Not Found",
+                "message": f"The endpoint {request.url.path} does not exist.",
+                "available_endpoints": {
+                    "anichin": ["/anichin/home", "/anichin/search", "/anichin/genres", "/anichin/ongoing-series", "/anichin/popular-series", "/anichin/new-movie"],
+                    "system": ["/vexalyn", "/rate-limit-status", "/cache/stats"],
+                    "docs": ["/docs", "/redoc"]
+                }
+            }
+        )
+    else:
+        # Return HTML 404 page for browser requests
+        error_404_file = os.path.join(os.path.dirname(__file__), "public", "404.html")
+        if os.path.exists(error_404_file):
+            return FileResponse(error_404_file, status_code=404)
+        else:
+            return HTMLResponse(
+                content="<h1>404 - Page Not Found</h1><p><a href='/'>Go to Homepage</a></p>",
+                status_code=404
+            )
+
+@app.exception_handler(500)
+async def custom_500_handler(request: Request, exc):
+    """Custom 500 error handler"""
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Internal Server Error",
+            "message": "Something went wrong. Please try again later or report this issue.",
+            "report_url": "/report"
+        }
+    )
+
 # ===== SERVER START =====
 
 if __name__ == "__main__":

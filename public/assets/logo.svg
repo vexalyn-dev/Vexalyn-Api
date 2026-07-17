@@ -1,0 +1,27 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle with Shadow Effect -->
+  <circle cx="100" cy="100" r="95" fill="#FBF1E3"/>
+  <circle cx="100" cy="100" r="90" fill="#FFFFFF" stroke="#15181F" stroke-width="3"/>
+  
+  <!-- V Letter (Bold and Angular) -->
+  <path d="M 60 60 L 90 140 L 100 120 L 110 140 L 140 60 L 125 60 L 100 110 L 75 60 Z" 
+        fill="#15181F"/>
+  
+  <!-- API Brackets -->
+  <path d="M 40 90 L 35 90 L 35 110 L 40 110" 
+        stroke="#9BD8F4" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M 160 90 L 165 90 L 165 110 L 160 110" 
+        stroke="#9BD8F4" stroke-width="4" stroke-linecap="round" fill="none"/>
+  
+  <!-- Data Flow Lines (Salmon accent) -->
+  <line x1="50" y1="80" x2="70" y2="80" stroke="#FFAB92" stroke-width="3" stroke-linecap="round"/>
+  <line x1="50" y1="100" x2="65" y2="100" stroke="#FFAB92" stroke-width="3" stroke-linecap="round"/>
+  <line x1="50" y1="120" x2="70" y2="120" stroke="#FFAB92" stroke-width="3" stroke-linecap="round"/>
+  
+  <line x1="130" y1="80" x2="150" y2="80" stroke="#CBC0F5" stroke-width="3" stroke-linecap="round"/>
+  <line x1="135" y1="100" x2="150" y2="100" stroke="#CBC0F5" stroke-width="3" stroke-linecap="round"/>
+  <line x1="130" y1="120" x2="150" y2="120" stroke="#CBC0F5" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Bottom Accent Line -->
+  <rect x="70" y="155" width="60" height="4" fill="#9BE3BC" rx="2"/>
+</svg>
