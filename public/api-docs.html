@@ -42,24 +42,25 @@
         }
 
         /* ===== HEADER ===== */
-        .header-outer{
+        .header-outer {
             padding: 22px 24px 0;
         }
 
         header {
-            max-width: 1180px;
+            max-width: 100%;
             margin: 0 auto;
             background: var(--white);
-            border: var(--border);
-            border-radius: var(--radius-pill);
-            box-shadow: var(--shadow);
-            padding: 12px 14px 12px 20px;
+            border: 2.5px solid var(--ink);
+            border-radius: 40px;
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.1);
+            padding: 14px 28px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 22px;
             z-index: 100;
+            margin: 0 24px;
         }
 
         .brand {
@@ -67,58 +68,355 @@
             align-items: center;
             gap: 10px;
             font-weight: 700;
-            font-size: 20px;
+            font-size: 16px;
             text-decoration: none;
             color: var(--ink);
+            flex-shrink: 0;
         }
 
         .brand-icon {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             background: var(--salmon);
             border: 2.5px solid var(--ink);
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .brand-icon svg {
-            width: 19px;
-            height: 19px;
+            width: 18px;
+            height: 18px;
             stroke: var(--ink);
+            stroke-width: 2.5;
         }
 
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 32px;
             align-items: center;
+            flex: 1;
+            justify-content: center;
+            margin: 0 40px;
         }
 
         .nav-links a {
-            font-weight: 600;
-            font-size: 14.5px;
+            font-weight: 500;
+            font-size: 14px;
             color: var(--ink);
-            opacity: 0.75;
-            transition: all 0.15s ease;
-            position: relative;
-            padding: 8px 14px;
-            border-radius: var(--radius-pill);
-            border: 2.5px solid transparent;
             text-decoration: none;
+            position: relative;
+            transition: all 0.2s ease;
+            padding: 6px 2px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--ink);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .nav-links a:hover {
             opacity: 1;
-            background: var(--mint-soft);
-            border-color: var(--ink);
-            transform: translate(-2px, -2px);
-            box-shadow: 4px 4px 0 var(--ink);
         }
 
-        .nav-links a:active {
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0;
+        }
+
+        .login-link {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--ink);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .login-link:hover {
+            opacity: 1;
+        }
+
+        .btn-coba {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--green);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 13px;
+            padding: 11px 22px;
+            border-radius: 50px;
+            border: 2.5px solid var(--ink);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 4px 4px 0 var(--ink);
+            white-space: nowrap;
+        }
+
+        .btn-coba:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--ink);
+        }
+
+        .btn-coba:active {
             transform: translate(1px, 1px);
-            box-shadow: 1px 1px 0 var(--ink);
+            box-shadow: 2px 2px 0 var(--ink);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2.5px;
+            background: var(--ink);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 24px;
+            right: 24px;
+            background: var(--white);
+            border: 2.5px solid var(--ink);
+            border-top: none;
+            border-radius: 0 0 24px 24px;
+            padding: 20px;
+            margin-top: -4px;
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.1);
+            z-index: 99;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--ink);
+            text-decoration: none;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--cream);
+            transition: opacity 0.2s ease;
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            opacity: 0.7;
+        }
+
+        .mobile-menu-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--cream);
+        }
+
+        .mobile-menu-actions a {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mobile-menu-login {
+            color: var(--ink);
+            font-weight: 600;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .nav-links {
+                gap: 24px;
+                margin: 0 30px;
+            }
+
+            .brand {
+                font-size: 14px;
+            }
+
+            .brand-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .brand-icon svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            header {
+                flex-wrap: wrap;
+                padding: 12px 20px;
+                margin: 0 20px;
+            }
+
+            .header-outer {
+                padding: 20px 0 0;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+                order: 3;
+            }
+
+            .header-right {
+                display: none;
+            }
+
+            .brand {
+                order: 1;
+                flex: 1;
+                gap: 8px;
+            }
+
+            .brand-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .brand-icon svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .mobile-menu {
+                left: 20px;
+                right: 20px;
+                width: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-outer {
+                padding: 16px 0 0;
+            }
+
+            header {
+                margin: 0 16px;
+                padding: 12px 16px;
+                border-radius: 32px;
+            }
+
+            .brand {
+                font-size: 13px;
+            }
+
+            .brand-icon {
+                width: 30px;
+                height: 30px;
+            }
+
+            .hamburger span {
+                width: 22px;
+                height: 2px;
+            }
+
+            .mobile-menu {
+                left: 16px;
+                right: 16px;
+                margin-top: -2px;
+                padding: 16px;
+                border-radius: 0 0 24px 24px;
+            }
+
+            .mobile-menu a {
+                font-size: 13px;
+                padding: 8px 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header-outer {
+                padding: 12px 0 0;
+            }
+
+            header {
+                margin: 0 12px;
+                padding: 10px 14px;
+                border-radius: 28px;
+            }
+
+            .brand {
+                font-size: 12px;
+                gap: 6px;
+            }
+
+            .brand-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .brand-icon svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .hamburger span {
+                width: 20px;
+                height: 2px;
+            }
+
+            .mobile-menu {
+                left: 12px;
+                right: 12px;
+                padding: 14px;
+            }
         }
 
         /* ===== HERO ===== */
@@ -540,15 +838,41 @@
     <div class="header-outer">
         <header>
             <a href="/" class="brand">
-                <img src="/assets/logo-horizontal.svg" alt="Vexalyn API" height="40" style="display:block;">
+                <span class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                </span>
+                <span>VEXALYN<br><span style="font-size:11px;font-weight:600;opacity:0.7;">API</span></span>
             </a>
             <nav class="nav-links">
-                <a href="/">Home</a>
-                <a href="/api-docs">API Docs</a>
-                <a href="/docs">Swagger</a>
-                <a href="/report">Report</a>
+                <a href="/">API Docs</a>
+                <a href="#quick-start">Quick Start</a>
+                <a href="#fitur">Fitur</a>
+                <a href="#faq">FAQ</a>
+                <a href="#kontak">Kontak</a>
             </nav>
+            <div class="header-right">
+                <a href="/login" class="login-link">Masuk</a>
+                <a href="/docs" target="_blank" class="btn-coba">Coba Gratis →</a>
+            </div>
+            <button class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </header>
+        
+        <!-- Mobile Menu -->
+        <nav class="mobile-menu" id="mobileMenu">
+            <a href="/">API Docs</a>
+            <a href="#quick-start">Quick Start</a>
+            <a href="#fitur">Fitur</a>
+            <a href="#faq">FAQ</a>
+            <a href="#kontak">Kontak</a>
+            <div class="mobile-menu-actions">
+                <a href="/login" class="mobile-menu-login">Masuk</a>
+                <a href="/docs" target="_blank" class="btn-coba" style="width:100%;justify-content:center;">Coba Gratis →</a>
+            </div>
+        </nav>
     </div>
 
     <!-- Hero Section -->
