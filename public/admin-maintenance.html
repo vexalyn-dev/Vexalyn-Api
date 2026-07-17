@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Maintenance Mode | Vexalyn API</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .admin-container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 48px;
+            max-width: 500px;
+            width: 100%;
+            border: 4px solid #000;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .admin-logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .admin-logo svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .status-card {
+            background: #f8fafc;
+            border: 3px solid #000;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .status-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .status-display {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #000;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.active {
+            background: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+        }
+
+        .status-indicator.maintenance {
+            background: #f59e0b;
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .status-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .control-section {
+            margin-bottom: 32px;
+        }
+
+        .control-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            border: 3px solid #000;
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 4px 4px 0 #000;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .toggle-info {
+            flex: 1;
+        }
+
+        .toggle-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .toggle-description {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 64px;
+            height: 34px;
+            background: #cbd5e1;
+            border: 3px solid #000;
+            border-radius: 34px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active {
+            background: #f59e0b;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(30px);
+        }
+
+        .info-box {
+            background: #fff8e1;
+            border: 3px solid #000;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 3px 3px 0 #000;
+        }
+
+        .info-box-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #f59e0b;
+            margin-bottom: 8px;
+        }
+
+        .info-box-content {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border: 3px solid #000;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #1a1a2e;
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 12px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: white;
+            border: 3px solid #000;
+            border-radius: 12px;
+            padding: 16px 24px;
+            box-shadow: 6px 6px 0 #000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            max-width: 360px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .toast.error {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .toast-icon {
+            font-size: 20px;
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        @media (max-width: 640px) {
+            .admin-container {
+                padding: 32px 24px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .toast {
+                right: 12px;
+                left: 12px;
+                max-width: calc(100% - 24px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <div class="admin-logo">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V7.89l7-3.11v8.21z"/>
+                </svg>
+            </div>
+            <h1>Admin Panel</h1>
+            <p class="subtitle">Maintenance Mode Control</p>
+        </div>
+
+        <div class="status-card">
+            <div class="status-label">Status Saat Ini</div>
+            <div class="status-display">
+                <div class="status-indicator active" id="statusIndicator"></div>
+                <div class="status-text" id="statusText">API Aktif</div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="info-box-title">
+                <span>⚠️</span>
+                <span>Perhatian</span>
+            </div>
+            <div class="info-box-content">
+                Saat maintenance mode aktif, semua pengunjung akan melihat halaman maintenance. Pastikan update sudah selesai sebelum mematikan mode ini.
+            </div>
+        </div>
+
+        <div class="control-section">
+            <label class="control-label">Kontrol Maintenance</label>
+            <div class="toggle-container">
+                <div class="toggle-info">
+                    <div class="toggle-title">Maintenance Mode</div>
+                    <div class="toggle-description">Aktifkan untuk maintenance</div>
+                </div>
+                <div class="toggle-switch" id="maintenanceToggle" onclick="toggleMaintenance()">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading" id="loadingState">
+            <div class="spinner"></div>
+            <p style="color: #64748b; font-size: 14px;">Memproses perubahan...</p>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/" class="btn btn-secondary">← Kembali ke Home</a>
+            <a href="/maintenance" class="btn btn-primary" id="previewBtn">Preview Maintenance</a>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="logout()" style="background: none; border: none; color: #64748b; font-size: 14px; cursor: pointer; text-decoration: underline;">
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        const adminToken = sessionStorage.getItem('admin_token');
+        if (!adminToken) {
+            window.location.href = '/admin/login';
+        }
+
+        // Cek status maintenance saat load
+        let isMaintenanceMode = false;
+
+        async function checkMaintenanceStatus() {
+            try {
+                const response = await fetch('/admin/maintenance/status', {
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+                const data = await response.json();
+                isMaintenanceMode = data.maintenance_mode;
+                updateUI();
+            } catch (error) {
+                console.error('Error checking status:', error);
+                showToast('Gagal mengecek status', 'error');
+            }
+        }
+
+        function updateUI() {
+            const toggle = document.getElementById('maintenanceToggle');
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const previewBtn = document.getElementById('previewBtn');
+
+            if (isMaintenanceMode) {
+                toggle.classList.add('active');
+                indicator.classList.remove('active');
+                indicator.classList.add('maintenance');
+                statusText.textContent = 'Mode Maintenance';
+                previewBtn.style.display = 'block';
+            } else {
+                toggle.classList.remove('active');
+                indicator.classList.add('active');
+                indicator.classList.remove('maintenance');
+                statusText.textContent = 'API Aktif';
+                previewBtn.style.display = 'none';
+            }
+        }
+
+        async function toggleMaintenance() {
+            const loading = document.getElementById('loadingState');
+            loading.classList.add('active');
+
+            try {
+                const response = await fetch('/admin/maintenance/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    isMaintenanceMode = data.maintenance_mode;
+                    updateUI();
+                    
+                    const message = isMaintenanceMode 
+                        ? 'Maintenance mode berhasil diaktifkan!' 
+                        : 'Maintenance mode berhasil dimatikan!';
+                    showToast(message, 'success');
+                } else {
+                    showToast(data.detail || 'Gagal mengubah status', 'error');
+                }
+            } catch (error) {
+                console.error('Error toggling maintenance:', error);
+                showToast('Terjadi kesalahan saat mengubah status', 'error');
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            // Remove existing toast
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            // Create new toast
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : '✕'}</span>
+                <span class="toast-message">${message}</span>
+            `;
+            document.body.appendChild(toast);
+
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            // Hide and remove toast
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Check status on page load
+        checkMaintenanceStatus();
+
+        // Auto refresh status every 30 seconds
+        setInterval(checkMaintenanceStatus, 30000);
+
+        function logout() {
+            sessionStorage.removeItem('admin_token');
+            window.location.href = '/admin/login';
+        }
+    </script>
+</body>
+</html>

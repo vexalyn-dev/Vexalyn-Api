@@ -61,7 +61,41 @@ MAINTENANCE_MODE=false
 
 ### Maintenance Mode
 
-Enable maintenance mode when deploying updates or performing system maintenance:
+Control maintenance mode using the **Admin Panel** or environment variables.
+
+#### Using Admin Panel (Recommended)
+
+**Login Required:** Access requires admin authentication for security.
+
+**Admin Credentials:**
+- Email: `admin.maintenance`
+- Password: `admin123`
+
+**Access URL:**
+- Local: `http://localhost:8000/admin/login`
+- Production: `https://api.vexalynapi.my.id/admin/login`
+
+**Features:**
+- 🔐 **Secure Login** - Email & password authentication required
+- 🎛️ **Toggle Switch** - Turn maintenance mode ON/OFF with one click
+- 📊 **Real-time Status** - See current API status (Active/Maintenance)
+- 👁️ **Preview** - View how the maintenance page looks
+- ⚡ **Instant Apply** - Changes apply immediately without restart
+- 💾 **Persistent** - Settings saved to .env file
+- 🚪 **Session Management** - Automatic logout, secure token-based auth
+
+**How to Use:**
+1. Visit `/admin/login`
+2. Login with credentials (admin.maintenance / admin123)
+3. Access admin panel automatically
+4. Click the toggle switch to enable/disable maintenance mode
+5. Changes apply instantly to all visitors
+6. Use "Preview Maintenance" button to see the maintenance page
+7. Logout when done
+
+#### Manual Configuration
+
+Alternatively, enable maintenance mode via environment variables:
 
 **How to Enable:**
 1. Set `MAINTENANCE_MODE=true` in your `.env` file (Railway environment variables)
@@ -76,9 +110,20 @@ Enable maintenance mode when deploying updates or performing system maintenance:
 **Features:**
 - 🎨 Friendly, casual maintenance page (neobrutalism design)
 - ⚡ All requests automatically redirected during maintenance
+- 🔒 Admin panel still accessible during maintenance
 - 🔒 Assets still accessible for maintenance page styling
 - 📱 Fully responsive design
 - ⏱️ Shows estimated completion time
+
+#### Admin API Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/admin/login` | Admin login page UI | No |
+| POST | `/admin/login` | Authenticate admin user | No |
+| GET | `/admin/maintenance` | Admin panel UI | Session |
+| GET | `/admin/maintenance/status` | Get current maintenance status | Bearer Token |
+| POST | `/admin/maintenance/toggle` | Toggle maintenance mode ON/OFF | Bearer Token |
 
 ### Google OAuth Setup (Optional)
 

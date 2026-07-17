@@ -21,9 +21,29 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
+from pydantic import BaseModel
+import secrets
+import hashlib
 
 # Load environment variables
 load_dotenv()
+
+# ===== ADMIN AUTHENTICATION =====
+ADMIN_EMAIL = "admin.maintenance"
+ADMIN_PASSWORD = "admin123"
+admin_sessions = {}  # Store active admin sessions {token: timestamp}
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+def generate_admin_token():
+    """Generate secure random token for admin session"""
+    return secrets.token_urlsafe(32)
+
+def verify_admin_token(token: str) -> bool:
+    """Verify if admin token is valid"""
+    return token in admin_sessions
 
 # Check maintenance mode
 MAINTENANCE_MODE = os.getenv('MAINTENANCE_MODE', 'false').lower() == 'true'
@@ -285,8 +305,10 @@ app.add_middleware(
 async def maintenance_mode_middleware(request: Request, call_next):
     """Intercept all requests when maintenance mode is enabled"""
     if MAINTENANCE_MODE:
-        # Allow access to maintenance page assets
-        if request.url.path.startswith("/assets") or request.url.path == "/maintenance":
+        # Allow access to maintenance page, assets, admin routes, and login
+        if (request.url.path.startswith("/assets") or 
+            request.url.path == "/maintenance" or 
+            request.url.path.startswith("/admin/")):
             return await call_next(request)
         
         # Redirect everything else to maintenance page
@@ -311,8 +333,8 @@ async def maintenance_mode_middleware(request: Request, call_next):
 async def rate_limit_middleware(request: Request, call_next):
     """Apply rate limiting to all API endpoints"""
     
-    # Skip rate limiting for static files and web UI routes
-    skip_paths = ["/", "/login", "/register", "/report", "/assets", "/docs", "/redoc", "/openapi.json", "/vexalyn", "/rate-limit-status", "/cache/"]
+    # Skip rate limiting for static files, web UI routes, and admin routes
+    skip_paths = ["/", "/login", "/register", "/report", "/assets", "/docs", "/redoc", "/openapi.json", "/vexalyn", "/rate-limit-status", "/cache/", "/maintenance", "/admin/"]
     
     if any(request.url.path.startswith(path) for path in skip_paths):
         return await call_next(request)
@@ -479,6 +501,134 @@ async def serve_register():
         
         return HTMLResponse(content=html_content)
     raise HTTPException(status_code=404, detail="Register page not found")
+
+@app.get("/maintenance", include_in_schema=False)
+async def serve_maintenance():
+    """Serve maintenance page (public preview)"""
+    maintenance_file = os.path.join(os.path.dirname(__file__), "public", "maintenance.html")
+    if os.path.exists(maintenance_file):
+        return FileResponse(maintenance_file)
+    raise HTTPException(status_code=404, detail="Maintenance page not found")
+
+@app.get("/admin/login", include_in_schema=False)
+async def serve_admin_login():
+    """Serve admin login page"""
+    login_file = os.path.join(os.path.dirname(__file__), "public", "admin-login.html")
+    if os.path.exists(login_file):
+        return FileResponse(login_file)
+    raise HTTPException(status_code=404, detail="Admin login page not found")
+
+@app.post("/admin/login", include_in_schema=False)
+async def admin_login(login_data: LoginRequest):
+    """Authenticate admin user"""
+    if login_data.email == ADMIN_EMAIL and login_data.password == ADMIN_PASSWORD:
+        # Generate token
+        token = generate_admin_token()
+        admin_sessions[token] = time.time()
+        
+        return {
+            "ok": True,
+            "token": token,
+            "message": "Login successful"
+        }
+    else:
+        return JSONResponse(
+            status_code=401,
+            content={
+                "ok": False,
+                "message": "Email atau password salah!"
+            }
+        )
+
+@app.get("/admin/maintenance", include_in_schema=False)
+async def serve_admin_maintenance():
+    """Serve admin maintenance control panel"""
+    admin_file = os.path.join(os.path.dirname(__file__), "public", "admin-maintenance.html")
+    if os.path.exists(admin_file):
+        return FileResponse(admin_file)
+    raise HTTPException(status_code=404, detail="Admin panel not found")
+
+# ===== ADMIN MAINTENANCE ENDPOINTS =====
+
+@app.get("/admin/maintenance/status", tags=["System"])
+async def get_maintenance_status(request: Request):
+    """Get current maintenance mode status (requires admin auth)"""
+    # Check authorization
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    token = auth_header.replace("Bearer ", "")
+    if not verify_admin_token(token):
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    global MAINTENANCE_MODE
+    return {
+        "maintenance_mode": MAINTENANCE_MODE,
+        "status": "maintenance" if MAINTENANCE_MODE else "active"
+    }
+
+@app.post("/admin/maintenance/toggle", tags=["System"])
+async def toggle_maintenance_mode(request: Request):
+    """Toggle maintenance mode ON/OFF (requires admin auth)"""
+    # Check authorization
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    token = auth_header.replace("Bearer ", "")
+    if not verify_admin_token(token):
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    global MAINTENANCE_MODE
+    
+    # Toggle the mode
+    MAINTENANCE_MODE = not MAINTENANCE_MODE
+    
+    # Update .env file
+    env_file = os.path.join(os.path.dirname(__file__), ".env")
+    
+    try:
+        if os.path.exists(env_file):
+            # Read current .env content
+            with open(env_file, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+            
+            # Update or add MAINTENANCE_MODE line
+            updated = False
+            new_lines = []
+            for line in lines:
+                if line.startswith('MAINTENANCE_MODE='):
+                    new_lines.append(f'MAINTENANCE_MODE={"true" if MAINTENANCE_MODE else "false"}\n')
+                    updated = True
+                else:
+                    new_lines.append(line)
+            
+            # If MAINTENANCE_MODE wasn't in file, add it
+            if not updated:
+                new_lines.append(f'MAINTENANCE_MODE={"true" if MAINTENANCE_MODE else "false"}\n')
+            
+            # Write back to .env
+            with open(env_file, 'w', encoding='utf-8') as f:
+                f.writelines(new_lines)
+        else:
+            # Create new .env file
+            with open(env_file, 'w', encoding='utf-8') as f:
+                f.write(f'MAINTENANCE_MODE={"true" if MAINTENANCE_MODE else "false"}\n')
+        
+        return {
+            "ok": True,
+            "maintenance_mode": MAINTENANCE_MODE,
+            "status": "maintenance" if MAINTENANCE_MODE else "active",
+            "message": f"Maintenance mode {'enabled' if MAINTENANCE_MODE else 'disabled'} successfully"
+        }
+    except Exception as e:
+        return {
+            "ok": False,
+            "maintenance_mode": MAINTENANCE_MODE,
+            "error": str(e),
+            "message": "Mode toggled in memory but failed to update .env file"
+        }
 
 # ===== DEVELOPER INFO =====
 
@@ -732,6 +882,7 @@ if __name__ == "__main__":
     print(f"📚 Docs: http://localhost:{port}/docs")
     print(f"🔐 Login: http://localhost:{port}/login")
     print(f"📝 Register: http://localhost:{port}/register")
+    print(f"🛠️  Admin Login: http://localhost:{port}/admin/login (admin.maintenance / admin123)")
     print(f"⏱️  Rate Limit Status: http://localhost:{port}/rate-limit-status\n")
     
     # Check if Google OAuth is configured
