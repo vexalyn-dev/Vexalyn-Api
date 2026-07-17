@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: anichin-api
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: PORT
+        value: 8000
+    healthCheckPath: /vexalyn
