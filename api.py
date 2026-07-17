@@ -357,6 +357,46 @@ async def serve_report():
         return FileResponse(report_file)
     raise HTTPException(status_code=404, detail="Report page not found")
 
+@app.get("/api-docs", include_in_schema=False)
+async def serve_api_docs():
+    """Serve API documentation page"""
+    api_docs_file = os.path.join(os.path.dirname(__file__), "public", "api-docs.html")
+    if os.path.exists(api_docs_file):
+        return FileResponse(api_docs_file)
+    raise HTTPException(status_code=404, detail="API docs page not found")
+
+@app.get("/privacy", include_in_schema=False)
+async def serve_privacy_policy():
+    """Serve Privacy Policy page"""
+    privacy_file = os.path.join(os.path.dirname(__file__), "public", "privacy.html")
+    if os.path.exists(privacy_file):
+        return FileResponse(privacy_file)
+    raise HTTPException(status_code=404, detail="Privacy policy page not found")
+
+@app.get("/robots.txt", include_in_schema=False)
+async def serve_robots():
+    """Serve robots.txt for SEO"""
+    robots_file = os.path.join(os.path.dirname(__file__), "public", "robots.txt")
+    if os.path.exists(robots_file):
+        return FileResponse(robots_file, media_type="text/plain")
+    raise HTTPException(status_code=404, detail="robots.txt not found")
+
+@app.get("/sitemap.xml", include_in_schema=False)
+async def serve_sitemap():
+    """Serve sitemap.xml for SEO"""
+    sitemap_file = os.path.join(os.path.dirname(__file__), "public", "sitemap.xml")
+    if os.path.exists(sitemap_file):
+        return FileResponse(sitemap_file, media_type="application/xml")
+    raise HTTPException(status_code=404, detail="sitemap.xml not found")
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def serve_favicon():
+    """Serve favicon.ico"""
+    favicon_file = os.path.join(os.path.dirname(__file__), "public", "assets", "favicon.svg")
+    if os.path.exists(favicon_file):
+        return FileResponse(favicon_file, media_type="image/svg+xml")
+    raise HTTPException(status_code=404, detail="Favicon not found")
+
 @app.get("/robots.txt", include_in_schema=False)
 async def serve_robots():
     """Serve robots.txt for SEO"""

@@ -1,13 +1,11 @@
-# robots.txt for Vexalyn API
-# Allow all search engines to crawl the site
-
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /cache/
+Disallow: /_next/
+Disallow: /admin/
 
-# Sitemap location
-Sitemap: https://vexalyn-api.up.railway.app/sitemap.xml
+# Sitemap
+Sitemap: https://vexalynapi.my.id/sitemap.xml
 
-# Crawl delay (optional, helps prevent overload)
-Crawl-delay: 10
+# Crawl-delay
+Crawl-delay: 1

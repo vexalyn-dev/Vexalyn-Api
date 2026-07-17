@@ -87,8 +87,8 @@ header{max-width:1180px;margin:0 auto;background:#fff;border:var(--border);borde
 .cat-card p{font-size:12.5px;color:var(--gray);font-weight:500;}
 
 /* Form */
-.report-form-section{max-width:700px;margin:0 auto;padding:0 24px 80px;}
-.form-card{background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:40px 36px;}
+.report-form-section{max-width:100%;margin:0 auto;padding:0 24px 80px;}
+.form-card{background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:40px 36px;max-width:1180px;margin:0 auto;}
 .form-card h2{font-size:26px;font-weight:700;margin-bottom:6px;}
 .form-card .sub{color:var(--gray);font-size:14px;font-weight:500;margin-bottom:28px;}
 .form-group{margin-bottom:20px;}
@@ -291,7 +291,7 @@ header{max-width:1180px;margin:0 auto;background:#fff;border:var(--border);borde
           </div>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" id="severity-group">
         <label>Tingkat Keparahan <span class="req">*</span></label>
         <div class="severity-row">
           <button type="button" class="sev-btn low" onclick="selectSeverity('low', this)">🟢 Rendah</button>
@@ -340,6 +340,22 @@ function selectCategory(name, el) {
   el.classList.add('selected');
   document.getElementById('selectedCategory').value = name;
   document.getElementById('categoryDisplay').value = name;
+  
+  // Hide severity field for "Request Fitur"
+  const severityGroup = document.getElementById('severity-group');
+  const severityInput = document.getElementById('severity');
+  if (name === 'Request Fitur') {
+    severityGroup.style.display = 'none';
+    severityInput.removeAttribute('required');
+    severityInput.value = 'n/a'; // Set default value for feature requests
+  } else {
+    severityGroup.style.display = 'block';
+    severityInput.setAttribute('required', 'required');
+    severityInput.value = ''; // Reset severity for other categories
+    // Reset active button
+    document.querySelectorAll('.sev-btn').forEach(b => b.classList.remove('active'));
+  }
+  
   document.getElementById('form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -407,7 +423,11 @@ function submitReport(e) {
   const category = document.getElementById('selectedCategory').value;
   const severity = document.getElementById('severity').value;
   if (!category) { alert('Pilih kategori laporan terlebih dahulu!'); return; }
-  if (!severity) { alert('Pilih tingkat keparahan!'); return; }
+  // Skip severity validation for "Request Fitur"
+  if (category !== 'Request Fitur' && !severity) { 
+    alert('Pilih tingkat keparahan!'); 
+    return; 
+  }
 
   const name     = document.getElementById('reporterName').value.trim();
   const email    = document.getElementById('reporterEmail').value.trim();
@@ -415,7 +435,7 @@ function submitReport(e) {
   const desc     = document.getElementById('reportDesc').value.trim();
   const endpoint = document.getElementById('affectedEndpoint').value || 'Tidak dipilih';
 
-  const sevLabel = { low:'🟢 Rendah', medium:'🟡 Sedang', high:'🟠 Tinggi', critical:'🔴 Kritis' }[severity] || severity;
+  const sevLabel = { low:'🟢 Rendah', medium:'🟡 Sedang', high:'🟠 Tinggi', critical:'🔴 Kritis', 'n/a':'➖ Tidak Berlaku' }[severity] || severity;
 
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;

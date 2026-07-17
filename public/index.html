@@ -17,14 +17,14 @@
 <meta name="revisit-after" content="7 days">
 
 <!-- Canonical URL -->
-<link rel="canonical" href="https://vexalyn-api.up.railway.app/">
+<link rel="canonical" href="https://vexalynapi.my.id/">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://vexalyn-api.up.railway.app/">
+<meta property="og:url" content="https://vexalynapi.my.id/">
 <meta property="og:title" content="Vexalyn API - Free Anichin Donghua REST API">
 <meta property="og:description" content="Powerful REST API for scraping Anichin donghua content. Free, fast, and easy to integrate with 50 requests/hour rate limit.">
-<meta property="og:image" content="https://vexalyn-api.up.railway.app/assets/og-image.svg">
+<meta property="og:image" content="https://vexalynapi.my.id/assets/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:site_name" content="Vexalyn API">
@@ -32,10 +32,10 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://vexalyn-api.up.railway.app/">
-<meta name="twitter:title" content="Vexalyn API - Free Anichin Donghua REST API">
+<meta name="twitter:url" content="https://vexalynapi.my.id/">
+<meta property="twitter:title" content="Vexalyn API - Free Anichin Donghua REST API">
 <meta name="twitter:description" content="Powerful REST API for scraping Anichin donghua content. Free, fast, and easy to integrate.">
-<meta name="twitter:image" content="https://vexalyn-api.up.railway.app/assets/og-image.png">
+<meta name="twitter:image" content="https://vexalynapi.my.id/assets/og-image.png">
 <meta name="twitter:creator" content="@vexalyndev">
 
 <!-- Favicon -->
@@ -50,7 +50,7 @@
   "@type": "SoftwareApplication",
   "name": "Vexalyn API",
   "description": "Free REST API for scraping Anichin donghua content. Fast, reliable, and easy to integrate.",
-  "url": "https://vexalyn-api.up.railway.app",
+  "url": "https://vexalynapi.my.id",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Any",
   "offers": {
@@ -82,6 +82,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
+
+/* Smooth Scroll */
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:100px; /* Offset untuk navbar fixed */
+}
+
 :root{
   --ink:#15181F;
   --cream:#FBF1E3;
@@ -122,6 +129,638 @@
   transition:opacity .4s ease, visibility .4s ease;
 }
 #loading-screen.hide{opacity:0;visibility:hidden;}
+
+/* ===== Welcome Modal ===== */
+#welcome-modal-overlay{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(21,24,31,.75);
+  backdrop-filter:blur(8px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9998;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .4s ease, visibility .4s ease;
+  padding:20px;
+}
+#welcome-modal-overlay.show{opacity:1;visibility:visible;}
+
+#welcome-modal{
+  background:#fff;
+  border:var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 20px 60px rgba(21,24,31,.4);
+  max-width:480px;
+  width:100%;
+  position:relative;
+  animation:modalSlideIn .5s cubic-bezier(.68,-.55,.265,1.55);
+  overflow:hidden;
+}
+
+@keyframes modalSlideIn{
+  from{transform:translateY(-50px) scale(.9);opacity:0;}
+  to{transform:translateY(0) scale(1);opacity:1;}
+}
+
+.modal-close{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:32px;
+  height:32px;
+  background:#fff;
+  border:2.5px solid var(--ink);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:all .2s ease;
+  z-index:10;
+  box-shadow:2px 2px 0 var(--ink);
+}
+.modal-close:hover{
+  transform:translate(-2px,-2px);
+  box-shadow:4px 4px 0 var(--ink);
+  background:var(--salmon-soft);
+}
+.modal-close:active{
+  transform:translate(1px,1px);
+  box-shadow:1px 1px 0 var(--ink);
+}
+.modal-close svg{width:16px;height:16px;stroke:var(--ink);stroke-width:3;}
+
+.modal-header{
+  background:linear-gradient(135deg, var(--mint) 0%, var(--sky) 100%);
+  padding:28px 24px 24px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.modal-header::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  right:-50%;
+  width:200%;
+  height:200%;
+  background:radial-gradient(circle, rgba(255,255,255,.3) 0%, transparent 70%);
+  animation:headerGlow 3s ease-in-out infinite;
+}
+@keyframes headerGlow{
+  0%,100%{transform:translate(0,0) scale(1);opacity:.5;}
+  50%{transform:translate(-20px,-20px) scale(1.1);opacity:.8;}
+}
+
+.modal-icon{
+  width:64px;
+  height:64px;
+  background:#fff;
+  border:3px solid var(--ink);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 14px;
+  position:relative;
+  z-index:1;
+  box-shadow:0 6px 16px rgba(21,24,31,.15);
+  animation:iconFloat 3s ease-in-out infinite;
+}
+@keyframes iconFloat{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  50%{transform:translateY(-8px) rotate(5deg);}
+}
+.modal-icon svg{width:30px;height:30px;stroke:var(--ink);stroke-width:2.5;}
+
+.modal-header h2{
+  font-family:'Fredoka',sans-serif;
+  font-size:23px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:6px;
+  position:relative;
+  z-index:1;
+}
+.modal-header p{
+  color:var(--ink);
+  opacity:.8;
+  font-size:13.5px;
+  font-weight:600;
+  position:relative;
+  z-index:1;
+}
+
+.modal-body{
+  padding:24px;
+}
+
+.modal-features{
+  display:grid;
+  gap:12px;
+  margin-bottom:20px;
+}
+.modal-feature{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:12px 14px;
+  background:var(--cream);
+  border:2.5px solid var(--ink);
+  border-radius:14px;
+  transition:all .2s ease;
+}
+.modal-feature:hover{
+  transform:translateX(3px);
+  background:var(--mint-soft);
+}
+.modal-feature-icon{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  border:2.5px solid var(--ink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.modal-feature-icon svg{width:18px;height:18px;stroke:var(--ink);stroke-width:2.5;}
+.modal-feature-icon.i1{background:var(--salmon);}
+.modal-feature-icon.i2{background:var(--sky);}
+.modal-feature-icon.i3{background:var(--lav);}
+.modal-feature h4{
+  font-family:'Fredoka',sans-serif;
+  font-size:14.5px;
+  font-weight:700;
+  margin-bottom:3px;
+}
+.modal-feature p{
+  color:var(--gray);
+  font-size:12.5px;
+  font-weight:500;
+  line-height:1.5;
+}
+
+.modal-actions{
+  display:flex;
+  gap:12px;
+}
+.modal-btn{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:12px 20px;
+  border-radius:var(--radius-pill);
+  border:var(--border);
+  font-family:'Inter',sans-serif;
+  font-weight:700;
+  font-size:13.5px;
+  cursor:pointer;
+  transition:all .15s ease;
+  box-shadow:3px 3px 0 var(--ink);
+}
+.modal-btn:hover{
+  transform:translate(-2px,-2px);
+  box-shadow:5px 5px 0 var(--ink);
+}
+.modal-btn:active{
+  transform:translate(1px,1px);
+  box-shadow:2px 2px 0 var(--ink);
+}
+.modal-btn-primary{
+  background:var(--green);
+  color:#fff;
+}
+.modal-btn-secondary{
+  background:#fff;
+  color:var(--ink);
+}
+
+/* ===== Cookie Consent Banner ===== */
+#cookie-banner{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  right:20px;
+  max-width:480px;
+  margin:0 auto;
+  background:#fff;
+  border:var(--border);
+  border-radius:var(--radius-sm);
+  box-shadow:0 10px 30px rgba(21,24,31,.2);
+  padding:18px 22px;
+  z-index:9997;
+  transform:translateY(120%);
+  opacity:0;
+  transition:all .4s cubic-bezier(.68,-.55,.265,1.55);
+}
+#cookie-banner.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.cookie-content{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  margin-bottom:14px;
+}
+.cookie-icon{
+  width:40px;
+  height:40px;
+  background:var(--lav-soft);
+  border:2.5px solid var(--ink);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.cookie-icon svg{width:20px;height:20px;stroke:var(--ink);stroke-width:2;}
+.cookie-text h4{
+  font-family:'Fredoka',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+.cookie-text p{
+  color:var(--gray);
+  font-size:12.5px;
+  font-weight:500;
+  line-height:1.5;
+}
+.cookie-text a{
+  color:var(--green);
+  font-weight:700;
+  text-decoration:underline;
+}
+
+.cookie-actions{
+  display:flex;
+  gap:10px;
+}
+.cookie-btn{
+  flex:1;
+  padding:10px 18px;
+  border-radius:var(--radius-pill);
+  border:2.5px solid var(--ink);
+  font-family:'Inter',sans-serif;
+  font-weight:700;
+  font-size:12.5px;
+  cursor:pointer;
+  transition:all .15s ease;
+  box-shadow:2px 2px 0 var(--ink);
+  text-align:center;
+}
+.cookie-btn:hover{
+  transform:translate(-2px,-2px);
+  box-shadow:4px 4px 0 var(--ink);
+}
+.cookie-btn:active{
+  transform:translate(1px,1px);
+  box-shadow:1px 1px 0 var(--ink);
+}
+.cookie-btn-accept{
+  background:var(--green);
+  color:#fff;
+}
+.cookie-btn-decline{
+  background:#fff;
+  color:var(--ink);
+}
+.cookie-btn-settings{
+  background:var(--cream);
+  color:var(--ink);
+  flex:0 0 auto;
+  padding:10px 14px;
+}
+
+@media(max-width:600px){
+  #welcome-modal{max-width:calc(100% - 32px);}
+  .modal-header{padding:24px 20px 20px;}
+  .modal-body{padding:20px;}
+  .modal-header h2{font-size:20px;}
+  .modal-icon{width:56px;height:56px;}
+  .modal-icon svg{width:26px;height:26px;}
+  .modal-actions{flex-direction:column;}
+  .cookie-actions{flex-direction:column;}
+  .cookie-btn-settings{flex:1;}
+  #cookie-banner{left:16px;right:16px;bottom:16px;padding:16px 18px;}
+  .cookie-content{gap:12px;margin-bottom:12px;}
+  .cookie-icon{width:36px;height:36px;}
+  .cookie-icon svg{width:18px;height:18px;}
+}
+
+/* ===== Custom Toast Notification ===== */
+#toast-container{
+  position:fixed;
+  top:100px;
+  right:24px;
+  z-index:10000;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  pointer-events:none;
+}
+.toast{
+  background:#fff;
+  border:var(--border);
+  border-radius:var(--radius-sm);
+  box-shadow:0 8px 24px rgba(21,24,31,.2);
+  padding:16px 20px;
+  min-width:320px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  pointer-events:all;
+  transform:translateX(400px);
+  opacity:0;
+  animation:toastSlideIn .4s cubic-bezier(.68,-.55,.265,1.55) forwards;
+}
+@keyframes toastSlideIn{
+  to{transform:translateX(0);opacity:1;}
+}
+.toast.hiding{
+  animation:toastSlideOut .3s ease forwards;
+}
+@keyframes toastSlideOut{
+  to{transform:translateX(400px);opacity:0;}
+}
+.toast-icon{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  border:2.5px solid var(--ink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.toast-icon svg{width:20px;height:20px;stroke:var(--ink);stroke-width:2.5;}
+.toast-icon.success{background:var(--mint);}
+.toast-icon.error{background:var(--salmon);}
+.toast-icon.info{background:var(--sky);}
+.toast-text h4{
+  font-family:'Fredoka',sans-serif;
+  font-size:14.5px;
+  font-weight:700;
+  margin-bottom:3px;
+}
+.toast-text p{
+  color:var(--gray);
+  font-size:12.5px;
+  font-weight:500;
+  line-height:1.4;
+}
+.toast-close{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:2.5px solid var(--ink);
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  flex-shrink:0;
+  margin-left:auto;
+  transition:all .2s ease;
+}
+.toast-close:hover{
+  background:var(--cream);
+  transform:rotate(90deg);
+}
+.toast-close svg{width:14px;height:14px;stroke:var(--ink);stroke-width:3;}
+/* ===== Custom Toast Notification ===== */
+#toast-container{
+  position:fixed;
+  top:100px;
+  right:24px;
+  z-index:10000;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  pointer-events:none;
+}
+.toast{
+  background:#fff;
+  border:var(--border);
+  border-radius:var(--radius-sm);
+  box-shadow:0 8px 24px rgba(21,24,31,.2);
+  padding:16px 20px;
+  min-width:320px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  pointer-events:all;
+  transform:translateX(400px);
+  opacity:0;
+  animation:toastSlideIn .4s cubic-bezier(.68,-.55,.265,1.55) forwards;
+}
+@keyframes toastSlideIn{
+  to{transform:translateX(0);opacity:1;}
+}
+.toast.hiding{
+  animation:toastSlideOut .3s ease forwards;
+}
+@keyframes toastSlideOut{
+  to{transform:translateX(400px);opacity:0;}
+}
+.toast-icon{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  border:2.5px solid var(--ink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.toast-icon svg{width:20px;height:20px;stroke:var(--ink);stroke-width:2.5;}
+.toast-icon.success{background:var(--mint);}
+.toast-icon.error{background:var(--salmon);}
+.toast-icon.info{background:var(--sky);}
+.toast-text h4{
+  font-family:'Fredoka',sans-serif;
+  font-size:14.5px;
+  font-weight:700;
+  margin-bottom:3px;
+}
+.toast-text p{
+  color:var(--gray);
+  font-size:12.5px;
+  font-weight:500;
+  line-height:1.4;
+}
+.toast-close{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:2.5px solid var(--ink);
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  flex-shrink:0;
+  margin-left:auto;
+  transition:all .2s ease;
+}
+.toast-close:hover{
+  background:var(--cream);
+  transform:rotate(90deg);
+}
+.toast-close svg{width:14px;height:14px;stroke:var(--ink);stroke-width:3;}
+
+/* ===== Cookie Settings Modal ===== */
+#cookie-settings-modal{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(21,24,31,.75);
+  backdrop-filter:blur(8px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .4s ease, visibility .4s ease;
+  padding:20px;
+}
+#cookie-settings-modal.show{opacity:1;visibility:visible;}
+
+.cookie-settings-content{
+  background:#fff;
+  border:var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 20px 60px rgba(21,24,31,.4);
+  max-width:520px;
+  width:100%;
+  position:relative;
+  animation:modalSlideIn .5s cubic-bezier(.68,-.55,.265,1.55);
+}
+
+.cookie-settings-header{
+  background:linear-gradient(135deg, var(--lav) 0%, var(--salmon) 100%);
+  padding:24px 48px 24px 24px;
+  border-bottom:var(--border);
+  border-radius:var(--radius) var(--radius) 0 0;
+  position:relative;
+}
+.cookie-settings-header h3{
+  font-family:'Fredoka',sans-serif;
+  font-size:22px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.cookie-settings-header p{
+  font-size:13px;
+  opacity:.85;
+}
+
+.cookie-settings-body{
+  padding:24px;
+  max-height:400px;
+  overflow-y:auto;
+}
+
+.cookie-type{
+  background:var(--cream);
+  border:2.5px solid var(--ink);
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:14px;
+  transition:all .2s;
+}
+.cookie-type:hover{
+  background:var(--mint-soft);
+}
+.cookie-type-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+.cookie-type-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.cookie-type-icon{
+  width:32px;
+  height:32px;
+  background:var(--sky);
+  border:2.5px solid var(--ink);
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.cookie-type-icon svg{width:16px;height:16px;stroke:var(--ink);stroke-width:2.5;}
+.cookie-type-icon.essential{background:var(--green);}
+.cookie-type-icon.analytics{background:var(--sky);}
+.cookie-type-icon.marketing{background:var(--lav);}
+.cookie-type h4{
+  font-family:'Fredoka',sans-serif;
+  font-size:15px;
+  font-weight:700;
+}
+.cookie-type p{
+  color:var(--gray);
+  font-size:12.5px;
+  line-height:1.5;
+  margin:0;
+}
+
+/* Toggle Switch */
+.toggle-switch{
+  position:relative;
+  width:48px;
+  height:26px;
+  background:var(--gray-soft);
+  border:2.5px solid var(--ink);
+  border-radius:20px;
+  cursor:pointer;
+  transition:background .3s;
+}
+.toggle-switch.disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+.toggle-switch.active{background:var(--green);}
+.toggle-switch-slider{
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:18px;
+  height:18px;
+  background:#fff;
+  border:2px solid var(--ink);
+  border-radius:50%;
+  transition:transform .3s;
+}
+.toggle-switch.active .toggle-switch-slider{
+  transform:translateX(22px);
+}
+
+.cookie-settings-footer{
+  padding:20px 24px;
+  border-top:var(--border);
+  border-radius:0 0 var(--radius) var(--radius);
+  display:flex;
+  gap:12px;
+}
+
+@media(max-width:600px){
+  #toast-container{right:16px;left:16px;}
+  .toast{min-width:auto;}
+  .cookie-settings-content{max-width:calc(100% - 32px);}
+  .cookie-settings-body{max-height:300px;}
+}
 
 .loader-logo{
   width:100px;height:100px;
@@ -508,9 +1147,16 @@ footer{padding:70px 24px 30px;}
   .nav-links{display:none;}
   .hero h1{font-size:38px;}
   .hero-stats{gap:34px;}
+  /* How It Works responsive */
+  section.block.white div[style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:1fr!important;}
+  /* Why Vexalyn stats responsive */
+  section.block div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
+  section.block div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;}
 }
 @media(max-width:600px){
   .grid-3,.grid-3-feat{grid-template-columns:1fr;}
+  /* Why Vexalyn stats mobile */
+  section.block div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr!important;}
 }
 </style>
 </head>
@@ -533,6 +1179,195 @@ footer{padding:70px 24px 30px;}
   </div>
 </div>
 
+<!-- ===== Welcome Modal ===== -->
+<div id="welcome-modal-overlay">
+  <div id="welcome-modal">
+    <button class="modal-close" onclick="closeWelcomeModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    
+    <div class="modal-header">
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+          <path d="M2 17l10 5 10-5"></path>
+          <path d="M2 12l10 5 10-5"></path>
+        </svg>
+      </div>
+      <h2>Selamat Datang di Vexalyn API!</h2>
+      <p>Platform REST API terbaik untuk developer Indonesia</p>
+    </div>
+    
+    <div class="modal-body">
+      <div class="modal-features">
+        <div class="modal-feature">
+          <span class="modal-feature-icon i1">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </span>
+          <div>
+            <h4>100% Gratis</h4>
+            <p>Akses semua endpoint tanpa biaya. Rate limit 50 request/jam.</p>
+          </div>
+        </div>
+        
+        <div class="modal-feature">
+          <span class="modal-feature-icon i2">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </span>
+          <div>
+            <h4>Response Cepat</h4>
+            <p>Rata-rata response time di bawah 5 detik dengan caching.</p>
+          </div>
+        </div>
+        
+        <div class="modal-feature">
+          <span class="modal-feature-icon i3">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </span>
+          <div>
+            <h4>Dokumentasi Lengkap</h4>
+            <p>Swagger UI interaktif dengan contoh code untuk setiap endpoint.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-primary" onclick="startExploring()">
+          <span>Mulai Eksplorasi</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;stroke:currentColor;">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+        <button class="modal-btn modal-btn-secondary" onclick="closeWelcomeModal()">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Cookie Consent Banner ===== -->
+<div id="cookie-banner">
+  <div class="cookie-content">
+    <div class="cookie-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </div>
+    <div class="cookie-text">
+      <h4>Cookies & Privacy</h4>
+      <p>Kami menggunakan cookies untuk meningkatkan pengalaman Anda. Dengan melanjutkan, Anda menyetujui <a href="/privacy">Privacy Policy</a> kami.</p>
+    </div>
+  </div>
+  <div class="cookie-actions">
+    <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Terima Semua</button>
+    <button class="cookie-btn cookie-btn-decline" onclick="declineCookies()">Tolak</button>
+    <button class="cookie-btn cookie-btn-settings" onclick="openCookieSettings()" title="Cookie Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;stroke:currentColor;">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H5m13.2 5.2l-4.2-4.2m0-6l4.2-4.2"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ===== Toast Container ===== -->
+<div id="toast-container"></div>
+
+<!-- ===== Cookie Settings Modal ===== -->
+<div id="cookie-settings-modal">
+  <div class="cookie-settings-content">
+    <button class="modal-close" onclick="closeCookieSettingsModal()" style="position:absolute;top:14px;right:14px;z-index:10;">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    
+    <div class="cookie-settings-header">
+      <h3>Cookie Preferences</h3>
+      <p>Kelola preferensi cookies sesuai kebutuhan Anda</p>
+    </div>
+    
+    <div class="cookie-settings-body">
+      <!-- Essential Cookies (Always Active) -->
+      <div class="cookie-type">
+        <div class="cookie-type-header">
+          <div class="cookie-type-title">
+            <div class="cookie-type-icon essential">
+              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <h4>Essential Cookies</h4>
+          </div>
+          <div class="toggle-switch active disabled">
+            <div class="toggle-switch-slider"></div>
+          </div>
+        </div>
+        <p>Diperlukan untuk fungsi dasar website. Tidak dapat dinonaktifkan.</p>
+      </div>
+      
+      <!-- Analytics Cookies -->
+      <div class="cookie-type">
+        <div class="cookie-type-header">
+          <div class="cookie-type-title">
+            <div class="cookie-type-icon analytics">
+              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </div>
+            <h4>Analytics Cookies</h4>
+          </div>
+          <div class="toggle-switch" id="analytics-toggle" onclick="toggleAnalytics()">
+            <div class="toggle-switch-slider"></div>
+          </div>
+        </div>
+        <p>Membantu kami memahami bagaimana pengunjung berinteraksi dengan website.</p>
+      </div>
+      
+      <!-- Marketing Cookies -->
+      <div class="cookie-type">
+        <div class="cookie-type-header">
+          <div class="cookie-type-title">
+            <div class="cookie-type-icon marketing">
+              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+            <h4>Marketing Cookies</h4>
+          </div>
+          <div class="toggle-switch" id="marketing-toggle" onclick="toggleMarketing()">
+            <div class="toggle-switch-slider"></div>
+          </div>
+        </div>
+        <p>Digunakan untuk menampilkan konten yang relevan dengan minat Anda.</p>
+      </div>
+    </div>
+    
+    <div class="cookie-settings-footer">
+      <button class="modal-btn modal-btn-primary" onclick="saveCookiePreferences()" style="flex:1;">
+        Simpan Preferensi
+      </button>
+      <button class="modal-btn modal-btn-secondary" onclick="closeCookieSettingsModal()" style="flex:1;">
+        Batal
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== Header ===== -->
 <div class="header-outer">
   <header>
@@ -540,15 +1375,15 @@ footer{padding:70px 24px 30px;}
       <img src="/assets/logo-horizontal.svg" alt="Vexalyn API" height="40" style="display:block;">
     </a>
     <nav class="nav-links">
-      <a href="#endpoints">Endpoint</a>
+      <a href="/api-docs">API Docs</a>
+      <a href="#quick-start">Quick Start</a>
       <a href="#fitur">Fitur</a>
       <a href="#faq">FAQ</a>
       <a href="#kontak">Kontak</a>
-      <a href="http://localhost:8000/docs" target="_blank">Docs</a>
     </nav>
     <div class="header-right">
       <a href="/login" class="login-link">Masuk</a>
-      <a href="http://localhost:8000/docs" target="_blank" class="btn btn-green btn-small">Coba Gratis</a>
+      <a href="/docs" target="_blank" class="btn btn-green btn-small">Coba Gratis</a>
     </div>
   </header>
 </div>
@@ -561,8 +1396,8 @@ footer{padding:70px 24px 30px;}
       <h1>Akses Data Real-Time,<br><span class="accent">Cepat & Mudah,</span><br>Untuk Semua Developer!</h1>
       <p>Platform API terpercaya untuk developer. Integrasi mudah dengan dokumentasi lengkap dan performa tinggi.</p>
       <div class="hero-actions">
-        <a href="http://localhost:8000/docs" target="_blank" class="btn btn-green">Coba API Sekarang →</a>
-        <a href="#endpoints" class="btn btn-sky">Lihat Endpoint</a>
+        <a href="/api-docs" class="btn btn-green">Lihat API Docs →</a>
+        <a href="/docs" target="_blank" class="btn btn-sky">Buka Swagger</a>
       </div>
       <div class="hero-stats">
         <div class="stat"><b>6</b><span>Endpoint</span></div>
@@ -584,7 +1419,7 @@ footer{padding:70px 24px 30px;}
           <div class="row"><span>Uptime</span><b>99.9%</b></div>
           <div class="progress-track"><div class="progress-fill" style="width:99%;"></div></div>
         </div>
-        <a href="http://localhost:8000/anichin/home" target="_blank" class="btn btn-green">Coba Endpoint Ini</a>
+        <a href="https://vexalynapi.my.id/anichin/home" target="_blank" class="btn btn-green">Coba Endpoint Ini</a>
         <span class="float-badge fb2"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
         <span class="float-badge fb3"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"></polygon></svg></span>
       </div>
@@ -592,118 +1427,241 @@ footer{padding:70px 24px 30px;}
   </div>
 </section>
 
-<!-- ===== Endpoints (Popular Courses layout) ===== -->
-<section class="block white" id="endpoints">
+<!-- ===== Why Vexalyn API (Introduction) ===== -->
+<section class="block" style="padding:70px 24px;background:var(--white);">
   <div class="wrap">
-    <div class="section-head">
-      <span class="pill pill-blue">Endpoint Populer</span>
-      <h2>Jelajahi Endpoint API</h2>
-      <p>Setiap endpoint dirancang cepat dan mudah diintegrasikan ke proyekmu.</p>
-    </div>
+    <div style="max-width:920px;margin:0 auto;text-align:center;">
+      <span class="pill pill-green" style="margin-bottom:24px;"><span class="pill-dot"></span> Kenapa Vexalyn API?</span>
+      <h2 style="font-family:'Fredoka',sans-serif;font-size:42px;font-weight:700;letter-spacing:-.5px;margin-bottom:20px;line-height:1.2;">REST API Terlengkap untuk<br>Berbagai Platform & Sumber Data</h2>
+      <p style="color:var(--gray);font-size:17px;font-weight:500;max-width:680px;margin:0 auto 44px;line-height:1.7;">Vexalyn API menyediakan akses mudah ke berbagai data dari multiple platform. Tanpa perlu setup scraper sendiri, tanpa maintenance, dan tanpa biaya. Cukup kirim HTTP request dan terima data JSON yang rapi.</p>
+      
+      <!-- Stats Grid -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:46px;">
+        <div style="background:var(--salmon-soft);border:var(--border);border-radius:var(--radius-sm);padding:26px 20px;text-align:center;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Fredoka',sans-serif;font-size:36px;font-weight:700;color:var(--ink);margin-bottom:8px;">6</div>
+          <div style="color:var(--gray);font-size:14px;font-weight:600;">Endpoints Aktif</div>
+        </div>
+        <div style="background:var(--sky-soft);border:var(--border);border-radius:var(--radius-sm);padding:26px 20px;text-align:center;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Fredoka',sans-serif;font-size:36px;font-weight:700;color:var(--ink);margin-bottom:8px;">50</div>
+          <div style="color:var(--gray);font-size:14px;font-weight:600;">Request/Jam</div>
+        </div>
+        <div style="background:var(--mint-soft);border:var(--border);border-radius:var(--radius-sm);padding:26px 20px;text-align:center;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Fredoka',sans-serif;font-size:36px;font-weight:700;color:var(--ink);margin-bottom:8px;">99.9%</div>
+          <div style="color:var(--gray);font-size:14px;font-weight:600;">Uptime Stabil</div>
+        </div>
+        <div style="background:var(--lav-soft);border:var(--border);border-radius:var(--radius-sm);padding:26px 20px;text-align:center;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Fredoka',sans-serif;font-size:36px;font-weight:700;color:var(--ink);margin-bottom:8px;">~3s</div>
+          <div style="color:var(--gray);font-size:14px;font-weight:600;">Avg Response</div>
+        </div>
+      </div>
 
-    <!-- ===== Anichin Info Section (moved here) ===== -->
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px;">
-      <span style="width: 52px; height: 52px; border-radius: 14px; background: var(--salmon); border: 2.5px solid var(--ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; stroke: var(--ink);">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-          <path d="M2 17l10 5 10-5"></path>
-          <path d="M2 12l10 5 10-5"></path>
-        </svg>
-      </span>
-      <h3 style="font-family: 'Fredoka', sans-serif; font-size: 28px; font-weight: 700; margin: 0 0 0 12px; color: var(--ink); letter-spacing: -0.3px;">Endpoints Anichin</h3>
-    </div>
-
-    <div class="grid-3">
-      <a class="ep-card" href="http://localhost:8000/anichin/home">
-        <div class="ep-top">
-          <span class="ep-icon c1"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span>
-          <span class="ep-status"><span class="dot"></span> Stable</span>
+      <!-- Key Benefits -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px;text-align:left;">
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);padding:24px;display:flex;align-items:flex-start;gap:16px;">
+          <div style="width:44px;height:44px;background:var(--mint-soft);border:2.5px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;stroke:var(--ink);"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div>
+            <h4 style="font-family:'Fredoka',sans-serif;font-size:16.5px;font-weight:700;margin-bottom:6px;">Tanpa API Key</h4>
+            <p style="color:var(--gray);font-size:14px;font-weight:500;line-height:1.6;">Langsung pakai tanpa registrasi atau autentikasi rumit.</p>
+          </div>
         </div>
-        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/home</span></div>
-        <h3>Home Feed</h3>
-        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
-        <div class="ep-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3s respons</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> Homepage feed</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 12.5K panggilan</span>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);padding:24px;display:flex;align-items:flex-start;gap:16px;">
+          <div style="width:44px;height:44px;background:var(--sky-soft);border:2.5px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;stroke:var(--ink);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <div>
+            <h4 style="font-family:'Fredoka',sans-serif;font-size:16.5px;font-weight:700;margin-bottom:6px;">Real-time Data</h4>
+            <p style="color:var(--gray);font-size:14px;font-weight:500;line-height:1.6;">Data selalu fresh dan update dari Anichin secara real-time.</p>
+          </div>
         </div>
-      </a>
-      <a class="ep-card" href="http://localhost:8000/anichin/search?q=renegade">
-        <div class="ep-top">
-          <span class="ep-icon c2"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
-          <span class="ep-status"><span class="dot"></span> Stable</span>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);padding:24px;display:flex;align-items:flex-start;gap:16px;">
+          <div style="width:44px;height:44px;background:var(--salmon-soft);border:2.5px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;stroke:var(--ink);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <div>
+            <h4 style="font-family:'Fredoka',sans-serif;font-size:16.5px;font-weight:700;margin-bottom:6px;">Cloudflare Bypass</h4>
+            <p style="color:var(--gray);font-size:14px;font-weight:500;line-height:1.6;">Sistem otomatis handle proteksi dan anti-bot untuk kamu.</p>
+          </div>
         </div>
-        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/search</span></div>
-        <h3>Pencarian Donghua</h3>
-        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
-        <div class="ep-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3s respons</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> param <code>q</code> wajib</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 8.2K panggilan</span>
+        <div style="background:#fff;border:var(--border);border-radius:var(--radius-sm);padding:24px;display:flex;align-items:flex-start;gap:16px;">
+          <div style="width:44px;height:44px;background:var(--lav-soft);border:2.5px solid var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;stroke:var(--ink);"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          </div>
+          <div>
+            <h4 style="font-family:'Fredoka',sans-serif;font-size:16.5px;font-weight:700;margin-bottom:6px;">JSON Format</h4>
+            <p style="color:var(--gray);font-size:14px;font-weight:500;line-height:1.6;">Response format JSON yang konsisten dan mudah diparsing.</p>
+          </div>
         </div>
-      </a>
-      <a class="ep-card" href="http://localhost:8000/anichin/genres">
-        <div class="ep-top">
-          <span class="ep-icon c1"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
-          <span class="ep-status"><span class="dot"></span> Stable</span>
-        </div>
-        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/genres</span></div>
-        <h3>List Genres</h3>
-        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
-        <div class="ep-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3s respons</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> 46 genre list</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 2.8K panggilan</span>
-        </div>
-      </a>
-      <a class="ep-card" href="http://localhost:8000/anichin/ongoing-series">
-        <div class="ep-top">
-          <span class="ep-icon c3"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
-          <span class="ep-status"><span class="dot"></span> Stable</span>
-        </div>
-        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/ongoing-series</span></div>
-        <h3>Ongoing Series</h3>
-        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
-        <div class="ep-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4s respons</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> 25 series + thumbnail</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 5.4K panggilan</span>
-        </div>
-      </a>
-      <a class="ep-card" href="http://localhost:8000/anichin/popular-series?filter=weekly">
-        <div class="ep-top">
-          <span class="ep-icon c4"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
-          <span class="ep-status"><span class="dot"></span> Stable</span>
-        </div>
-        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/popular-series</span></div>
-        <h3>Popular Series</h3>
-        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
-        <div class="ep-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3s respons</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> weekly / monthly / all</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 2.1K panggilan</span>
-        </div>
-      </a>
-      <a class="ep-card" href="http://localhost:8000/anichin/new-movie">
-        <div class="ep-top">
-          <span class="ep-icon c2"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg></span>
-          <span class="ep-status"><span class="dot"></span> Stable</span>
-        </div>
-        <div class="ep-path-row"><span class="method-badge">GET</span><span class="ep-path-code">/anichin/new-movie</span></div>
-        <h3>New Movie</h3>
-        <p class="by"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> oleh Vexalyn Dev</p>
-        <div class="ep-meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3s respons</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> title + genres + date</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> 1.3K panggilan</span>
-        </div>
-      </a>
-    </div>
-    <div class="view-all">
-      <a href="http://localhost:8000/docs" target="_blank" class="btn btn-sky">Lihat Semua Endpoint →</a>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- ===== How It Works (Quick Start) ===== -->
+<section class="block white" id="quick-start" style="padding:70px 24px;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="pill pill-salmon">Mulai dalam 3 Langkah</span>
+      <h2>Cara Pakai API dengan Mudah</h2>
+      <p>Integrasi Vexalyn API ke proyekmu hanya butuh beberapa menit. Tidak perlu API key atau setup rumit.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:1100px;margin:0 auto;">
+      <!-- Step 1 -->
+      <div style="background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:32px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:16px;left:16px;width:48px;height:48px;background:var(--salmon);border:2.5px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:22px;font-weight:700;color:var(--ink);">1</div>
+        <div style="width:70px;height:70px;background:var(--salmon-soft);border:var(--border);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:24px auto 20px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;stroke:var(--ink);"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+        </div>
+        <h3 style="font-family:'Fredoka',sans-serif;font-size:19px;font-weight:700;margin-bottom:10px;">Pilih Endpoint</h3>
+        <p style="color:var(--gray);font-size:14px;font-weight:500;line-height:1.65;">Lihat daftar endpoint yang tersedia di halaman API Docs. Pilih yang sesuai kebutuhanmu.</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div style="background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:32px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:16px;left:16px;width:48px;height:48px;background:var(--sky);border:2.5px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:22px;font-weight:700;color:var(--ink);">2</div>
+        <div style="width:70px;height:70px;background:var(--sky-soft);border:var(--border);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:24px auto 20px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;stroke:var(--ink);"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        </div>
+        <h3 style="font-family:'Fredoka',sans-serif;font-size:19px;font-weight:700;margin-bottom:10px;">Kirim Request</h3>
+        <p style="color:var(--gray);font-size:14px;font-weight:500;line-height:1.65;">Gunakan fetch, axios, atau HTTP client favoritmu. Langsung GET tanpa API key!</p>
+      </div>
+
+      <!-- Step 3 -->
+      <div style="background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:32px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:16px;left:16px;width:48px;height:48px;background:var(--mint);border:2.5px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:22px;font-weight:700;color:var(--ink);">3</div>
+        <div style="width:70px;height:70px;background:var(--mint-soft);border:var(--border);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:24px auto 20px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;stroke:var(--ink);"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <h3 style="font-family:'Fredoka',sans-serif;font-size:19px;font-weight:700;margin-bottom:10px;">Terima Data JSON</h3>
+        <p style="color:var(--gray);font-size:14px;font-weight:500;line-height:1.65;">Parsing response JSON yang rapi dan konsisten. Langsung pakai di aplikasimu!</p>
+      </div>
+    </div>
+
+    <!-- Code Example Terminal -->
+    <div style="max-width:1100px;margin:46px auto 0;">
+      <!-- Terminal Header -->
+      <div style="background:var(--ink);border:var(--border);border-bottom:none;border-radius:var(--radius) var(--radius) 0 0;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;gap:8px;">
+          <span style="width:14px;height:14px;border-radius:50%;background:#FF5F57;border:1.5px solid var(--ink);"></span>
+          <span style="width:14px;height:14px;border-radius:50%;background:#FFBD2E;border:1.5px solid var(--ink);"></span>
+          <span style="width:14px;height:14px;border-radius:50%;background:#28CA42;border:1.5px solid var(--ink);"></span>
+        </div>
+        <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--cream);opacity:.7;">~/vexalyn-api-example</div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div style="background:#1e1e1e;border-left:var(--border);border-right:var(--border);display:flex;gap:0;overflow-x:auto;">
+        <button onclick="switchTab('curl')" id="tab-curl" class="code-tab active" style="flex:1;padding:12px 20px;background:transparent;border:none;border-right:2px solid #2d2d2d;color:#888;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;">cURL</button>
+        <button onclick="switchTab('javascript')" id="tab-javascript" class="code-tab" style="flex:1;padding:12px 20px;background:transparent;border:none;border-right:2px solid #2d2d2d;color:#888;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;">JavaScript</button>
+        <button onclick="switchTab('python')" id="tab-python" class="code-tab" style="flex:1;padding:12px 20px;background:transparent;border:none;border-right:2px solid #2d2d2d;color:#888;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;">Python</button>
+        <button onclick="switchTab('php')" id="tab-php" class="code-tab" style="flex:1;padding:12px 20px;background:transparent;border:none;border-right:2px solid #2d2d2d;color:#888;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;">PHP</button>
+        <button onclick="switchTab('nodejs')" id="tab-nodejs" class="code-tab" style="flex:1;padding:12px 20px;background:transparent;border:none;color:#888;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;">Node.js</button>
+      </div>
+
+      <!-- Code Content -->
+      <div style="background:#1e1e1e;border:var(--border);border-top:2px solid #2d2d2d;border-radius:0 0 var(--radius) var(--radius);padding:28px;position:relative;min-height:220px;">
+        <!-- Copy Button -->
+        <button onclick="copyCode(event)" style="position:absolute;top:16px;right:16px;background:var(--mint-soft);border:2px solid var(--ink);border-radius:10px;padding:8px 16px;font-family:'Inter',sans-serif;font-weight:700;font-size:12px;color:var(--green-dark);cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:3px 3px 0 var(--ink);" onmouseover="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='5px 5px 0 var(--ink)';" onmouseout="this.style.transform='translate(0,0)';this.style.boxShadow='3px 3px 0 var(--ink)';">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;stroke:currentColor;display:inline;vertical-align:middle;margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copy
+        </button>
+
+        <!-- cURL -->
+        <pre id="code-curl" class="code-block" style="margin:0;color:#d4d4d4;font-family:'Courier New',monospace;font-size:14px;line-height:1.7;overflow-x:auto;"><code><span style="color:#569cd6;">curl</span> <span style="color:#ce9178;">-X GET "https://vexalynapi.my.id/anichin/home"</span> \
+  <span style="color:#9cdcfe;">-H</span> <span style="color:#ce9178;">"Accept: application/json"</span></code></pre>
+
+        <!-- JavaScript -->
+        <pre id="code-javascript" class="code-block" style="display:none;margin:0;color:#d4d4d4;font-family:'Courier New',monospace;font-size:14px;line-height:1.7;overflow-x:auto;"><code><span style="color:#c586c0;">const</span> <span style="color:#9cdcfe;">url</span> <span style="color:#d4d4d4;">=</span> <span style="color:#ce9178;">'https://vexalynapi.my.id/anichin/home'</span><span style="color:#d4d4d4;">;</span>
+
+<span style="color:#dcdcaa;">fetch</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">url</span><span style="color:#d4d4d4;">)</span>
+  <span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">then</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">response</span> <span style="color:#c586c0;">=></span> <span style="color:#9cdcfe;">response</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">json</span><span style="color:#d4d4d4;">())</span>
+  <span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">then</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">data</span> <span style="color:#c586c0;">=></span> <span style="color:#9cdcfe;">console</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">log</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">data</span><span style="color:#d4d4d4;">))</span>
+  <span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">catch</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">error</span> <span style="color:#c586c0;">=></span> <span style="color:#9cdcfe;">console</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">error</span><span style="color:#d4d4d4;">(</span><span style="color:#ce9178;">'Error:'</span><span style="color:#d4d4d4;">,</span> <span style="color:#9cdcfe;">error</span><span style="color:#d4d4d4;">));</span></code></pre>
+
+        <!-- Python -->
+        <pre id="code-python" class="code-block" style="display:none;margin:0;color:#d4d4d4;font-family:'Courier New',monospace;font-size:14px;line-height:1.7;overflow-x:auto;"><code><span style="color:#c586c0;">import</span> <span style="color:#4ec9b0;">requests</span>
+
+<span style="color:#9cdcfe;">url</span> <span style="color:#d4d4d4;">=</span> <span style="color:#ce9178;">"https://vexalynapi.my.id/anichin/home"</span>
+
+<span style="color:#9cdcfe;">response</span> <span style="color:#d4d4d4;">=</span> <span style="color:#4ec9b0;">requests</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">get</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">url</span><span style="color:#d4d4d4;">)</span>
+<span style="color:#9cdcfe;">data</span> <span style="color:#d4d4d4;">=</span> <span style="color:#9cdcfe;">response</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">json</span><span style="color:#d4d4d4;">()</span>
+
+<span style="color:#dcdcaa;">print</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">data</span><span style="color:#d4d4d4;">)</span></code></pre>
+
+        <!-- PHP -->
+        <pre id="code-php" class="code-block" style="display:none;margin:0;color:#d4d4d4;font-family:'Courier New',monospace;font-size:14px;line-height:1.7;overflow-x:auto;"><code><span style="color:#569cd6;">&lt;?php</span>
+
+<span style="color:#9cdcfe;">$url</span> <span style="color:#d4d4d4;">=</span> <span style="color:#ce9178;">"https://vexalynapi.my.id/anichin/home"</span><span style="color:#d4d4d4;">;</span>
+
+<span style="color:#9cdcfe;">$response</span> <span style="color:#d4d4d4;">=</span> <span style="color:#dcdcaa;">file_get_contents</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">$url</span><span style="color:#d4d4d4;">);</span>
+<span style="color:#9cdcfe;">$data</span> <span style="color:#d4d4d4;">=</span> <span style="color:#dcdcaa;">json_decode</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">$response</span><span style="color:#d4d4d4;">,</span> <span style="color:#569cd6;">true</span><span style="color:#d4d4d4;">);</span>
+
+<span style="color:#dcdcaa;">print_r</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">$data</span><span style="color:#d4d4d4;">);</span>
+
+<span style="color:#569cd6;">?&gt;</span></code></pre>
+
+        <!-- Node.js -->
+        <pre id="code-nodejs" class="code-block" style="display:none;margin:0;color:#d4d4d4;font-family:'Courier New',monospace;font-size:14px;line-height:1.7;overflow-x:auto;"><code><span style="color:#c586c0;">const</span> <span style="color:#4ec9b0;">axios</span> <span style="color:#d4d4d4;">=</span> <span style="color:#dcdcaa;">require</span><span style="color:#d4d4d4;">(</span><span style="color:#ce9178;">'axios'</span><span style="color:#d4d4d4;">);</span>
+
+<span style="color:#c586c0;">const</span> <span style="color:#9cdcfe;">url</span> <span style="color:#d4d4d4;">=</span> <span style="color:#ce9178;">'https://vexalynapi.my.id/anichin/home'</span><span style="color:#d4d4d4;">;</span>
+
+<span style="color:#4ec9b0;">axios</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">get</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">url</span><span style="color:#d4d4d4;">)</span>
+  <span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">then</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">response</span> <span style="color:#c586c0;">=></span> <span style="color:#9cdcfe;">console</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">log</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">response</span><span style="color:#d4d4d4;">.</span><span style="color:#9cdcfe;">data</span><span style="color:#d4d4d4;">))</span>
+  <span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">catch</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">error</span> <span style="color:#c586c0;">=></span> <span style="color:#9cdcfe;">console</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">error</span><span style="color:#d4d4d4;">(</span><span style="color:#ce9178;">'Error:'</span><span style="color:#d4d4d4;">,</span> <span style="color:#9cdcfe;">error</span><span style="color:#d4d4d4;">));</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Tab Switching
+function switchTab(lang) {
+  // Hide all code blocks
+  document.querySelectorAll('.code-block').forEach(block => block.style.display = 'none');
+  // Remove active class from all tabs
+  document.querySelectorAll('.code-tab').forEach(tab => {
+    tab.style.color = '#888';
+    tab.style.background = 'transparent';
+  });
+  
+  // Show selected code block
+  document.getElementById('code-' + lang).style.display = 'block';
+  // Activate selected tab
+  const activeTab = document.getElementById('tab-' + lang);
+  activeTab.style.color = '#fff';
+  activeTab.style.background = '#2d2d2d';
+}
+
+// Copy Code - FIX: Accept event parameter
+function copyCode(e) {
+  const activeBlock = document.querySelector('.code-block:not([style*="display: none"])');
+  const code = activeBlock.textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = e.target.closest('button');
+    const originalHTML = btn.innerHTML;
+    const originalBg = btn.style.background;
+    const originalColor = btn.style.color;
+    const originalBorder = btn.style.borderColor;
+    
+    // Change to green checkmark
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;stroke:#28CA42;display:inline;vertical-align:middle;margin-right:6px;"><polyline points="20 6 9 17 4 12"></polyline></svg>Copied!';
+    btn.style.background = '#DFF7EA';
+    btn.style.color = '#1D7A46';
+    btn.style.borderColor = '#33B96A';
+    
+    // Reset after 2 seconds
+    setTimeout(() => {
+      btn.innerHTML = originalHTML;
+      btn.style.background = originalBg || 'var(--mint-soft)';
+      btn.style.color = originalColor || 'var(--green-dark)';
+      btn.style.borderColor = originalBorder || 'var(--ink)';
+    }, 2000);
+  }).catch(err => {
+    console.error('Failed to copy:', err);
+  });
+}
+</script>
 
 <!-- ===== Fitur (Why Choose Us layout) ===== -->
 <section class="block" id="fitur">
@@ -952,8 +1910,8 @@ footer{padding:70px 24px 30px;}
     <h2>Siap Mulai Integrasi?</h2>
     <p>Gabung bareng ratusan developer dan mulai ambil data donghua hari ini. Gratis, dengan rate limit 50 request/jam.</p>
     <div class="cta-actions">
-      <a href="http://localhost:8000/docs" target="_blank" class="btn btn-green">Mulai Sekarang →</a>
-      <a href="http://localhost:8000/docs" target="_blank" class="btn btn-white">Lihat Dokumentasi</a>
+      <a href="/api-docs" class="btn btn-green">Lihat API Docs →</a>
+      <a href="/docs" target="_blank" class="btn btn-white">Buka Swagger</a>
     </div>
     <div class="cta-check">
       <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Tanpa perlu API key</span>
@@ -982,10 +1940,10 @@ footer{padding:70px 24px 30px;}
     </div>
     <div class="footer-col">
       <h4>Endpoint</h4>
-      <a href="#">Home Feed</a>
-      <a href="#">Search</a>
-      <a href="#">Docs</a>
-      <a href="#">Status</a>
+      <a href="/api-docs">API Docs</a>
+      <a href="/anichin/home">Home Feed</a>
+      <a href="/anichin/search?q=renegade">Search</a>
+      <a href="/docs">Swagger</a>
     </div>
     <div class="footer-col">
       <h4>Perusahaan</h4>
@@ -1019,8 +1977,317 @@ window.addEventListener('load', function() {
   const loadingScreen = document.getElementById('loading-screen');
   setTimeout(function() {
     loadingScreen.classList.add('hide');
+    
+    // ALWAYS show modals on every page load
+    checkFirstVisit();
+    checkCookieConsent();
   }, 300);
 });
+
+// ===== Welcome Modal Functions =====
+function checkFirstVisit() {
+  // ALWAYS show welcome modal (removed localStorage check)
+  setTimeout(() => {
+    document.getElementById('welcome-modal-overlay').classList.add('show');
+  }, 600);
+}
+
+function closeWelcomeModal() {
+  document.getElementById('welcome-modal-overlay').classList.remove('show');
+  // Optional: Save to localStorage if you want to stop showing after first close
+  // localStorage.setItem('vexalyn_visited', 'true');
+}
+
+function startExploring() {
+  closeWelcomeModal();
+  // Smooth scroll to API Docs section
+  const quickStart = document.getElementById('quick-start');
+  if (quickStart) {
+    quickStart.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// ===== Cookie Consent Functions =====
+function checkCookieConsent() {
+  // ALWAYS show cookie banner (removed localStorage check)
+  setTimeout(() => {
+    document.getElementById('cookie-banner').classList.add('show');
+  }, 1500);
+}
+
+function acceptCookies() {
+  const preferences = {
+    analytics: true,
+    marketing: true,
+    essential: true
+  };
+  localStorage.setItem('vexalyn_cookie_preferences', JSON.stringify(preferences));
+  localStorage.setItem('vexalyn_cookie_consent', 'accepted');
+  localStorage.setItem('vexalyn_cookie_date', new Date().toISOString());
+  document.getElementById('cookie-banner').classList.remove('show');
+  
+  // Initialize tracking
+  initializeTracking();
+  
+  // Show success modal instead of toast
+  showSuccessModal('Cookies Diterima', 'Terima kasih! Semua cookies telah diaktifkan untuk pengalaman terbaik.');
+  console.log('✅ Cookies accepted');
+}
+
+function declineCookies() {
+  const preferences = {
+    analytics: false,
+    marketing: false,
+    essential: true
+  };
+  localStorage.setItem('vexalyn_cookie_preferences', JSON.stringify(preferences));
+  localStorage.setItem('vexalyn_cookie_consent', 'declined');
+  localStorage.setItem('vexalyn_cookie_date', new Date().toISOString());
+  document.getElementById('cookie-banner').classList.remove('show');
+  
+  // Show info modal
+  showSuccessModal('Cookies Ditolak', 'Hanya essential cookies yang aktif. Analytics dan marketing dinonaktifkan.');
+  console.log('❌ Cookies declined');
+}
+
+function openCookieSettings() {
+  // Close cookie banner
+  document.getElementById('cookie-banner').classList.remove('show');
+  
+  // Load saved preferences
+  const preferences = JSON.parse(localStorage.getItem('vexalyn_cookie_preferences') || '{"analytics":false,"marketing":false}');
+  
+  if (preferences.analytics) {
+    document.getElementById('analytics-toggle').classList.add('active');
+  }
+  if (preferences.marketing) {
+    document.getElementById('marketing-toggle').classList.add('active');
+  }
+  
+  // Show modal
+  document.getElementById('cookie-settings-modal').classList.add('show');
+}
+
+function closeCookieSettingsModal() {
+  document.getElementById('cookie-settings-modal').classList.remove('show');
+  // Show cookie banner again if no consent yet
+  const consent = localStorage.getItem('vexalyn_cookie_consent');
+  if (!consent) {
+    setTimeout(() => {
+      document.getElementById('cookie-banner').classList.add('show');
+    }, 300);
+  }
+}
+
+function toggleAnalytics() {
+  document.getElementById('analytics-toggle').classList.toggle('active');
+}
+
+function toggleMarketing() {
+  document.getElementById('marketing-toggle').classList.toggle('active');
+}
+
+function saveCookiePreferences() {
+  const analytics = document.getElementById('analytics-toggle').classList.contains('active');
+  const marketing = document.getElementById('marketing-toggle').classList.contains('active');
+  
+  const preferences = {
+    analytics: analytics,
+    marketing: marketing,
+    essential: true // always true
+  };
+  
+  localStorage.setItem('vexalyn_cookie_preferences', JSON.stringify(preferences));
+  localStorage.setItem('vexalyn_cookie_consent', 'customized');
+  localStorage.setItem('vexalyn_cookie_date', new Date().toISOString());
+  
+  // Initialize tracking based on preferences
+  if (analytics || marketing) {
+    initializeTracking();
+  }
+  
+  // Close modal
+  closeCookieSettingsModal();
+  
+  // Show success modal instead of toast
+  showSuccessModal('Preferensi Disimpan', `✅ Essential: Aktif\n${analytics ? '✅' : '❌'} Analytics: ${analytics ? 'Aktif' : 'Nonaktif'}\n${marketing ? '✅' : '❌'} Marketing: ${marketing ? 'Aktif' : 'Nonaktif'}`);
+  
+  console.log('💾 Cookie preferences saved:', preferences);
+}
+
+// ===== Real Cookie Tracking Implementation =====
+function initializeTracking() {
+  console.log('🔧 Initializing tracking services...');
+  
+  // Example: Google Analytics (uncomment dan ganti dengan GA ID kamu)
+  // const script = document.createElement('script');
+  // script.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
+  // script.async = true;
+  // document.head.appendChild(script);
+  
+  // window.dataLayer = window.dataLayer || [];
+  // function gtag(){dataLayer.push(arguments);}
+  // gtag('js', new Date());
+  // gtag('config', 'G-XXXXXXXXXX');
+  
+  // Track page view
+  trackEvent('page_view', { page_path: window.location.pathname });
+  
+  // Track user session
+  const sessionId = getOrCreateSessionId();
+  console.log('📊 Session ID:', sessionId);
+}
+
+function trackEvent(eventName, params = {}) {
+  const consent = localStorage.getItem('vexalyn_cookie_consent');
+  if (consent !== 'accepted') return;
+  
+  // Log event (in production, send to analytics service)
+  console.log('📈 Event:', eventName, params);
+  
+  // Example: Send to your backend
+  // fetch('/api/analytics', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify({ event: eventName, ...params, timestamp: Date.now() })
+  // });
+}
+
+function getOrCreateSessionId() {
+  let sessionId = sessionStorage.getItem('vexalyn_session_id');
+  if (!sessionId) {
+    sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    sessionStorage.setItem('vexalyn_session_id', sessionId);
+  }
+  return sessionId;
+}
+
+// ===== Custom Toast Notification System =====
+function showToast(type, title, message) {
+  const container = document.getElementById('toast-container');
+  
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  
+  // Icon based on type
+  let iconSVG = '';
+  let iconClass = '';
+  
+  if (type === 'success') {
+    iconClass = 'success';
+    iconSVG = '<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  } else if (type === 'error') {
+    iconClass = 'error';
+    iconSVG = '<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+  } else {
+    iconClass = 'info';
+    iconSVG = '<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+  }
+  
+  toast.innerHTML = `
+    <div class="toast-icon ${iconClass}">
+      ${iconSVG}
+    </div>
+    <div class="toast-text">
+      <h4>${title}</h4>
+      <p>${message}</p>
+    </div>
+    <button class="toast-close" onclick="closeToast(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  `;
+  
+  container.appendChild(toast);
+  
+  // Auto remove after 5 seconds
+  setTimeout(() => {
+    toast.classList.add('hiding');
+    setTimeout(() => toast.remove(), 300);
+  }, 5000);
+}
+
+function closeToast(btn) {
+  const toast = btn.closest('.toast');
+  toast.classList.add('hiding');
+  setTimeout(() => toast.remove(), 300);
+}
+
+// ===== Success Modal (Replace Toast for important messages) =====
+function showSuccessModal(title, message) {
+  // Create modal overlay with unique ID
+  const overlayId = 'success-modal-' + Date.now();
+  const overlay = document.createElement('div');
+  overlay.id = overlayId;
+  overlay.style.cssText = `
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    background:rgba(21,24,31,.75);backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:center;z-index:10001;
+    opacity:0;transition:opacity .3s;padding:20px;
+  `;
+  
+  // Create modal
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    background:#fff;border:3px solid var(--ink);border-radius:20px;
+    box-shadow:0 20px 60px rgba(21,24,31,.4);max-width:400px;width:100%;
+    text-align:center;padding:32px 28px;transform:scale(.9);
+    transition:transform .3s cubic-bezier(.68,-.55,.265,1.55);
+  `;
+  
+  modal.innerHTML = `
+    <div style="width:64px;height:64px;background:var(--mint);border:3px solid var(--ink);
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      margin:0 auto 20px;animation:successPop .6s cubic-bezier(.68,-.55,.265,1.55);">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" 
+        style="width:32px;height:32px;stroke:var(--ink);">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+    <h3 style="font-family:'Fredoka',sans-serif;font-size:20px;font-weight:700;
+      margin-bottom:12px;color:var(--ink);">${title}</h3>
+    <p style="color:var(--gray);font-size:14px;line-height:1.6;margin-bottom:24px;white-space:pre-line;">${message}</p>
+    <button onclick="document.getElementById('${overlayId}').remove()" 
+      style="width:100%;padding:12px 24px;background:var(--green);color:#fff;
+      border:3px solid var(--ink);border-radius:50px;font-family:'Inter',sans-serif;
+      font-weight:700;font-size:14px;cursor:pointer;box-shadow:4px 4px 0 var(--ink);
+      transition:all .15s;">
+      Oke, Mengerti!
+    </button>
+  `;
+  
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  
+  // Animate in
+  setTimeout(() => {
+    overlay.style.opacity = '1';
+    modal.style.transform = 'scale(1)';
+  }, 10);
+  
+  // Add animation keyframes if not exists
+  if (!document.getElementById('success-modal-styles')) {
+    const style = document.createElement('style');
+    style.id = 'success-modal-styles';
+    style.textContent = `
+      @keyframes successPop {
+        0% { transform: scale(0) rotate(0deg); }
+        50% { transform: scale(1.1) rotate(180deg); }
+        100% { transform: scale(1) rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  
+  // Auto close after 5 seconds
+  setTimeout(() => {
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.remove(), 300);
+  }, 5000);
+}
 
 // FAQ Toggle Function
 function toggleFAQ(element) {
@@ -1066,6 +2333,17 @@ function updateLoginButton() {
 
 // Run on page load
 updateLoginButton();
+
+// ===== DEBUG HELPER (Remove in production) =====
+// Add console command to reset modals
+window.resetModals = function() {
+  localStorage.removeItem('vexalyn_visited');
+  localStorage.removeItem('vexalyn_cookie_consent');
+  localStorage.removeItem('vexalyn_cookie_preferences');
+  console.log('🔄 Modals reset! Refresh page to see them again.');
+  console.log('💡 Or just refresh: location.reload()');
+};
+console.log('💡 Tip: Run resetModals() in console to see modals again!');
 </script>
 
 <!-- ===== Floating Report Button ===== -->

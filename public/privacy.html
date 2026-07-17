@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy - Vexalyn API</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --ink:#15181F;
+  --cream:#FBF1E3;
+  --white:#FFFFFF;
+  --salmon:#FFAB92;
+  --salmon-soft:#FFE4D9;
+  --sky:#9BD8F4;
+  --sky-soft:#DCF0FB;
+  --lav:#CBC0F5;
+  --lav-soft:#EAE5FC;
+  --mint:#9BE3BC;
+  --mint-soft:#DFF7EA;
+  --green:#33B96A;
+  --green-dark:#1D7A46;
+  --gray:#6B7280;
+  --gray-soft:#9AA0AC;
+  --shadow: 6px 6px 0 var(--ink);
+  --shadow-sm: 4px 4px 0 var(--ink);
+  --radius: 24px;
+  --radius-sm: 16px;
+  --radius-pill: 100px;
+  --border: 3px solid var(--ink);
+}
+
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.7;
+}
+h1,h2,h3,.brand{font-family:'Fredoka',sans-serif;}
+a{text-decoration:none;color:inherit;}
+
+/* Header */
+.header-outer{padding:22px 24px 0;}
+header{
+  max-width:1180px;margin:0 auto;background:#fff;border:var(--border);border-radius:var(--radius-pill);
+  box-shadow:var(--shadow);padding:12px 14px 12px 20px;display:flex;align-items:center;justify-content:space-between;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;}
+.brand-icon{
+  width:38px;height:38px;background:var(--salmon);border:2.5px solid var(--ink);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+}
+.brand-icon svg{width:19px;height:19px;stroke:var(--ink);}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
+  padding:11px 22px;border-radius:var(--radius-pill);border:var(--border);
+  box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s ease, box-shadow .15s ease;
+  background:var(--green);color:#fff;
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+
+/* Content */
+.container{max-width:860px;margin:0 auto;padding:80px 24px;}
+.back-link{
+  display:inline-flex;align-items:center;gap:8px;color:var(--green-dark);
+  font-weight:700;font-size:14px;margin-bottom:32px;padding:8px 16px;
+  background:var(--mint-soft);border:2.5px solid var(--ink);border-radius:var(--radius-pill);
+  transition:all .2s;
+}
+.back-link:hover{transform:translateX(-4px);box-shadow:4px 4px 0 var(--ink);}
+.back-link svg{width:16px;height:16px;stroke:currentColor;}
+
+.page-header{
+  background:#fff;border:var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:40px;margin-bottom:32px;text-align:center;
+}
+.page-icon{
+  width:72px;height:72px;background:var(--sky);border:var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+}
+.page-icon svg{width:34px;height:34px;stroke:var(--ink);stroke-width:2.5;}
+.page-header h1{font-size:36px;font-weight:700;margin-bottom:12px;}
+.page-header .meta{color:var(--gray);font-size:14px;font-weight:600;}
+
+.content-card{
+  background:#fff;border:var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);padding:40px;margin-bottom:24px;
+}
+.content-card h2{font-size:24px;font-weight:700;margin:32px 0 16px;color:var(--ink);}
+.content-card h2:first-child{margin-top:0;}
+.content-card h3{font-size:18px;font-weight:700;margin:24px 0 12px;color:var(--ink);}
+.content-card p{color:var(--gray);font-size:15px;margin-bottom:16px;}
+.content-card ul{margin:12px 0 16px 24px;color:var(--gray);font-size:15px;}
+.content-card li{margin-bottom:8px;}
+.content-card strong{color:var(--ink);font-weight:700;}
+.content-card a{color:var(--green-dark);font-weight:700;text-decoration:underline;}
+
+.highlight-box{
+  background:var(--sky-soft);border:var(--border);border-radius:var(--radius-sm);
+  padding:20px 24px;margin:20px 0;
+}
+.highlight-box h4{font-family:'Fredoka',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+.highlight-box p{color:var(--gray);font-size:14px;margin:0;}
+
+.footer{
+  max-width:860px;margin:40px auto 0;padding:24px;
+  border-top:2.5px solid var(--ink);text-align:center;
+}
+.footer p{color:var(--gray-soft);font-size:13px;}
+
+@media(max-width:768px){
+  .container{padding:60px 20px;}
+  .page-header{padding:32px 24px;}
+  .page-header h1{font-size:28px;}
+  .content-card{padding:28px 20px;}
+  .content-card h2{font-size:20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header-outer">
+  <header>
+    <a href="/" class="brand" style="text-decoration:none;">
+      <img src="/assets/logo-horizontal.svg" alt="Vexalyn API" height="40" style="display:block;">
+    </a>
+    <a href="/" class="btn">← Kembali ke Home</a>
+  </header>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="page-header">
+    <div class="page-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+    </div>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Terakhir diperbarui: 16 Juli 2026</p>
+  </div>
+
+  <div class="content-card">
+    <h2>1. Pengantar</h2>
+    <p>Selamat datang di Vexalyn API. Kami menghargai privasi Anda dan berkomitmen untuk melindungi data pribadi Anda. Kebijakan privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat menggunakan layanan API kami.</p>
+
+    <div class="highlight-box">
+      <h4>📌 Ringkasan Singkat</h4>
+      <p>Kami TIDAK mengumpulkan data pribadi identitas. Kami hanya menggunakan cookies untuk analytics dan meningkatkan performa layanan. Anda dapat menolak cookies kapan saja.</p>
+    </div>
+
+    <h2>2. Informasi yang Kami Kumpulkan</h2>
+    
+    <h3>2.1 Data Otomatis</h3>
+    <p>Ketika Anda menggunakan Vexalyn API, kami secara otomatis mengumpulkan:</p>
+    <ul>
+      <li><strong>Log Data</strong>: IP address, browser type, timestamp request</li>
+      <li><strong>API Usage Data</strong>: Endpoint yang diakses, response time, error logs</li>
+      <li><strong>Performance Metrics</strong>: Rate limit status, cache hit ratio</li>
+    </ul>
+
+    <h3>2.2 Cookies</h3>
+    <p>Kami menggunakan cookies untuk:</p>
+    <ul>
+      <li><strong>Essential Cookies</strong>: Diperlukan untuk fungsi dasar website (selalu aktif)</li>
+      <li><strong>Analytics Cookies</strong>: Memahami bagaimana pengguna berinteraksi dengan API</li>
+      <li><strong>Performance Cookies</strong>: Mengoptimalkan kecepatan dan stabilitas layanan</li>
+    </ul>
+
+    <h2>3. Bagaimana Kami Menggunakan Data</h2>
+    <p>Data yang kami kumpulkan digunakan untuk:</p>
+    <ul>
+      <li>Menyediakan dan memelihara layanan API</li>
+      <li>Memantau dan menganalisis penggunaan layanan</li>
+      <li>Mendeteksi, mencegah, dan menangani masalah teknis</li>
+      <li>Meningkatkan performa dan keamanan API</li>
+      <li>Mengirim notifikasi penting terkait layanan (jika diperlukan)</li>
+    </ul>
+
+    <h2>4. Berbagi Data</h2>
+    <p>Kami TIDAK menjual, menyewakan, atau membagikan data pribadi Anda kepada pihak ketiga untuk tujuan komersial. Data hanya dibagikan dalam kondisi berikut:</p>
+    <ul>
+      <li><strong>Service Providers</strong>: Hosting provider (Railway, Vercel) untuk menjalankan infrastruktur</li>
+      <li><strong>Legal Compliance</strong>: Jika diwajibkan oleh hukum atau proses legal</li>
+      <li><strong>Security</strong>: Untuk melindungi hak, properti, atau keamanan Vexalyn API dan pengguna</li>
+    </ul>
+
+    <h2>5. Keamanan Data</h2>
+    <p>Kami menerapkan langkah-langkah keamanan teknis dan organisasi yang tepat untuk melindungi data Anda:</p>
+    <ul>
+      <li>HTTPS encryption untuk semua komunikasi</li>
+      <li>Rate limiting untuk mencegah abuse</li>
+      <li>Regular security audits dan updates</li>
+      <li>Limited data retention (log disimpan maksimal 90 hari)</li>
+    </ul>
+
+    <div class="highlight-box">
+      <h4>🔒 Catatan Keamanan</h4>
+      <p>Meskipun kami berupaya keras melindungi data Anda, tidak ada metode transmisi internet atau penyimpanan elektronik yang 100% aman. Kami tidak dapat menjamin keamanan absolut.</p>
+    </div>
+
+    <h2>6. Hak Anda</h2>
+    <p>Anda memiliki hak untuk:</p>
+    <ul>
+      <li><strong>Akses</strong>: Meminta salinan data pribadi yang kami simpan</li>
+      <li><strong>Koreksi</strong>: Meminta koreksi data yang tidak akurat</li>
+      <li><strong>Penghapusan</strong>: Meminta penghapusan data pribadi Anda</li>
+      <li><strong>Opt-out</strong>: Menolak penggunaan cookies analytics</li>
+      <li><strong>Portabilitas</strong>: Meminta transfer data ke layanan lain</li>
+    </ul>
+
+    <h2>7. Cookies Management</h2>
+    <p>Anda dapat mengelola preferensi cookies melalui:</p>
+    <ul>
+      <li>Banner cookie di website kami (klik tombol "Tolak" atau "⚙️ Settings")</li>
+      <li>Browser settings Anda (clear cookies atau block cookies)</li>
+      <li>localStorage browser: Hapus key <code>vexalyn_cookie_consent</code></li>
+    </ul>
+
+    <h2>8. Pihak Ketiga</h2>
+    <p>Website kami mungkin berisi link ke website pihak ketiga. Kami tidak bertanggung jawab atas praktik privasi atau konten website tersebut. Kami sarankan Anda membaca privacy policy mereka.</p>
+
+    <h2>9. Children's Privacy</h2>
+    <p>Layanan kami tidak ditujukan untuk anak di bawah 13 tahun. Kami tidak secara sengaja mengumpulkan informasi pribadi dari anak-anak. Jika Anda adalah orang tua dan menyadari bahwa anak Anda telah memberikan data pribadi, silakan hubungi kami.</p>
+
+    <h2>10. Perubahan Kebijakan</h2>
+    <p>Kami dapat memperbarui Privacy Policy ini dari waktu ke waktu. Perubahan akan diposting di halaman ini dengan "Terakhir diperbarui" yang diperbarui. Kami menyarankan Anda untuk meninjau halaman ini secara berkala.</p>
+
+    <h2>11. Kontak</h2>
+    <p>Jika Anda memiliki pertanyaan tentang Privacy Policy ini, silakan hubungi kami:</p>
+    <ul>
+      <li><strong>Email</strong>: <a href="mailto:vioatmajaya@gmail.com">vioatmajaya@gmail.com</a></li>
+      <li><strong>Website</strong>: <a href="https://vexalyndev.my.id">vexalyndev.my.id</a></li>
+      <li><strong>Report Center</strong>: <a href="/report">Laporkan Masalah</a></li>
+    </ul>
+
+    <div class="highlight-box" style="background:var(--mint-soft);margin-top:32px;">
+      <h4>✅ Komitmen Kami</h4>
+      <p>Kami berkomitmen untuk melindungi privasi Anda dan memberikan transparansi penuh tentang bagaimana data Anda digunakan. Kepercayaan Anda adalah prioritas kami.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>© 2026 Vexalyn API. Seluruh hak cipta dilindungi.</p>
+    <p style="margin-top:8px;"><a href="/">Home</a> • <a href="/api-docs">API Docs</a> • <a href="/report">Report</a> • <a href="/privacy" style="color:var(--green-dark);">Privacy Policy</a></p>
+  </div>
+</div>
+
+</body>
+</html>
