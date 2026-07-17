@@ -142,18 +142,19 @@ async def scrape_search(query: str):
 
     search_results = []
     
-    # Multiple patterns untuk cari hasil search
-    # Pattern 1: Cari article/div dengan class yang umum untuk search results
+    # Pattern 1: Cari card donghua dengan class spesifik Anichin
+    # Anichin biasa pakai: bs, bsx, film-list, post-item
     items = (
+        soup.find_all('div', class_=lambda c: c and any(x in c.lower() for x in ['bs', 'bsx', 'film', 'flw-item', 'post-item'])) or
         soup.find_all('article', class_=lambda c: c and ('post' in c.lower() or 'entry' in c.lower())) or
-        soup.find_all('div', class_=lambda c: c and ('post' in c.lower() or 'item' in c.lower() or 'result' in c.lower()))
+        soup.find_all('div', class_=lambda c: c and ('post' in c.lower() or 'item' in c.lower()))
     )
     
-    print(f"{C_CYAN}[DEBUG-SEARCH]{RESET} Found {len(items)} potential results")
+    print(f"{C_CYAN}[DEBUG-SEARCH]{RESET} Pattern 1 found {len(items)} items")
     
     for item in items:
         try:
-            # Cari link dan title
+            # Cari link dan title - bisa di a atau di dalam
             a_tag = item.find('a', href=True)
             if not a_tag:
                 continue
@@ -163,7 +164,7 @@ async def scrape_search(query: str):
                 continue
             
             # Skip link yang tidak valid
-            if any(skip in link.lower() for skip in ['#', 'javascript', 'wp-content', 'feed', 'wp-json']):
+            if any(skip in link.lower() for skip in ['#', 'javascript', 'wp-content', 'feed', 'wp-json', 'genre', 'tag=']):
                 continue
             
             # Extract title dari berbagai sumber
@@ -171,6 +172,7 @@ async def scrape_search(query: str):
                 a_tag.get('title') or
                 item.find('h2').get_text(strip=True) if item.find('h2') else None or
                 item.find('h3').get_text(strip=True) if item.find('h3') else None or
+                item.find('h4').get_text(strip=True) if item.find('h4') else None or
                 a_tag.get_text(strip=True)
             )
             
@@ -181,12 +183,20 @@ async def scrape_search(query: str):
             img_tag = item.find('img')
             thumb = None
             if img_tag:
-                thumb = img_tag.get('data-src') or img_tag.get('src') or img_tag.get('data-lazy-src')
+                thumb = img_tag.get('data-src') or img_tag.get('src') or img_tag.get('data-lazy-src') or img_tag.get('data-original')
                 if thumb and thumb.startswith('/'):
                     thumb = "https://anichin.watch" + thumb
             
-            # Skip jika tidak ada thumbnail valid
-            if not thumb or 'logo' in thumb.lower():
+            # Jangan skip tanpa thumbnail - coba cari di parent
+            if not thumb:
+                parent_img = a_tag.find('img')
+                if parent_img:
+                    thumb = parent_img.get('data-src') or parent_img.get('src') or parent_img.get('data-lazy-src')
+                    if thumb and thumb.startswith('/'):
+                        thumb = "https://anichin.watch" + thumb
+            
+            # Skip jika masih tidak ada thumbnail atau logo
+            if not thumb or 'logo' in thumb.lower() or 'banner' in thumb.lower():
                 continue
             
             # Extract episode number
@@ -196,7 +206,7 @@ async def scrape_search(query: str):
             status = extract_status(item)
             
             search_results.append({
-                "title": title[:80],
+                "title": title,
                 "url": link,
                 "latest_episode": episode,
                 "status": status,
@@ -205,10 +215,13 @@ async def scrape_search(query: str):
         except Exception as e:
             continue
     
-    # Pattern 2: Jika pattern 1 gagal, cari dari semua link dengan gambar
-    if len(search_results) < 1:
-        print(f"{C_YELLOW}[FALLBACK]{RESET} Using fallback search pattern...")
+    print(f"{C_CYAN}[DEBUG-SEARCH]{RESET} Pattern 1 results: {len(search_results)}")
+    
+    # Pattern 2: Jika masih kurang, cari SEMUA link dengan gambar
+    if len(search_results) < 2:
+        print(f"{C_YELLOW}[FALLBACK]{RESET} Searching all links with images...")
         all_links = soup.find_all('a', href=True)
+        pattern2_results = []
         
         for a_tag in all_links:
             try:
@@ -218,15 +231,11 @@ async def scrape_search(query: str):
                 if not href or len(href) < 5 or not title or len(title) < 3:
                     continue
                 
-                # Filter: harus mengandung keyword pencarian
-                if query.lower() not in title.lower():
-                    continue
-                
                 # Skip link yang jelek
-                if any(skip in href.lower() for skip in ['#', 'javascript', 'genre', 'tag=', 'page=', 'wp-content', 'feed', 'wp-json']):
+                if any(skip in href.lower() for skip in ['#', 'javascript', 'wp-content', 'feed', 'wp-json', 'instagram', 'facebook', 'twitter', 'category', 'genre', 'tag=']):
                     continue
                 
-                # Cari gambar
+                # Cari gambar di a_tag atau parent
                 img_tag = a_tag.find('img')
                 if not img_tag:
                     parent = a_tag.parent
@@ -236,17 +245,25 @@ async def scrape_search(query: str):
                 if not img_tag:
                     continue
                 
-                thumb = img_tag.get('data-src') or img_tag.get('src') or img_tag.get('data-lazy-src')
+                thumb = img_tag.get('data-src') or img_tag.get('src') or img_tag.get('data-lazy-src') or img_tag.get('data-original')
                 if thumb and thumb.startswith('/'):
                     thumb = "https://anichin.watch" + thumb
                 
-                if not thumb or 'logo' in thumb.lower():
+                if not thumb or 'logo' in thumb.lower() or 'banner' in thumb.lower():
+                    continue
+                
+                # Flexible keyword match
+                query_words = query.lower().split()
+                title_lower = title.lower()
+                matched_words = sum(1 for word in query_words if len(word) > 2 and word in title_lower)
+                
+                if matched_words == 0:
                     continue
                 
                 episode = extract_episode_number(title)
                 
-                search_results.append({
-                    "title": title[:80],
+                pattern2_results.append({
+                    "title": title,
                     "url": href,
                     "latest_episode": episode,
                     "status": "N/A",
@@ -254,6 +271,9 @@ async def scrape_search(query: str):
                 })
             except Exception:
                 continue
+        
+        print(f"{C_YELLOW}[FALLBACK]{RESET} Pattern 2 found {len(pattern2_results)} items")
+        search_results.extend(pattern2_results)
     
     # Filter duplikat
     seen_urls = set()

@@ -751,18 +751,18 @@ async def anichin_home():
 
 @app.get("/anichin/search", tags=["Anichin"])
 async def anichin_search(q: str = Query(..., description="Search keyword", min_length=1)):
-    """Search donghua by keyword on Anichin"""
-    cache_key = f"anichin:search:{q.lower().strip()}"
-    cached = cache.get(cache_key)
-    if cached:
-        cached["_cached"] = True
-        return JSONResponse(content=cached)
+    """Search donghua by keyword on Anichin (no cache - fresh results every time)"""
     try:
         from Anichin.Search import scrape_search
         result = await scrape_search(q)
-        if result.get("ok"):
-            cache.set(cache_key, result, ttl_seconds=180)  # 3 menit
-        return JSONResponse(content=result)
+        
+        # Force browser to NEVER cache search results
+        response = JSONResponse(content=result)
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+        
+        return response
     except Exception as e:
         print(f"[ERROR] {e}")
         raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
