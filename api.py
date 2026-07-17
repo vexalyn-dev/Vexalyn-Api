@@ -32,10 +32,14 @@ load_dotenv()
 ADMIN_EMAIL = "admin.maintenance"
 ADMIN_PASSWORD = "admin123"
 admin_sessions = {}  # Store active admin sessions {token: timestamp}
+maintenance_estimated_time = "~30 menit"  # Default estimated completion time
 
 class LoginRequest(BaseModel):
     email: str
     password: str
+
+class EstimatedTimeRequest(BaseModel):
+    estimated_completion: str
 
 def generate_admin_token():
     """Generate secure random token for admin session"""
@@ -553,19 +557,26 @@ async def serve_admin_maintenance():
 @app.get("/admin/maintenance/status", tags=["System"])
 async def get_maintenance_status(request: Request):
     """Get current maintenance mode status (requires admin auth)"""
+    global MAINTENANCE_MODE, maintenance_estimated_time
+    
     # Check authorization
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        # Allow public access without token for maintenance page
+        return {
+            "maintenance_mode": MAINTENANCE_MODE,
+            "status": "maintenance" if MAINTENANCE_MODE else "active",
+            "estimated_completion": maintenance_estimated_time
+        }
     
     token = auth_header.replace("Bearer ", "")
     if not verify_admin_token(token):
         raise HTTPException(status_code=401, detail="Invalid or expired token")
     
-    global MAINTENANCE_MODE
     return {
         "maintenance_mode": MAINTENANCE_MODE,
-        "status": "maintenance" if MAINTENANCE_MODE else "active"
+        "status": "maintenance" if MAINTENANCE_MODE else "active",
+        "estimated_completion": maintenance_estimated_time
     }
 
 @app.post("/admin/maintenance/toggle", tags=["System"])
@@ -629,6 +640,27 @@ async def toggle_maintenance_mode(request: Request):
             "error": str(e),
             "message": "Mode toggled in memory but failed to update .env file"
         }
+
+@app.post("/admin/maintenance/estimated-time", tags=["System"])
+async def set_estimated_time(request: Request, time_data: EstimatedTimeRequest):
+    """Set estimated completion time for maintenance (requires admin auth)"""
+    # Check authorization
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    token = auth_header.replace("Bearer ", "")
+    if not verify_admin_token(token):
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    global maintenance_estimated_time
+    maintenance_estimated_time = time_data.estimated_completion
+    
+    return {
+        "ok": True,
+        "estimated_completion": maintenance_estimated_time,
+        "message": "Estimated completion time updated successfully"
+    }
 
 # ===== DEVELOPER INFO =====
 

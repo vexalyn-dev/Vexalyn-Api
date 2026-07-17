@@ -22,6 +22,24 @@
             padding: 20px;
         }
 
+        /* Full screen on desktop */
+        @media (min-width: 1024px) {
+            body {
+                padding: 0;
+            }
+            .admin-container {
+                max-width: 100%;
+                min-height: 100vh;
+                border-radius: 0;
+                box-shadow: none;
+                border: none;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 60px 80px;
+            }
+        }
+
         .admin-container {
             background: white;
             border-radius: 24px;
@@ -138,6 +156,54 @@
             display: block;
         }
 
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 3px solid #000;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            background: #f8fafc;
+            box-shadow: 4px 4px 0 #000;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            transform: translateY(-2px);
+            box-shadow: 6px 6px 0 #000;
+            background: white;
+        }
+
+        .btn-save {
+            padding: 12px 20px;
+            border: 3px solid #000;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #9BD8F4;
+            color: #15181F;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .btn-save:active {
+            transform: translateY(0);
+            box-shadow: 2px 2px 0 #000;
+        }
+
         .toggle-container {
             display: flex;
             align-items: center;
@@ -228,6 +294,260 @@
             font-size: 13px;
             color: #64748b;
             line-height: 1.6;
+        }
+
+        /* Welcome Card */
+        .welcome-card {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            max-width: 360px;
+            background: white;
+            border: 3px solid #000;
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 6px 6px 0 #000;
+            z-index: 200;
+            animation: slideInRight 0.5s cubic-bezier(.68,-.55,.265,1.55);
+            display: none;
+        }
+
+        .welcome-card.show {
+            display: block;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .welcome-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .welcome-card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .welcome-emoji {
+            font-size: 22px;
+        }
+
+        .card-close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .card-close-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .card-close-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: #64748b;
+        }
+
+        .welcome-card-text {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .welcome-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #FBF1E3;
+            border: 2px solid #000;
+            border-radius: 100px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .welcome-badge svg {
+            width: 14px;
+            height: 14px;
+            stroke: #FFAB92;
+        }
+
+        /* Welcome Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(21, 24, 31, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .welcome-modal {
+            max-width: 480px;
+            width: 100%;
+            background: #fff;
+            border: 3px solid #000;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 32px 28px;
+            position: relative;
+            animation: modalBounce 0.5s cubic-bezier(.68,-.55,.265,1.55);
+        }
+
+        @keyframes modalBounce {
+            from { transform: scale(0.8) translateY(-50px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-emoji {
+            font-size: 28px;
+        }
+
+        .modal-close-btn {
+            background: #FBF1E3;
+            border: 2.5px solid #000;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 3px 3px 0 #000;
+        }
+
+        .modal-close-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 #000;
+        }
+
+        .modal-close-btn:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        .modal-close-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: #1a1a2e;
+            stroke-width: 2.5;
+        }
+
+        .modal-text {
+            color: #64748b;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .modal-button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            background: #FFAB92;
+            border: 3px solid #000;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #15181F;
+            cursor: pointer;
+            box-shadow: 4px 4px 0 #000;
+            transition: all 0.15s;
+        }
+
+        .modal-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .modal-button:active {
+            transform: translate(1px, 1px);
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        .modal-button svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+        }
+
+        /* Toggle Text ON/OFF */
+        .toggle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .toggle-text.hide {
+            opacity: 0;
         }
 
         .action-buttons {
@@ -355,6 +675,14 @@
                 flex-direction: column;
             }
 
+            .form-group {
+                gap: 10px;
+            }
+
+            .btn-save {
+                width: 100%;
+            }
+
             .toast {
                 right: 12px;
                 left: 12px;
@@ -406,6 +734,22 @@
             </div>
         </div>
 
+        <div class="control-section">
+            <label class="control-label">Estimasi Waktu Selesai</label>
+            <div class="form-group">
+                <input 
+                    type="text" 
+                    id="estimatedTime" 
+                    class="form-input" 
+                    placeholder="Contoh: ~30 menit, 1 jam, 15:00 WIB"
+                    maxlength="50"
+                >
+                <button class="btn btn-save" onclick="saveEstimatedTime()">
+                    Simpan Estimasi
+                </button>
+            </div>
+        </div>
+
         <div class="loading" id="loadingState">
             <div class="spinner"></div>
             <p style="color: #64748b; font-size: 14px;">Memproses perubahan...</p>
@@ -442,6 +786,12 @@
                 });
                 const data = await response.json();
                 isMaintenanceMode = data.maintenance_mode;
+                
+                // Update estimated time field
+                if (data.estimated_completion) {
+                    document.getElementById('estimatedTime').value = data.estimated_completion;
+                }
+                
                 updateUI();
             } catch (error) {
                 console.error('Error checking status:', error);
@@ -539,6 +889,37 @@
         function logout() {
             sessionStorage.removeItem('admin_token');
             window.location.href = '/admin/login';
+        }
+
+        async function saveEstimatedTime() {
+            const estimatedTime = document.getElementById('estimatedTime').value.trim();
+            
+            if (!estimatedTime) {
+                showToast('Masukkan estimasi waktu terlebih dahulu', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/admin/maintenance/estimated-time', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminToken}`
+                    },
+                    body: JSON.stringify({ estimated_completion: estimatedTime })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast('Estimasi waktu berhasil disimpan!', 'success');
+                } else {
+                    showToast(data.detail || 'Gagal menyimpan estimasi', 'error');
+                }
+            } catch (error) {
+                console.error('Error saving estimated time:', error);
+                showToast('Terjadi kesalahan saat menyimpan', 'error');
+            }
         }
     </script>
 </body>

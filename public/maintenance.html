@@ -103,16 +103,156 @@ h1{
 .footer-text a{
   color:var(--green);text-decoration:underline;font-weight:700;
 }
+/* Welcome Modal */
+.modal-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(21,24,31,.6);
+  backdrop-filter:blur(4px);
+  z-index:1000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  animation:fadeIn .3s ease;
+}
+.modal-overlay.show{display:flex;}
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+.welcome-modal{
+  max-width:480px;
+  width:100%;
+  background:#fff;
+  border:var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+  padding:32px 28px;
+  position:relative;
+  animation:modalBounce .5s cubic-bezier(.68,-.55,.265,1.55);
+}
+@keyframes modalBounce{
+  from{transform:scale(.8) translateY(-50px);opacity:0;}
+  to{transform:scale(1) translateY(0);opacity:1;}
+}
+.modal-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+.modal-title{
+  font-family:'Fredoka',sans-serif;
+  font-size:22px;
+  font-weight:700;
+  color:var(--ink);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.modal-emoji{font-size:28px;}
+.close-btn{
+  background:var(--cream);
+  border:2.5px solid var(--ink);
+  border-radius:50%;
+  cursor:pointer;
+  width:36px;
+  height:36px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform .2s, box-shadow .2s;
+  box-shadow:3px 3px 0 var(--ink);
+}
+.close-btn:hover{
+  transform:translate(-2px,-2px);
+  box-shadow:5px 5px 0 var(--ink);
+}
+.close-btn:active{
+  transform:translate(0,0);
+  box-shadow:2px 2px 0 var(--ink);
+}
+.close-btn svg{width:18px;height:18px;stroke:var(--ink);stroke-width:2.5;}
+.modal-text{
+  color:var(--gray);
+  font-size:15px;
+  font-weight:500;
+  line-height:1.7;
+  margin-bottom:24px;
+}
+.modal-button{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:14px 24px;
+  background:var(--salmon);
+  border:var(--border);
+  border-radius:var(--radius-pill);
+  font-family:'Inter',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  color:var(--ink);
+  cursor:pointer;
+  box-shadow:4px 4px 0 var(--ink);
+  transition:transform .15s, box-shadow .15s;
+}
+.modal-button:hover{
+  transform:translate(-2px,-2px);
+  box-shadow:6px 6px 0 var(--ink);
+}
+.modal-button:active{
+  transform:translate(1px,1px);
+  box-shadow:2px 2px 0 var(--ink);
+}
+.modal-button svg{width:18px;height:18px;stroke:currentColor;}
+
 @media(max-width:600px){
   .container{padding:36px 28px;}
   h1{font-size:28px;}
   .subtitle{font-size:16px;}
   .icon-box{width:80px;height:80px;}
   .icon-box svg{width:40px;height:40px;}
+  .bg-shape{display:none;} /* Hide animated shapes on mobile for better performance */
+  .welcome-modal{
+    padding:28px 24px;
+    max-width:calc(100% - 32px);
+  }
+  .modal-title{font-size:20px;}
+  .modal-text{font-size:14px;}
 }
 </style>
 </head>
 <body>
+
+<!-- Welcome Modal Overlay -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="welcome-modal" id="welcomeModal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span class="modal-emoji">👋</span>
+        <span>Halo Developer!</span>
+      </div>
+      <button class="close-btn" onclick="closeWelcomeModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <p class="modal-text">
+      Maaf ya maintenance-nya dadakan. Kita lagi optimasi server biar response time makin cepet. Dijamin worth the wait!
+    </p>
+    <button class="modal-button" onclick="closeWelcomeModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>Balik lagi sebentar ya</span>
+    </button>
+  </div>
+</div>
 
 <!-- Background Shapes -->
 <div class="bg-shape shape1"></div>
@@ -147,7 +287,7 @@ h1{
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       </div>
-      <div class="info-text">Estimasi selesai: <strong>~30 menit</strong></div>
+      <div class="info-text">Estimasi selesai: <strong id="estimatedTime">Memuat...</strong></div>
     </div>
     
     <div class="info-item">
@@ -170,6 +310,78 @@ h1{
     atau cek update di <a href="https://www.instagram.com/vio_atmaja" target="_blank">@vexalyndev</a>
   </p>
 </div>
+
+<script>
+// Show welcome modal on load
+window.addEventListener('load', () => {
+  // Check if user has closed the modal before
+  const modalClosed = sessionStorage.getItem('welcomeModalClosed');
+  if (!modalClosed) {
+    setTimeout(() => {
+      document.getElementById('modalOverlay').classList.add('show');
+    }, 800); // Show after 0.8 second
+  }
+});
+
+// Close welcome modal
+function closeWelcomeModal() {
+  const overlay = document.getElementById('modalOverlay');
+  const modal = document.getElementById('welcomeModal');
+  
+  // Animate out
+  modal.style.animation = 'modalBounce 0.3s reverse';
+  overlay.style.animation = 'fadeIn 0.3s reverse';
+  
+  setTimeout(() => {
+    overlay.classList.remove('show');
+    sessionStorage.setItem('welcomeModalClosed', 'true');
+  }, 300);
+}
+
+// Close modal when clicking overlay (outside modal)
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modalOverlay') {
+    closeWelcomeModal();
+  }
+});
+
+// Fetch estimated completion time from API
+async function fetchEstimatedTime() {
+  try {
+    const response = await fetch('/admin/maintenance/status');
+    const data = await response.json();
+    
+    if (data.estimated_completion) {
+      document.getElementById('estimatedTime').textContent = data.estimated_completion;
+    } else {
+      // Default fallback
+      document.getElementById('estimatedTime').textContent = '~30 menit';
+    }
+  } catch (error) {
+    console.error('Error fetching maintenance info:', error);
+    // Fallback to default
+    document.getElementById('estimatedTime').textContent = '~30 menit';
+  }
+}
+
+// Fetch on page load
+fetchEstimatedTime();
+
+// Auto-refresh every 2 minutes to check if maintenance is done
+setInterval(() => {
+  fetch('/admin/maintenance/status')
+    .then(res => res.json())
+    .then(data => {
+      if (!data.maintenance_mode) {
+        // Maintenance is done, reload page
+        window.location.reload();
+      } else if (data.estimated_completion) {
+        document.getElementById('estimatedTime').textContent = data.estimated_completion;
+      }
+    })
+    .catch(err => console.error('Status check error:', err));
+}, 120000); // Every 2 minutes
+</script>
 
 </body>
 </html>
