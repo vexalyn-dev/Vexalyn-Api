@@ -25,6 +25,16 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# Check maintenance mode
+MAINTENANCE_MODE = os.getenv('MAINTENANCE_MODE', 'false').lower() == 'true'
+
+if MAINTENANCE_MODE:
+    print("⚠️  MAINTENANCE MODE ENABLED")
+    print("🔧 Only maintenance page will be served")
+else:
+    print("✅ MAINTENANCE MODE DISABLED")
+    print("🚀 Normal operation mode")
+
 # ===== IN-MEMORY CACHE =====
 class SimpleCache:
     """
@@ -269,6 +279,32 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Maintenance Mode Middleware (MUST BE BEFORE OTHER MIDDLEWARES)
+@app.middleware("http")
+async def maintenance_mode_middleware(request: Request, call_next):
+    """Intercept all requests when maintenance mode is enabled"""
+    if MAINTENANCE_MODE:
+        # Allow access to maintenance page assets
+        if request.url.path.startswith("/assets") or request.url.path == "/maintenance":
+            return await call_next(request)
+        
+        # Redirect everything else to maintenance page
+        maintenance_file = os.path.join(os.path.dirname(__file__), "public", "maintenance.html")
+        if os.path.exists(maintenance_file):
+            return FileResponse(maintenance_file, media_type="text/html")
+        else:
+            return JSONResponse(
+                status_code=503,
+                content={
+                    "error": "Service Unavailable",
+                    "message": "Vexalyn API is currently under maintenance. Please try again later.",
+                    "maintenance_mode": True
+                }
+            )
+    
+    # Normal operation - continue to next middleware
+    return await call_next(request)
 
 # Rate Limiting Middleware
 @app.middleware("http")

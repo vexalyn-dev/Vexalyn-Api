@@ -41,6 +41,45 @@ copy .env.example .env
 
 ## ⚙️ Configuration
 
+### Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+# Google OAuth (Optional - uses demo mode if not set)
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+
+# Server Configuration
+API_HOST=0.0.0.0
+API_PORT=8000
+
+# Maintenance Mode
+# Set to 'true' to enable maintenance mode (shows maintenance page to all visitors)
+# Set to 'false' or leave empty for normal operation
+MAINTENANCE_MODE=false
+```
+
+### Maintenance Mode
+
+Enable maintenance mode when deploying updates or performing system maintenance:
+
+**How to Enable:**
+1. Set `MAINTENANCE_MODE=true` in your `.env` file (Railway environment variables)
+2. Restart the server
+3. All visitors will see a friendly maintenance page
+
+**How to Disable:**
+1. Set `MAINTENANCE_MODE=false` (or remove the variable)
+2. Restart the server
+3. Normal operation resumes
+
+**Features:**
+- 🎨 Friendly, casual maintenance page (neobrutalism design)
+- ⚡ All requests automatically redirected during maintenance
+- 🔒 Assets still accessible for maintenance page styling
+- 📱 Fully responsive design
+- ⏱️ Shows estimated completion time
+
 ### Google OAuth Setup (Optional)
 
 Jika ingin menggunakan Google Sign-In yang real (bukan demo mode):
