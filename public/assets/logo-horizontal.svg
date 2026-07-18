@@ -3,8 +3,8 @@
   <rect x="4" y="4" width="52" height="52" fill="#15181F"/>
   <rect x="2" y="2" width="52" height="52" fill="#FFAB92" stroke="#15181F" stroke-width="2"/>
   
-  <!-- V Letter -->
-  <path d="M 14 16 L 24 40 L 28 28 L 32 40 L 42 16 L 37 16 L 28 34 L 19 16 Z" 
+  <!-- V Letter - Geometric/Angular Style -->
+  <path d="M 16 16 L 23 16 L 30 25 L 26 16 L 30 42 L 36.5 14 L 42 14 L 30 46 Z" 
         fill="#FFFFFF"/>
   
   <!-- Text: VEXALYN -->

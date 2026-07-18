@@ -784,54 +784,189 @@
 
         /* ===== FOOTER ===== */
         footer {
-            background: var(--ink);
-            color: var(--white);
-            margin-top: 100px;
-            padding: 40px 24px;
-            text-align: center;
-            border-top: var(--border);
+            padding: 70px 24px 30px;
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1180px;
+            margin: 0 auto 46px;
         }
 
-        .footer-text {
+        .footer-brand p {
+            color: var(--gray);
             font-size: 14px;
+            margin: 16px 0 20px;
+            max-width: 260px;
+            font-weight: 500;
+        }
+
+        .social-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2.5px solid var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--white);
+            transition: transform 0.2s;
+            text-decoration: none;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            background: #E8F7F0;
+        }
+
+        .social-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--ink);
+            stroke-width: 2;
+        }
+
+        .footer-col h4 {
+            font-size: 14.5px;
+            font-weight: 700;
             margin-bottom: 16px;
         }
 
-        .footer-links {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
+        .footer-col a {
+            display: block;
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            transition: color 0.2s;
+            text-decoration: none;
         }
 
-        .footer-links a {
-            color: var(--salmon);
+        .footer-col a:hover {
+            color: var(--ink);
+        }
+
+        .footer-bottom {
+            max-width: 1180px;
+            margin: 0 auto;
+            border-top: 2.5px solid var(--ink);
+            padding-top: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-bottom p {
+            color: var(--gray);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .footer-bottom .links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-bottom .links a {
+            color: var(--gray);
+            font-size: 13px;
+            font-weight: 500;
             text-decoration: none;
-            font-weight: 600;
             transition: color 0.2s;
         }
 
-        .footer-links a:hover {
-            color: var(--sky);
+        .footer-bottom .links a:hover {
+            color: var(--ink);
         }
 
-        .footer-divider {
-            height: 2px;
-            background: var(--salmon);
-            margin: 20px 0;
-            opacity: 0.3;
+        .made-by {
+            color: var(--gray);
+            font-size: 13px;
+            font-weight: 600;
         }
 
-        .footer-credit {
-            font-size: 12px;
-            color: var(--cream);
-            opacity: 0.7;
+        .gradient-name {
+            background: linear-gradient(90deg, #FF6B9D 0%, #C084FC 25%, #60A5FA 50%, #C084FC 75%, #FF6B9D 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 14px;
+            animation: gradient-flow 3s linear infinite;
+        }
+
+        @keyframes gradient-flow {
+            0% {
+                background-position: 0% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        }
+
+        .floating-bug-btn:hover .tooltip {
+            opacity: 1;
+        }
+
+        .floating-bug-btn .tooltip::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid var(--ink);
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+        }
+
+        @media (max-width: 768px) {
+            .floating-bug-btn {
+                width: 56px;
+                height: 56px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .floating-bug-btn svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .floating-bug-btn .tooltip {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
         }
 
         /* ===== RESPONSIVE ===== */
@@ -1227,20 +1362,54 @@
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-text">
-                Vexalyn REST API - Free Anichin Donghua Streaming Data
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="brand">
+                    <span class="brand-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                    </span>
+                    Vexalyn API
+                </div>
+                <p>Menyediakan akses data donghua dari Anichin secara cepat dan konsisten untuk seluruh developer.</p>
+                <div class="social-row">
+                    <a href="https://github.com/vexalyn-dev" target="_blank" class="social-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"></path></svg>
+                    </a>
+                    <a href="https://vexalyndev.my.id" target="_blank" class="social-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    </a>
+                    <a href="mailto:vioatmajaya@gmail.com" class="social-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </a>
+                </div>
             </div>
-            <div class="footer-links">
-                <a href="/">Home</a>
-                <a href="/rate-limit-status">Rate Limit</a>
+            <div class="footer-col">
+                <h4>Endpoint</h4>
+                <a href="/api-docs">API Docs</a>
+                <a href="/anichin/home">Home Feed</a>
+                <a href="/anichin/search?q=renegade">Search</a>
                 <a href="/docs">Swagger</a>
-                <a href="/report">Report Bug</a>
             </div>
-            <div class="footer-divider"></div>
-            <div class="footer-credit">
-                Built with ❤️ by Vexalyn Developer | vioatmajaya@gmail.com
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <a href="/">Beranda</a>
+                <a href="/api-docs">Dokumentasi</a>
+                <a href="/rate-limit-status">Rate Limit</a>
+                <a href="/report">Laporkan Bug</a>
             </div>
+            <div class="footer-col">
+                <h4>Developer</h4>
+                <a href="https://github.com/vexalyn-dev" target="_blank">GitHub</a>
+                <a href="https://vexalyndev.my.id" target="_blank">Website</a>
+                <a href="mailto:vioatmajaya@gmail.com">Email</a>
+                <a href="/privacy">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Vexalyn API. Seluruh hak cipta dilindungi.</p>
+            <p class="made-by">
+                Made by <span class="gradient-name">Vio Atmajaya Saputra</span>
+            </p>
         </div>
     </footer>
 

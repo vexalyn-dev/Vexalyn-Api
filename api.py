@@ -447,6 +447,14 @@ async def serve_endpoint_detail():
         return FileResponse(detail_file)
     raise HTTPException(status_code=404, detail="Endpoint detail page not found")
 
+@app.get("/api-terminal.html", include_in_schema=False)
+async def serve_api_terminal():
+    """Serve interactive API terminal component"""
+    terminal_file = os.path.join(os.path.dirname(__file__), "public", "api-terminal.html")
+    if os.path.exists(terminal_file):
+        return FileResponse(terminal_file)
+    raise HTTPException(status_code=404, detail="API terminal component not found")
+
 @app.get("/privacy", include_in_schema=False)
 async def serve_privacy_policy():
     """Serve Privacy Policy page"""

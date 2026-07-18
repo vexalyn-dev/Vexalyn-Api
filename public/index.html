@@ -363,6 +363,34 @@ html{
   opacity:1;
 }
 
+.cookie-close-btn{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:28px;
+  height:28px;
+  background:#fff;
+  border:2.5px solid var(--ink);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:all .2s ease;
+  z-index:10;
+  box-shadow:2px 2px 0 var(--ink);
+}
+.cookie-close-btn:hover{
+  transform:translate(-2px,-2px);
+  box-shadow:4px 4px 0 var(--ink);
+  background:var(--salmon-soft);
+}
+.cookie-close-btn:active{
+  transform:translate(1px,1px);
+  box-shadow:1px 1px 0 var(--ink);
+}
+.cookie-close-btn svg{width:14px;height:14px;stroke:var(--ink);stroke-width:3;}
+
 .cookie-content{
   display:flex;
   align-items:flex-start;
@@ -1130,6 +1158,11 @@ footer{padding:70px 24px 30px;}
 .footer-bottom p{color:var(--gray-soft);font-size:13px;font-weight:500;}
 .footer-bottom .links{display:flex;gap:22px;}
 .footer-bottom .links a{color:var(--gray-soft);font-size:13px;font-weight:500;}
+.made-by{color:var(--gray);font-size:13px;font-weight:600;}
+.gradient-name{background:linear-gradient(90deg,#FF6B9D 0%,#C084FC 25%,#60A5FA 50%,#C084FC 75%,#FF6B9D 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;font-size:14px;animation:gradient-flow 3s linear infinite;}
+@keyframes gradient-flow{0%{background-position:0% center;}100%{background-position:200% center;}}
+
+@media(max-width:768px){.floating-bug-btn{width:56px;height:56px;bottom:20px;right:20px;}.floating-bug-btn svg{width:24px;height:24px;}.floating-bug-btn .tooltip{display:none;}}
 
 /* ===== Responsive ===== */
 @media(max-width:900px){
@@ -1157,6 +1190,46 @@ footer{padding:70px 24px 30px;}
   .grid-3,.grid-3-feat{grid-template-columns:1fr;}
   /* Why Vexalyn stats mobile */
   section.block div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr!important;}
+  /* Hero mobile */
+  .hero h1{font-size:32px;line-height:1.2;}
+  .hero p{font-size:15px;}
+  .hero-actions{flex-direction:column;width:100%;}
+  .hero-actions .btn{width:100%;justify-content:center;}
+  .hero-stats{flex-direction:column;gap:20px;}
+  .section-head h2{font-size:28px;line-height:1.2;}
+  .section-head p{font-size:15px;}
+  /* Navbar mobile */
+  .nav{padding:16px 20px;}
+  .brand{font-size:20px;}
+  /* Sections padding mobile */
+  .hero{padding:100px 20px 60px;}
+  section.block{padding:50px 20px!important;}
+  section.block.white{padding:50px 20px!important;}
+  /* Terminal iframe mobile */
+  div[style*="max-width:1100px"] iframe{height:400px!important;}
+  /* Step cards mobile - reduce padding */
+  section.block.white div[style*="padding:32px"]{padding:24px 20px!important;}
+  section.block.white div[style*="position:absolute;top:16px;left:16px"]{top:12px!important;left:12px!important;width:40px!important;height:40px!important;font-size:18px!important;}
+  section.block.white div[style*="width:70px;height:70px"]{width:56px!important;height:56px!important;margin:20px auto 16px!important;}
+  section.block.white div[style*="width:70px;height:70px"] svg{width:26px!important;height:26px!important;}
+  section.block.white h3{font-size:17px!important;}
+  section.block.white div[style*="padding:32px"] p{font-size:13px!important;}
+  /* Benefits cards mobile */
+  section.block div[style*="padding:24px;display:flex"]{padding:20px!important;}
+  section.block div[style*="width:44px;height:44px"]{width:40px!important;height:40px!important;}
+  section.block div[style*="width:44px;height:44px"] svg{width:20px!important;height:20px!important;}
+  section.block h4{font-size:15px!important;}
+  /* Footer mobile */
+  .footer-top{grid-template-columns:1fr!important;gap:32px;}
+  .footer-bottom{flex-direction:column;gap:16px;text-align:center;}
+}
+@media(max-width:480px){
+  .hero h1{font-size:28px;}
+  .section-head h2{font-size:24px;}
+  .pill{font-size:12px;padding:6px 14px;}
+  .btn{font-size:14px;padding:12px 20px;}
+  /* Terminal even smaller on very small screens */
+  div[style*="max-width:1100px"] iframe{height:350px!important;}
 }
 </style>
 </head>
@@ -1258,6 +1331,12 @@ footer{padding:70px 24px 30px;}
 
 <!-- ===== Cookie Consent Banner ===== -->
 <div id="cookie-banner">
+  <button class="cookie-close-btn" onclick="declineCookies()" title="Tutup">
+    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
   <div class="cookie-content">
     <div class="cookie-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -1287,7 +1366,7 @@ footer{padding:70px 24px 30px;}
 <!-- ===== Cookie Settings Modal ===== -->
 <div id="cookie-settings-modal">
   <div class="cookie-settings-content">
-    <button class="modal-close" onclick="closeCookieSettingsModal()" style="position:absolute;top:14px;right:14px;z-index:10;">
+    <button class="modal-close" onclick="closeCookieSettingsModal()">
       <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -1540,76 +1619,7 @@ footer{padding:70px 24px 30px;}
 
     <!-- Code Example Terminal -->
     <div style="max-width:1100px;margin:46px auto 0;">
-      <!-- Terminal Header -->
-      <div style="background:var(--ink);border:var(--border);border-bottom:none;border-radius:var(--radius) var(--radius) 0 0;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;">
-        <div style="display:flex;gap:8px;">
-          <span style="width:14px;height:14px;border-radius:50%;background:#FF5F57;border:1.5px solid var(--ink);"></span>
-          <span style="width:14px;height:14px;border-radius:50%;background:#FFBD2E;border:1.5px solid var(--ink);"></span>
-          <span style="width:14px;height:14px;border-radius:50%;background:#28CA42;border:1.5px solid var(--ink);"></span>
-        </div>
-        <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--cream);opacity:.7;">~/vexalyn-api-example</div>
-      </div>
-
-      <!-- Tab Navigation -->
-      <div style="background:#1e1e1e;border-left:var(--border);border-right:var(--border);display:flex;gap:0;overflow-x:auto;">
-        <button onclick="switchTab('curl')" id="tab-curl" class="code-tab active" style="flex:1;padding:12px 20px;background:transparent;border:none;border-right:2px solid #2d2d2d;color:#888;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;">cURL</button>
-        <button onclick="switchTab('javascript')" id="tab-javascript" class="code-tab" style="flex:1;padding:12px 20px;background:transparent;border:none;border-right:2px solid #2d2d2d;color:#888;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;">JavaScript</button>
-        <button onclick="switchTab('python')" id="tab-python" class="code-tab" style="flex:1;padding:12px 20px;background:transparent;border:none;border-right:2px solid #2d2d2d;color:#888;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;">Python</button>
-        <button onclick="switchTab('php')" id="tab-php" class="code-tab" style="flex:1;padding:12px 20px;background:transparent;border:none;border-right:2px solid #2d2d2d;color:#888;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;">PHP</button>
-        <button onclick="switchTab('nodejs')" id="tab-nodejs" class="code-tab" style="flex:1;padding:12px 20px;background:transparent;border:none;color:#888;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;">Node.js</button>
-      </div>
-
-      <!-- Code Content -->
-      <div style="background:#1e1e1e;border:var(--border);border-top:2px solid #2d2d2d;border-radius:0 0 var(--radius) var(--radius);padding:28px;position:relative;min-height:220px;">
-        <!-- Copy Button -->
-        <button onclick="copyCode(event)" style="position:absolute;top:16px;right:16px;background:var(--mint-soft);border:2px solid var(--ink);border-radius:10px;padding:8px 16px;font-family:'Inter',sans-serif;font-weight:700;font-size:12px;color:var(--green-dark);cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:3px 3px 0 var(--ink);" onmouseover="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='5px 5px 0 var(--ink)';" onmouseout="this.style.transform='translate(0,0)';this.style.boxShadow='3px 3px 0 var(--ink)';">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;stroke:currentColor;display:inline;vertical-align:middle;margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          Copy
-        </button>
-
-        <!-- cURL -->
-        <pre id="code-curl" class="code-block" style="margin:0;color:#d4d4d4;font-family:'Courier New',monospace;font-size:14px;line-height:1.7;overflow-x:auto;"><code><span style="color:#569cd6;">curl</span> <span style="color:#ce9178;">-X GET "https://api.vexalynapi.my.id/anichin/home"</span> \
-  <span style="color:#9cdcfe;">-H</span> <span style="color:#ce9178;">"Accept: application/json"</span></code></pre>
-
-        <!-- JavaScript -->
-        <pre id="code-javascript" class="code-block" style="display:none;margin:0;color:#d4d4d4;font-family:'Courier New',monospace;font-size:14px;line-height:1.7;overflow-x:auto;"><code><span style="color:#c586c0;">const</span> <span style="color:#9cdcfe;">url</span> <span style="color:#d4d4d4;">=</span> <span style="color:#ce9178;">'https://api.vexalynapi.my.id/anichin/home'</span><span style="color:#d4d4d4;">;</span>
-
-<span style="color:#dcdcaa;">fetch</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">url</span><span style="color:#d4d4d4;">)</span>
-  <span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">then</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">response</span> <span style="color:#c586c0;">=></span> <span style="color:#9cdcfe;">response</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">json</span><span style="color:#d4d4d4;">())</span>
-  <span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">then</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">data</span> <span style="color:#c586c0;">=></span> <span style="color:#9cdcfe;">console</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">log</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">data</span><span style="color:#d4d4d4;">))</span>
-  <span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">catch</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">error</span> <span style="color:#c586c0;">=></span> <span style="color:#9cdcfe;">console</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">error</span><span style="color:#d4d4d4;">(</span><span style="color:#ce9178;">'Error:'</span><span style="color:#d4d4d4;">,</span> <span style="color:#9cdcfe;">error</span><span style="color:#d4d4d4;">));</span></code></pre>
-
-        <!-- Python -->
-        <pre id="code-python" class="code-block" style="display:none;margin:0;color:#d4d4d4;font-family:'Courier New',monospace;font-size:14px;line-height:1.7;overflow-x:auto;"><code><span style="color:#c586c0;">import</span> <span style="color:#4ec9b0;">requests</span>
-
-<span style="color:#9cdcfe;">url</span> <span style="color:#d4d4d4;">=</span> <span style="color:#ce9178;">"https://api.vexalynapi.my.id/anichin/home"</span>
-
-<span style="color:#9cdcfe;">response</span> <span style="color:#d4d4d4;">=</span> <span style="color:#4ec9b0;">requests</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">get</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">url</span><span style="color:#d4d4d4;">)</span>
-<span style="color:#9cdcfe;">data</span> <span style="color:#d4d4d4;">=</span> <span style="color:#9cdcfe;">response</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">json</span><span style="color:#d4d4d4;">()</span>
-
-<span style="color:#dcdcaa;">print</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">data</span><span style="color:#d4d4d4;">)</span></code></pre>
-
-        <!-- PHP -->
-        <pre id="code-php" class="code-block" style="display:none;margin:0;color:#d4d4d4;font-family:'Courier New',monospace;font-size:14px;line-height:1.7;overflow-x:auto;"><code><span style="color:#569cd6;">&lt;?php</span>
-
-<span style="color:#9cdcfe;">$url</span> <span style="color:#d4d4d4;">=</span> <span style="color:#ce9178;">"https://api.vexalynapi.my.id/anichin/home"</span><span style="color:#d4d4d4;">;</span>
-
-<span style="color:#9cdcfe;">$response</span> <span style="color:#d4d4d4;">=</span> <span style="color:#dcdcaa;">file_get_contents</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">$url</span><span style="color:#d4d4d4;">);</span>
-<span style="color:#9cdcfe;">$data</span> <span style="color:#d4d4d4;">=</span> <span style="color:#dcdcaa;">json_decode</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">$response</span><span style="color:#d4d4d4;">,</span> <span style="color:#569cd6;">true</span><span style="color:#d4d4d4;">);</span>
-
-<span style="color:#dcdcaa;">print_r</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">$data</span><span style="color:#d4d4d4;">);</span>
-
-<span style="color:#569cd6;">?&gt;</span></code></pre>
-
-        <!-- Node.js -->
-        <pre id="code-nodejs" class="code-block" style="display:none;margin:0;color:#d4d4d4;font-family:'Courier New',monospace;font-size:14px;line-height:1.7;overflow-x:auto;"><code><span style="color:#c586c0;">const</span> <span style="color:#4ec9b0;">axios</span> <span style="color:#d4d4d4;">=</span> <span style="color:#dcdcaa;">require</span><span style="color:#d4d4d4;">(</span><span style="color:#ce9178;">'axios'</span><span style="color:#d4d4d4;">);</span>
-
-<span style="color:#c586c0;">const</span> <span style="color:#9cdcfe;">url</span> <span style="color:#d4d4d4;">=</span> <span style="color:#ce9178;">'https://api.vexalynapi.my.id/anichin/home'</span><span style="color:#d4d4d4;">;</span>
-
-<span style="color:#4ec9b0;">axios</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">get</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">url</span><span style="color:#d4d4d4;">)</span>
-  <span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">then</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">response</span> <span style="color:#c586c0;">=></span> <span style="color:#9cdcfe;">console</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">log</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">response</span><span style="color:#d4d4d4;">.</span><span style="color:#9cdcfe;">data</span><span style="color:#d4d4d4;">))</span>
-  <span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">catch</span><span style="color:#d4d4d4;">(</span><span style="color:#9cdcfe;">error</span> <span style="color:#c586c0;">=></span> <span style="color:#9cdcfe;">console</span><span style="color:#d4d4d4;">.</span><span style="color:#dcdcaa;">error</span><span style="color:#d4d4d4;">(</span><span style="color:#ce9178;">'Error:'</span><span style="color:#d4d4d4;">,</span> <span style="color:#9cdcfe;">error</span><span style="color:#d4d4d4;">));</span></code></pre>
-      </div>
+      <iframe src="/api-terminal.html" style="width:100%;height:480px;border:none;"></iframe>
     </div>
   </div>
 </section>
@@ -1848,7 +1858,7 @@ function copyCode(e) {
         </div>
       </div>
       <div class="faq-answer">
-        <p>Ya, Vexalyn API 100% gratis tanpa batasan rate limit. Kamu bisa menggunakan semua endpoint tanpa perlu API key atau sistem pembayaran.</p>
+        <p>Vexalyn API sepenuhnya gratis untuk digunakan dengan fair use policy. Kami menerapkan rate limit 50 requests per jam per IP untuk memastikan service tetap stabil untuk semua pengguna. Tidak ada API key atau sistem pembayaran yang diperlukan.</p>
       </div>
     </div>
 
@@ -1914,66 +1924,6 @@ function copyCode(e) {
   </div>
 </section>
 
-<!-- ===== Contact Section ===== -->
-<section class="contact-section" id="kontak">
-  <div class="contact-container">
-    <div class="section-head">
-      <span class="pill pill-green">Hubungi Kami</span>
-      <h2>Mari Terhubung</h2>
-      <p>Punya pertanyaan atau ingin berkolaborasi? Jangan ragu untuk menghubungi kami!</p>
-    </div>
-
-    <div class="contact-grid">
-      <div class="contact-card">
-        <div class="contact-icon email">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-            <path d="M22 6l-10 7L2 6"></path>
-          </svg>
-        </div>
-        <h3>Email</h3>
-        <p>Kirim email untuk inquiry atau support</p>
-        <a href="mailto:vioatmajaya@gmail.com" class="btn btn-sky">vioatmajaya@gmail.com</a>
-      </div>
-
-      <div class="contact-card">
-        <div class="contact-icon github">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"></path>
-          </svg>
-        </div>
-        <h3>GitHub</h3>
-        <p>Kontribusi atau report issues di repo kami</p>
-        <a href="https://github.com/vexalyn-dev" target="_blank" class="btn btn-sky">GitHub Repository</a>
-      </div>
-
-      <div class="contact-card">
-        <div class="contact-icon discord">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-        </div>
-        <h3>Discord</h3>
-        <p>Gabung komunitas developer Vexalyn</p>
-        <a href="#" class="btn btn-sky">Join Discord</a>
-      </div>
-
-      <div class="contact-card">
-        <div class="contact-icon web">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="2" y1="12" x2="22" y2="12"></line>
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-          </svg>
-        </div>
-        <h3>Website</h3>
-        <p>Kunjungi website portfolio kami</p>
-        <a href="https://vexalyndev.my.id" target="_blank" class="btn btn-sky">vexalyndev.my.id</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ===== CTA ===== -->
 <section class="cta-outer">
   <div class="cta-card">
@@ -2033,11 +1983,9 @@ function copyCode(e) {
   </div>
   <div class="footer-bottom">
     <p>© 2026 Vexalyn API. Seluruh hak cipta dilindungi.</p>
-    <div class="links">
-      <a href="#">Privasi</a>
-      <a href="#">Ketentuan</a>
-      <a href="#">Cookies</a>
-    </div>
+    <p class="made-by">
+      Made by <span class="gradient-name">Vio Atmajaya Saputra</span>
+    </p>
   </div>
 </footer>
 
