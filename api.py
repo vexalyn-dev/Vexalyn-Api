@@ -15,6 +15,12 @@ from typing import Dict, Tuple
 # Fix asyncio event loop untuk Windows (support subprocess Playwright)
 if sys.platform == 'win32':
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+    # Fix stdout/stderr encoding for emojis on Windows console
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except AttributeError:
+        pass
 
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -147,8 +153,30 @@ class RateLimiter:
 # Initialize rate limiter
 rate_limiter = RateLimiter(max_requests=50, window_seconds=3600)
 
+# ── Lifespan: warm-up & cleanup browser pool ────────────────────────────────
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app):
+    # Startup: pre-launch browser agar request pertama tidak lambat
+    try:
+        from core.browser import _get_browser
+        await _get_browser()
+        print("[STARTUP] Browser pre-warmed and ready.")
+    except Exception as e:
+        print(f"[STARTUP] Browser pre-warm failed (will launch on first request): {e}")
+    yield
+    # Shutdown: tutup browser
+    try:
+        from core.browser import close_browser
+        await close_browser()
+        print("[SHUTDOWN] Browser closed.")
+    except Exception:
+        pass
+
 # Initialize FastAPI app
 app = FastAPI(
+    lifespan=lifespan,
     title="Vexalyn REST API",
     description="Multi-Source REST API by Vexalyn Developer",
     version="1.0.0",
@@ -200,6 +228,13 @@ def custom_openapi():
     return app.openapi_schema
 
 app.openapi = custom_openapi
+
+@app.middleware("http")
+async def serve_ui_for_browsers(request: Request, call_next):
+    # If a user visits an /anichin API endpoint directly from a browser, serve the UI instead of raw JSON
+    if request.url.path.startswith("/anichin/") and "text/html" in request.headers.get("accept", ""):
+        return FileResponse(Path("public/endpoint-detail.html"))
+    return await call_next(request)
 
 # Custom Swagger UI with hidden /openapi.json link
 from fastapi.responses import HTMLResponse
@@ -309,9 +344,12 @@ app.add_middleware(
 async def maintenance_mode_middleware(request: Request, call_next):
     """Intercept all requests when maintenance mode is enabled"""
     if MAINTENANCE_MODE:
-        # Allow access to maintenance page, assets, admin routes, and login
+        # Allow access to maintenance page, assets, and admin login/panel
+        # Admin login doesn't need token to access the page itself
         if (request.url.path.startswith("/assets") or 
             request.url.path == "/maintenance" or 
+            request.url.path == "/admin/login" or
+            request.url.path == "/admin/maintenance" or
             request.url.path.startswith("/admin/")):
             return await call_next(request)
         
@@ -871,30 +909,110 @@ async def anichin_new_movie():
         print(f"[ERROR] {e}")
         raise HTTPException(status_code=500, detail=f"Failed to load new movies: {str(e)}")
 
+@app.get("/anichin/popular-today", tags=["Anichin"])
+async def anichin_popular_today():
+    """
+    Get Popular Today donghua - trending/hot donghua from this week.
+    
+    Returns list of trending donghua with title, url, thumbnail, episode info.
+    """
+    cache_key = "anichin:popular-today"
+    cached = cache.get(cache_key)
+    if cached:
+        cached["_cached"] = True
+        return JSONResponse(content=cached)
+    try:
+        from Anichin.Populer_today import scrape_popular_today
+        result = await scrape_popular_today()
+        if result.get("ok"):
+            cache.set(cache_key, result, ttl_seconds=300)  # 5 menit
+        return JSONResponse(content=result)
+    except Exception as e:
+        print(f"[ERROR] {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to load popular today: {str(e)}")
+
+@app.get("/anichin/latest-release", tags=["Anichin"])
+async def anichin_latest_release():
+    """
+    Get Latest Release donghua - episode terbaru yang baru dirilis dari Anichin.
+
+    Returns list of latest releases with title, url (series page), thumbnail,
+    total_episode, type, and sub_dub.
+    """
+    cache_key = "anichin:latest-release"
+    cached = cache.get(cache_key)
+    if cached:
+        cached["_cached"] = True
+        return JSONResponse(content=cached)
+    try:
+        import importlib.util, pathlib
+        _spec = importlib.util.spec_from_file_location(
+            "Latest_Release",
+            pathlib.Path(__file__).parent / "Anichin" / "Latest_Release.py"
+        )
+        _mod = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(_mod)
+        result = await _mod.scrape_latest_release()
+        if result.get("ok"):
+            cache.set(cache_key, result, ttl_seconds=300)  # 5 menit
+        return JSONResponse(content=result)
+    except Exception as e:
+        print(f"[ERROR] {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to load latest release: {str(e)}")
+
+@app.get("/anichin/recommendation", tags=["Anichin"])
+async def anichin_recommendation(
+    genre: str = Query(
+        default="fantasy",
+        description="Genre tab filter: fantasy, music, mythology, space, supernatural",
+        pattern="^(fantasy|music|mythology|space|supernatural)$"
+    )
+):
+    """
+    Get Recommendation donghua from Anichin, filtered by genre tab.
+
+    - **genre=fantasy**      : Fantasy recommendations (default)
+    - **genre=music**        : Music genre recommendations
+    - **genre=mythology**    : Mythology genre recommendations
+    - **genre=space**        : Space genre recommendations
+    - **genre=supernatural** : Supernatural genre recommendations
+    """
+    cache_key = f"anichin:recommendation:{genre}"
+    cached = cache.get(cache_key)
+    if cached:
+        cached["_cached"] = True
+        return JSONResponse(content=cached)
+    try:
+        from Anichin.Recommendation import scrape_recommendation
+        result = await scrape_recommendation(genre)
+        if result.get("ok"):
+            cache.set(cache_key, result, ttl_seconds=600)  # 10 menit
+        return JSONResponse(content=result)
+    except Exception as e:
+        print(f"[ERROR] {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to load recommendation: {str(e)}")
+
 # ===== CUSTOM ERROR HANDLERS =====
 
 @app.exception_handler(404)
 async def custom_404_handler(request: Request, exc):
     """Custom 404 page"""
-    # Check if request wants JSON (API call) or HTML (browser)
     accept = request.headers.get('accept', '')
     
     if 'application/json' in accept or '/anichin/' in request.url.path:
-        # Return JSON for API requests
         return JSONResponse(
             status_code=404,
             content={
                 "error": "Not Found",
                 "message": f"The endpoint {request.url.path} does not exist.",
                 "available_endpoints": {
-                    "anichin": ["/anichin/home", "/anichin/search", "/anichin/genres", "/anichin/ongoing-series", "/anichin/popular-series", "/anichin/new-movie"],
+                    "anichin": ["/anichin/home", "/anichin/search", "/anichin/genres", "/anichin/ongoing-series", "/anichin/popular-series", "/anichin/new-movie", "/anichin/popular-today", "/anichin/latest-release"],
                     "system": ["/vexalyn", "/rate-limit-status", "/cache/stats"],
                     "docs": ["/docs", "/redoc"]
                 }
             }
         )
     else:
-        # Return HTML 404 page for browser requests
         error_404_file = os.path.join(os.path.dirname(__file__), "public", "404.html")
         if os.path.exists(error_404_file):
             return FileResponse(error_404_file, status_code=404)

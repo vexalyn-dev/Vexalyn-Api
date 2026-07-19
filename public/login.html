@@ -221,6 +221,42 @@ h1{
   height:20px;
 }
 
+.google-signin-button{
+  width:100%;
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:18px;
+}
+
+.google-signin-button > div{
+  width:100% !important;
+  display:flex;
+  justify-content:center;
+}
+
+.google-auth-note{
+  display:none;
+  margin:-6px 0 18px;
+  padding:12px 14px;
+  border:2px solid var(--ink);
+  border-radius:8px;
+  background:var(--cream);
+  color:var(--gray);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.google-auth-note strong{
+  color:var(--ink);
+}
+
+.google-auth-note code{
+  color:var(--ink);
+  font-weight:800;
+}
+
 .btn-admin{
   background:var(--salmon);
   color:var(--ink);
@@ -471,10 +507,8 @@ h1{
     <p class="subtitle">Masuk ke akun Vexalyn API Anda</p>
 
     <!-- Google Sign In Button -->
-    <button class="btn btn-google" onclick="handleGoogleSignIn()">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-      Masuk dengan Google
-    </button>
+    <div id="googleSignInButton" class="google-signin-button"></div>
+    <p id="googleAuthNote" class="google-auth-note"></p>
 
     <!-- Admin Login Button -->
     <a href="/admin/login" class="btn btn-admin" style="text-decoration: none; margin-top: 10px;">
@@ -537,6 +571,8 @@ h1{
 </div>
 
 <script>
+const demoMode = true;
+
 // Hide loading screen after page load
 window.addEventListener('load', () => {
   setTimeout(() => {
@@ -544,57 +580,128 @@ window.addEventListener('load', () => {
   }, 800);
 });
 
+// Render mock/demo Google Sign-In button
+function renderDemoButton() {
+  const container = document.getElementById('googleSignInButton');
+  if (!container) return;
+  container.innerHTML = `
+    <button type="button" class="btn btn-google" onclick="handleDemoGoogleLogin()" style="margin-bottom:0; width:100%; display:flex; justify-content:center; align-items:center;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" style="margin-right:10px;">
+      Masuk dengan Google (Demo)
+    </button>
+  `;
+}
+
 // Google Sign-In Handler
-function handleGoogleSignIn() {
-  const demoMode = true;
-  
+function initGoogleSignIn(retries = 20) {
+  const clientId = document.querySelector('meta[name="google-signin-client_id"]')?.content;
+  const googleReady = window.google?.accounts?.id;
+
   if (demoMode) {
-    const demoUser = {
-      name: 'Demo User',
-      email: 'demo@gmail.com',
-      picture: 'https://ui-avatars.com/api/?name=Demo+User&background=FFAB92&color=15181F&size=128',
-      provider: 'google'
-    };
-    
-    console.log('Google Sign-In (Demo Mode):', demoUser);
-    localStorage.setItem('user', JSON.stringify(demoUser));
-    alert('Login berhasil! (Demo Mode)\nSelamat datang, ' + demoUser.name);
-    window.location.href = '/';
+    console.log('Google Sign-In running in Demo Mode');
+    renderDemoButton();
     return;
   }
-  
+
+  if (!clientId || clientId.includes('YOUR_GOOGLE_CLIENT_ID')) {
+    console.warn('Login Google belum siap. Pastikan GOOGLE_CLIENT_ID sudah dikonfigurasi.');
+    renderDemoButton();
+    showGoogleAuthNote('Client ID Google belum dikonfigurasi di server. Menggunakan Demo Mode.');
+    return;
+  }
+
+  if (!googleReady) {
+    if (retries > 0) {
+      setTimeout(() => initGoogleSignIn(retries - 1), 250);
+    } else {
+      console.warn('Google Identity Services script failed to load. Falling back to Demo Mode.');
+      renderDemoButton();
+      showGoogleAuthNote('Gagal memuat Google Sign-in. Menggunakan Demo Mode.');
+    }
+    return;
+  }
+
   try {
     google.accounts.id.initialize({
-      client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
-      callback: handleGoogleCallback
+      client_id: clientId,
+      callback: handleGoogleCallback,
+      auto_select: false,
+      cancel_on_tap_outside: true
     });
 
-    google.accounts.id.prompt((notification) => {
-      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-        alert('Google Sign-In tidak tersedia. Silakan login dengan email.');
+    google.accounts.id.renderButton(
+      document.getElementById('googleSignInButton'),
+      {
+        type: 'standard',
+        theme: 'outline',
+        size: 'large',
+        text: 'signin_with',
+        shape: 'pill',
+        logo_alignment: 'center',
+        width: Math.min(400, document.getElementById('googleSignInButton').offsetWidth || 400)
       }
-    });
+    );
   } catch (error) {
     console.error('Google Sign-In error:', error);
-    alert('Google Sign-In belum dikonfigurasi. Silakan login dengan email atau gunakan demo mode.');
+    renderDemoButton();
+    showGoogleAuthNote('Login Google gagal dimulai. Menggunakan Demo Mode.');
   }
+}
+
+window.addEventListener('load', initGoogleSignIn);
+
+function showGoogleAuthNote(message) {
+  const note = document.getElementById('googleAuthNote');
+  if (!note) return;
+
+  note.innerHTML = `<strong>${message}</strong><br>Di Google Cloud Console, tambahkan <code>${window.location.origin}</code> ke Authorized JavaScript origins untuk Client ID yang dipakai.`;
+  note.style.display = 'block';
 }
 
 // Google Callback
 function handleGoogleCallback(response) {
-  const credential = response.credential;
-  const payload = JSON.parse(atob(credential.split('.')[1]));
-  
-  console.log('Google Sign-In Success:', payload);
-  
-  localStorage.setItem('user', JSON.stringify({
-    name: payload.name,
-    email: payload.email,
-    picture: payload.picture,
+  if (!response?.credential) {
+    alert('Credential Google tidak ditemukan. Silakan coba lagi.');
+    return;
+  }
+
+  try {
+    const credential = response.credential;
+    const base64Url = credential.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    const payload = JSON.parse(jsonPayload);
+    
+    console.log('Google Sign-In Success:', payload);
+    
+    localStorage.setItem('user', JSON.stringify({
+      name: payload.name,
+      email: payload.email,
+      picture: payload.picture,
+      provider: 'google'
+    }));
+    
+    alert('Login berhasil! Selamat datang, ' + payload.name);
+    window.location.href = '/';
+  } catch (error) {
+    console.error('JWT Decode error:', error);
+    alert('Gagal mendekode credential Google. Silakan gunakan metode email/password atau coba lagi.');
+  }
+}
+
+// Demo Google Login
+function handleDemoGoogleLogin() {
+  const payload = {
+    name: 'Vexalyn User Demo',
+    email: 'user.demo@vexalyn.com',
+    picture: 'https://lh3.googleusercontent.com/a/default-user=s96-c',
     provider: 'google'
-  }));
+  };
   
-  alert('Login berhasil! Selamat datang, ' + payload.name);
+  localStorage.setItem('user', JSON.stringify(payload));
+  alert('Login berhasil! (Demo Mode) Selamat datang, ' + payload.name);
   window.location.href = '/';
 }
 

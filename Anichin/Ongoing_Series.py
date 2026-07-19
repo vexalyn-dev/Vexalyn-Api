@@ -134,6 +134,8 @@ async def scrape_ongoing_series():
                 # Extract episode dari <span class="r">
                 episode_span = a_tag.find('span', class_='r')
                 episode = episode_span.get_text(strip=True) if episode_span else "N/A"
+                ep_match = re.search(r'\d+', episode)
+                total_episode = f"Episode {ep_match.group(0)}" if ep_match else episode
                 
                 # Extract title bersih dari <span class="l"> (tanpa icon)
                 title_span = a_tag.find('span', class_='l')
@@ -149,7 +151,7 @@ async def scrape_ongoing_series():
                 ongoing_series.append({
                     "title": title,
                     "url": href,
-                    "latest_episode": episode,
+                    "total_episode": total_episode,
                     "status": "Ongoing"
                 })
             except Exception as e:

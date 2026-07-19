@@ -208,7 +208,7 @@ async def scrape_search(query: str):
             search_results.append({
                 "title": title,
                 "url": link,
-                "latest_episode": episode,
+                "total_episode": episode,
                 "status": status,
                 "thumbnail": thumb
             })
@@ -265,7 +265,7 @@ async def scrape_search(query: str):
                 pattern2_results.append({
                     "title": title,
                     "url": href,
-                    "latest_episode": episode,
+                    "total_episode": episode,
                     "status": "N/A",
                     "thumbnail": thumb
                 })

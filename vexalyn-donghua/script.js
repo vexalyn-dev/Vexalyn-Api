@@ -213,7 +213,7 @@ function normalizeItem(item) {
     description: item.description || item.synopsis || item.desc || item.excerpt || "A cinematic donghua selection curated for premium discovery.",
     rating: item.rating || item.score || item.rate || "HD",
     genre: item.genre || item.genres || item.category || item.type || "Donghua",
-    status: item.status || item.release_status || item.episode || item.latest_episode || "Available",
+    status: item.status || item.release_status || item.episode || item.total_episode || item.latest_episode || "Available",
     url: item.url || item.link || item.href || "#",
   };
 }

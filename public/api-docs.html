@@ -914,7 +914,7 @@
             }
         }
 
-        }
+
 
         .floating-bug-btn:hover .tooltip {
             opacity: 1;
@@ -1355,6 +1355,117 @@
                     </button>
                 </div>
             </div>
+
+            <!-- GET /anichin/popular-today -->
+            <div class="endpoint-card" onclick="openEndpoint('/anichin/popular-today', 'GET', 'Popular Today', 'Trending/hot donghua dari minggu ini dengan rating tertinggi.')">
+                <div class="ep-top">
+                    <span class="ep-icon c1">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                    </span>
+                    <span class="ep-status"><span class="dot"></span> Stable</span>
+                </div>
+                <span class="method-badge get">GET</span>
+                <div class="endpoint-path">/anichin/popular-today</div>
+                <h3>Popular Today</h3>
+                <p class="endpoint-author">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    oleh Vexalyn Dev
+                </p>
+                <div class="endpoint-meta">
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ~11s respons
+                    </span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        Trending minggu ini
+                    </span>
+                </div>
+                <div class="endpoint-footer">
+                    <span class="api-calls">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        4.2K panggilan
+                    </span>
+                    <button class="btn-run" onclick="event.stopPropagation(); openEndpoint('/anichin/popular-today', 'GET', 'Popular Today', 'Trending/hot donghua dari minggu ini.')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Run
+                    </button>
+                </div>
+            </div>
+
+            <!-- GET /anichin/latest-release -->
+            <div class="endpoint-card" onclick="openEndpoint('/anichin/latest-release', 'GET', 'Latest Release', 'Episode donghua terbaru yang baru dirilis dari Anichin. Berisi title, url series, thumbnail, total_episode, type, dan sub_dub.')">
+                <div class="ep-top">
+                    <span class="ep-icon c3">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </span>
+                    <span class="ep-status"><span class="dot"></span> Stable</span>
+                </div>
+                <span class="method-badge get">GET</span>
+                <div class="endpoint-path">/anichin/latest-release</div>
+                <h3>Latest Release</h3>
+                <p class="endpoint-author">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    oleh Vexalyn Dev
+                </p>
+                <div class="endpoint-meta">
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ~12s respons
+                    </span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        Episode terbaru
+                    </span>
+                </div>
+                <div class="endpoint-footer">
+                    <span class="api-calls">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        7.1K panggilan
+                    </span>
+                    <button class="btn-run" onclick="event.stopPropagation(); openEndpoint('/anichin/latest-release', 'GET', 'Latest Release', 'Episode donghua terbaru yang baru dirilis dari Anichin.')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Run
+                    </button>
+                </div>
+            </div>
+
+            <!-- GET /anichin/recommendation -->
+            <div class="endpoint-card" onclick="openEndpoint('/anichin/recommendation', 'GET', 'Recommendation', 'Donghua rekomendasi dari Anichin berdasarkan genre tab: Fantasy, Music, Mythology, Space, Supernatural.', [{name: 'genre', required: false, type: 'string', description: 'Genre tab: fantasy, music, mythology, space, supernatural (default: fantasy)'}])">
+                <div class="ep-top">
+                    <span class="ep-icon c4">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    </span>
+                    <span class="ep-status"><span class="dot"></span> Stable</span>
+                </div>
+                <span class="method-badge get">GET</span>
+                <div class="endpoint-path">/anichin/recommendation</div>
+                <h3>Recommendation</h3>
+                <p class="endpoint-author">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    oleh Vexalyn Dev
+                </p>
+                <div class="endpoint-meta">
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ~12s respons
+                    </span>
+                    <span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        5 genre tabs
+                    </span>
+                </div>
+                <div class="endpoint-footer">
+                    <span class="api-calls">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        3.5K panggilan
+                    </span>
+                    <button class="btn-run" onclick="event.stopPropagation(); openEndpoint('/anichin/recommendation', 'GET', 'Recommendation', 'Donghua rekomendasi berdasarkan genre tab.', [{name: 'genre', required: false, type: 'string', description: 'Genre tab: fantasy, music, mythology, space, supernatural (default: fantasy)'}])">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Run
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1424,18 +1535,9 @@
 
         // Open endpoint detail page
         function openEndpoint(path, method, title, description, params = []) {
-            // Encode data untuk dikirim via URL
-            const data = {
-                path: path,
-                method: method,
-                title: title,
-                description: description,
-                params: params
-            };
-            
-            // Redirect ke halaman detail dengan data di URL
-            const encoded = encodeURIComponent(JSON.stringify(data));
-            window.location.href = `/endpoint-detail.html?data=${encoded}`;
+            // Redirect directly to the endpoint URL. 
+            // The FastAPI backend will serve endpoint-detail.html for browser requests to these paths.
+            window.location.href = path;
         }
 
         // Fade-in animation on scroll

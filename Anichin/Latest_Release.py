@@ -1,4 +1,4 @@
-# home.py
+# Latest_Release.py
 import sys
 import asyncio
 import json
@@ -39,16 +39,16 @@ $$ |   $$ | $$$$$$\  $$\   $$\ $$$$$$\  $$ |$$\   $$\ $$$$$$$\        $$ |  $$ |
  \$$\$$  / $$$$$$$$ | \$$$$  / $$$$$$$ |$$ |$$ |  $$ |$$ |  $$ |      $$ |  $$ |$$$$$$$$ |\$$\$$  / 
   \$$$  /  $$   ____| $$  $$< $$  __$$ |$$ |$$ |  $$ |$$ |  $$ |      $$ |  $$ |$$   ____| \$$$  /  
    \$  /   \$$$$$$$\ $$  /\$$\\$$$$$$$ |$$ |\$$$$$$$ |$$ |  $$ |      $$$$$$$  |\$$$$$$$\   \$  /   
-    \_/     \_______|\__/  \__|\_______ |\__| \____$$ |\__|  \__|      \_______/  \_______|   \_/    
+    \_/     \_______|\__/  \__|\_______|\__| \____$$ |\__|  \__|      \_______/  \_______|   \_/    
                                             $$\   $$ |                                              
                                             \$$$$$$  |                                              
                                              \______/                                               
  ================================================================
  ANICHIN SCRAPER - Donghua Extraction Engine
  ================================================================
- [Module]          -> Home Scraper (home.py)
- [Target]          -> https://anichin.watch/
- [Sections]        -> Popular Today + Latest Release (all article.bs cards)
+ [Module]          -> Latest Release Scraper (Latest_Release.py)
+ [Target]          -> https://anichin.watch/ (Latest Release section)
+ [Structure]       -> div.releases.latesthome > div.bixbox > article.bs
  [Developer]       -> Vexalyn Developer
  ================================================================"""
     print(f"{C_GREEN}{banner}{RESET}")
@@ -79,12 +79,12 @@ def _extract_series_title(a_tag) -> str:
     return raw
 
 
-def _parse_articles(container) -> list:
-    """Parse semua article.bs dari container, return list of cards."""
+def _parse_articles_lr(container) -> list:
+    """Parse semua article.bs dari container, return list of cards dengan key last_episode."""
     items = []
     seen_urls = set()
     articles = container.find_all('article', class_='bs')
-    print(f"{C_CYAN}[DEBUG]{RESET} homepage: found {len(articles)} article.bs cards")
+    print(f"{C_CYAN}[DEBUG]{RESET} Latest Release: found {len(articles)} article.bs cards")
 
     for article in articles:
         try:
@@ -122,7 +122,7 @@ def _parse_articles(container) -> list:
             epx = a_tag.find('span', class_='epx') or a_tag.find('div', class_='epx')
             ep_text = epx.get_text(strip=True) if epx else ''
             ep_match = re.search(r'\d+', ep_text)
-            total_episode = ep_match.group(0) if ep_match else 'N/A'
+            last_episode = ep_match.group(0) if ep_match else 'N/A'
 
             typez = a_tag.find('div', class_='typez')
             content_type = typez.get_text(strip=True) if typez else 'Donghua'
@@ -132,12 +132,12 @@ def _parse_articles(container) -> list:
 
             seen_urls.add(series_url)
             items.append({
-                "title":         title,
-                "url":           series_url,
-                "thumbnail":     thumbnail,
-                "total_episode": total_episode,
-                "type":          content_type,
-                "sub_dub":       sub_dub,
+                "title":        title,
+                "url":          series_url,
+                "thumbnail":    thumbnail,
+                "last_episode": last_episode,
+                "type":         content_type,
+                "sub_dub":      sub_dub,
             })
 
         except Exception as e:
@@ -147,13 +147,18 @@ def _parse_articles(container) -> list:
     return items
 
 
-async def scrape_home_data():
+async def scrape_latest_release() -> dict:
     """
-    Scrape semua card article.bs dari homepage anichin.watch.
-    Mencakup Popular Today + Latest Release sections.
+    Scrape Latest Release section dari Anichin homepage.
 
-    Returns:
-        data items with fields: title, url, thumbnail, total_episode (number only), type, sub_dub
+    Struktur target:
+      div.bixbox.bbnofrm
+        div.releases.latesthome  (heading 'Latest Release')
+        div.listupd
+          article.bs x20         <- semua cards
+
+    Returns list of:
+      {title, url (series page), thumbnail, total_episode (e.g. "Episode 208"), type, sub_dub}
     """
     url = "https://anichin.watch/"
 
@@ -163,6 +168,8 @@ async def scrape_home_data():
         "status": "success",
         "message": "Data fetched successfully",
         "ok": True,
+        "section": "Latest Release",
+        "view_all_url": "https://anichin.watch/anime/?order=update",
         "total_data": 0,
         "data": []
     }
@@ -173,7 +180,7 @@ async def scrape_home_data():
         response.update({
             "statusCode": 500,
             "status": "error",
-            "message": f"Failed to load home page: {error}",
+            "message": f"Failed to load page: {error}",
             "ok": False,
         })
         return response
@@ -183,16 +190,58 @@ async def scrape_home_data():
     page_title = soup.title.string.strip() if soup.title and soup.title.string else "No Title"
     print(f"{C_CYAN}[DEBUG-DOM]{RESET} Page: {C_WHITE}{page_title}{RESET}")
 
-    items = _parse_articles(soup)
+    # ── Step 1: Cari heading 'Latest Release' ─────────────────────────────────
+    heading = None
+    for tag in soup.find_all(['div', 'h2', 'h3', 'h4', 'h5']):
+        text = tag.get_text(strip=True).lower()
+        if 'latest release' in text and len(text) < 50:
+            # Pastikan ini heading div (div.releases.latesthome), bukan container besar
+            if tag.name == 'div' and tag.get('class') and 'releases' in tag.get('class', []):
+                heading = tag
+                break
+            elif tag.name in ['h2', 'h3', 'h4', 'h5']:
+                heading = tag
+                break
+
+    if not heading:
+        print(f"{C_RED}[ERROR]{RESET} 'Latest Release' heading not found!")
+        response.update({
+            "statusCode": 404,
+            "status": "not_found",
+            "message": "Latest Release section not found. Website structure may have changed.",
+            "ok": False,
+        })
+        return response
+
+    print(f"{C_GREEN}[OK]{RESET} Found heading: '{heading.get_text(strip=True)[:40]}'")
+
+    # ── Step 2: Dapatkan bixbox container ─────────────────────────────────────
+    # div.releases.latesthome berada di dalam div.bixbox.bbnofrm
+    if heading.name == 'div' and 'releases' in heading.get('class', []):
+        bixbox = heading.parent  # div.bixbox.bbnofrm
+    else:
+        bixbox = heading.parent.parent
+
+    print(f"{C_CYAN}[DEBUG]{RESET} bixbox classes: {bixbox.get('class')}")
+
+    # Ambil view_all URL dari link di dalam heading
+    vl_link = heading.find('a', class_='vl') or heading.find('a', string=lambda t: t and 'view all' in t.lower() if t else False)
+    if not vl_link:
+        vl_link = heading.find('a', href=True)
+    if vl_link and vl_link.get('href'):
+        response["view_all_url"] = vl_link['href']
+
+    # ── Step 3: Parse semua article.bs di dalam bixbox ────────────────────────
+    items = _parse_articles_lr(bixbox)
 
     response["total_data"] = len(items)
     response["data"] = items
 
     if len(items) == 0:
-        response["message"] = "0 items found. Website structure may have changed."
+        response["message"] = "0 items found. Latest Release structure may have changed."
         print(f"{C_YELLOW}[WARN]{RESET} No items extracted!")
     else:
-        print(f"{C_GREEN}[INFO]{RESET} Extracted {len(items)} home items")
+        print(f"{C_GREEN}[INFO]{RESET} Extracted {len(items)} Latest Release items")
 
     return response
 
@@ -203,9 +252,9 @@ async def main():
     print_banner()
     await loading_animation("Initializing Vexalyn Engine", 0.3)
 
-    print(f"\n{C_GRAY}[*] Scraping homepage cards...{RESET}")
+    print(f"\n{C_GRAY}[*] Extracting Latest Release section...{RESET}")
 
-    result = await scrape_home_data()
+    result = await scrape_latest_release()
 
     elapsed = time.time() - start_time
     sep = " " + ("─" * 61)
@@ -214,6 +263,7 @@ async def main():
     if result['ok']:
         print(f"{C_GREEN}[SUCCESS]{RESET} Status Code  : {result['statusCode']}")
         print(f"{C_GREEN}[SUCCESS]{RESET} Items Found  : {result['total_data']}")
+        print(f"{C_GREEN}[SUCCESS]{RESET} View All     : {result['view_all_url']}")
         print(f"{C_GREEN}[SUCCESS]{RESET} Elapsed Time : {elapsed:.2f}s")
     else:
         print(f"{C_RED}[FAILED]{RESET} {result['message']}")
