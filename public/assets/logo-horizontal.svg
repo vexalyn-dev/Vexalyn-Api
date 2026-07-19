@@ -1,20 +1,5 @@
-<svg width="240" height="60" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Logo Icon Part -->
-  <rect x="4" y="4" width="52" height="52" fill="#15181F"/>
-  <rect x="2" y="2" width="52" height="52" fill="#FFAB92" stroke="#15181F" stroke-width="2"/>
-  
-  <!-- V Letter - Geometric/Angular Style -->
-  <path d="M 16 16 L 23 16 L 30 25 L 26 16 L 30 42 L 36.5 14 L 42 14 L 30 46 Z" 
-        fill="#FFFFFF"/>
-  
-  <!-- Text: VEXALYN -->
-  <text x="70" y="30" font-family="'Fredoka', sans-serif" font-size="22" font-weight="700" 
-        fill="#15181F" letter-spacing="0.5">VEXALYN</text>
-  
-  <!-- Text: API -->
-  <text x="70" y="48" font-family="'Inter', sans-serif" font-size="14" font-weight="600" 
-        fill="#6B7280" letter-spacing="2">API</text>
-  
-  <!-- Accent Line -->
-  <rect x="70" y="52" width="60" height="3" fill="#9BD8F4" rx="1.5"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display: block;" viewBox="0 0 2048 2036" width="1166" height="1159" preserveAspectRatio="none">
+<path transform="translate(0,0)" fill="rgb(255,168,144)" d="M 0 0 L 2048 0 L 2048 2036 L 0 2036 L 0 0 z"/>
+<path transform="translate(0,0)" fill="rgb(247,247,247)" d="M 1489.22 337.11 C 1593.03 338.369 1698.72 336.769 1802.81 336.98 C 1759.14 416.736 1710.79 497.703 1664.99 576.352 L 1439.95 961.715 L 1026.27 1679.91 C 1004.17 1718.66 981.72 1757.22 958.929 1795.57 L 824.892 1548.47 C 838.381 1520.7 859.808 1486.18 875.134 1458.05 L 1017.75 1198.91 L 1489.22 337.11 z"/>
+<path transform="translate(0,0)" fill="rgb(247,247,247)" d="M 221.868 400.282 C 249.362 399.285 281.89 399.985 309.874 400.006 L 465.473 400.058 L 932.711 400.089 C 861.813 494.72 793.748 593.208 723.253 688.489 C 744.84 729.138 771.382 773.331 794.647 813.534 C 837.009 886.928 880.154 959.867 924.073 1032.34 L 895.067 1084.54 L 763.178 1322.95 C 741.817 1290.05 716.202 1244 696.059 1209.33 L 583.353 1015.55 L 221.868 400.282 z"/>
 </svg>

@@ -1652,15 +1652,18 @@ img{max-width:100%;height:auto;}
 <!-- ===== Header ===== -->
 <div class="header-outer">
   <header>
-    <a href="/" class="brand" style="text-decoration:none;">
-      <img src="/assets/logo-horizontal.svg" alt="Vexalyn API" height="40" style="display:block;">
+    <a href="/" class="brand" style="text-decoration:none;display:flex;align-items:center;gap:12px;">
+      <img src="/assets/logo-icon.svg" alt="Vexalyn" width="40" height="40" style="display:block;border-radius:6px;border:2.5px solid var(--ink);">
+      <div style="display:flex;align-items:baseline;gap:6px;">
+        <span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;color:var(--ink);letter-spacing:.5px;">VEXALYN</span>
+        <span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;color:var(--ink);letter-spacing:.5px;">API</span>
+      </div>
     </a>
     <nav class="nav-links">
       <a href="/api-docs">API Docs</a>
       <a href="#quick-start">Quick Start</a>
       <a href="#fitur">Fitur</a>
       <a href="#faq">FAQ</a>
-      <a href="#kontak">Kontak</a>
     </nav>
     <button class="nav-toggle" type="button" aria-label="Buka menu" aria-expanded="false">
       <span></span>
@@ -1682,8 +1685,8 @@ img{max-width:100%;height:auto;}
       <h1>Akses Data Real-Time,<br><span class="accent">Cepat & Mudah,</span><br>Untuk Semua Developer!</h1>
       <p>Platform API terpercaya untuk developer. Integrasi mudah dengan dokumentasi lengkap dan performa tinggi.</p>
       <div class="hero-actions">
-        <a href="/api-docs" class="btn btn-green">Lihat API Docs →</a>
-        <a href="/docs" target="_blank" class="btn btn-sky">Buka Swagger</a>
+        <a href="/login" class="btn btn-green">Get Started</a>
+        <a href="/api-docs" class="btn btn-sky">Lihat API Docs →</a>
       </div>
       <div class="hero-stats">
         <div class="stat"><b>6</b><span>Endpoint</span></div>
@@ -2621,6 +2624,9 @@ console.log('💡 Tip: Run resetModals() in console to see modals again!');
   .float-bug-icon svg{width:22px;height:22px;}
   #float-dismiss{width:20px;height:20px;font-size:11px;}
 }
+#float-report-wrap{cursor:grab;}
+#float-report-wrap.dragging{cursor:grabbing!important;}
+#float-report-wrap.dragging #float-report-btn{transform:none!important;box-shadow:5px 5px 0 var(--ink)!important;pointer-events:none;}
 </style>
 
 <div id="float-report-wrap">
@@ -2642,6 +2648,82 @@ console.log('💡 Tip: Run resetModals() in console to see modals again!');
 function dismissFloat() {
   document.getElementById('float-report-wrap').classList.add('hidden');
 }
+
+// ===== Drag Functionality =====
+(function() {
+  const wrap = document.getElementById('float-report-wrap');
+  const btn = document.getElementById('float-report-btn');
+  if (!wrap || !btn) return;
+
+  let isDragging = false;
+  let hasMoved = false;
+  let startX, startY, startLeft, startBottom;
+
+  function getPos() {
+    const rect = wrap.getBoundingClientRect();
+    return {
+      left: rect.left,
+      bottom: window.innerHeight - rect.bottom
+    };
+  }
+
+  function onStart(e) {
+    // Don't drag from dismiss button
+    if (e.target.id === 'float-dismiss') return;
+    const ev = e.touches ? e.touches[0] : e;
+    isDragging = true;
+    hasMoved = false;
+    const pos = getPos();
+    startX = ev.clientX;
+    startY = ev.clientY;
+    wrap.style.right = 'auto';
+    wrap.style.left = pos.left + 'px';
+    startLeft = pos.left;
+    startBottom = pos.bottom;
+    wrap.style.transition = 'none';
+  }
+
+  function onMove(e) {
+    if (!isDragging) return;
+    const ev = e.touches ? e.touches[0] : e;
+    const dx = ev.clientX - startX;
+    const dy = ev.clientY - startY;
+    if (!hasMoved && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+      hasMoved = true;
+      wrap.classList.add('dragging');
+    }
+    if (!hasMoved) return;
+    e.preventDefault();
+    let newLeft = startLeft + dx;
+    let newBottom = startBottom - dy;
+    const maxLeft = window.innerWidth - wrap.offsetWidth - 4;
+    const maxBottom = window.innerHeight - wrap.offsetHeight - 4;
+    newLeft = Math.max(4, Math.min(newLeft, maxLeft));
+    newBottom = Math.max(4, Math.min(newBottom, maxBottom));
+    wrap.style.left = newLeft + 'px';
+    wrap.style.bottom = newBottom + 'px';
+  }
+
+  function onEnd() {
+    isDragging = false;
+    wrap.classList.remove('dragging');
+  }
+
+  // Prevent link navigation if user dragged
+  btn.addEventListener('click', function(e) {
+    if (hasMoved) { e.preventDefault(); hasMoved = false; }
+  });
+
+  // Mouse: click-hold + drag
+  wrap.addEventListener('mousedown', onStart);
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onEnd);
+
+  // Touch: tap-hold + drag
+  wrap.addEventListener('touchstart', onStart, { passive: true });
+  document.addEventListener('touchmove', onMove, { passive: false });
+  document.addEventListener('touchend', onEnd);
+})();
 </script>
 
 </body>
