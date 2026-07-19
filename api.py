@@ -231,9 +231,23 @@ app.openapi = custom_openapi
 
 @app.middleware("http")
 async def serve_ui_for_browsers(request: Request, call_next):
-    # If a user visits an /anichin API endpoint directly from a browser, serve the UI instead of raw JSON
-    if request.url.path.startswith("/anichin/") and "text/html" in request.headers.get("accept", ""):
-        return FileResponse(Path("public/endpoint-detail.html"))
+    """
+    Jika browser langsung akses /anichin/... endpoint, sajikan UI endpoint-detail.html.
+    Kunci anti-cache: header Cache-Control: no-store + Vary: Accept.
+    - Browser tidak akan cache response HTML ini.
+    - Fetch dari JS dengan Accept: application/json tidak akan menemukan cache HTML,
+      sehingga langsung hit server dan mendapat JSON dari handler aslinya.
+    """
+    accept_header = request.headers.get("accept", "")
+    path = request.url.path
+
+    if path.startswith("/anichin/") and "text/html" in accept_header:
+        response = FileResponse(Path("public/endpoint-detail.html"))
+        # Kunci utama: jangan cache HTML ini di browser
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+        response.headers["Vary"] = "Accept"  # Cache per Accept header
+        return response
+
     return await call_next(request)
 
 # Custom Swagger UI with hidden /openapi.json link
@@ -862,7 +876,7 @@ async def anichin_popular_series(
     filter: str = Query(
         default="weekly",
         description="Time range filter: weekly, monthly, or all",
-        regex="^(weekly|monthly|all|alltime)$"
+        pattern="^(weekly|monthly|all|alltime)$"
     )
 ):
     """

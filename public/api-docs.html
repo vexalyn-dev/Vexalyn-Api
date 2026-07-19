@@ -1535,8 +1535,8 @@
 
         // Open endpoint detail page
         function openEndpoint(path, method, title, description, params = []) {
-            // Redirect directly to the endpoint URL. 
-            // The FastAPI backend will serve endpoint-detail.html for browser requests to these paths.
+            // Redirect langsung ke path API. Middleware backend akan serve UI endpoint-detail.html
+            // dengan Cache-Control: no-store sehingga fetch JSON berikutnya tidak kena cache HTML.
             window.location.href = path;
         }
 
