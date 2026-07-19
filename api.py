@@ -539,21 +539,13 @@ async def serve_favicon():
         return FileResponse(favicon_file, media_type="image/svg+xml")
     raise HTTPException(status_code=404, detail="Favicon not found")
 
-@app.get("/robots.txt", include_in_schema=False)
-async def serve_robots():
-    """Serve robots.txt for SEO"""
-    robots_file = os.path.join(os.path.dirname(__file__), "public", "robots.txt")
-    if os.path.exists(robots_file):
-        return FileResponse(robots_file, media_type="text/plain")
-    raise HTTPException(status_code=404, detail="robots.txt not found")
-
-@app.get("/sitemap.xml", include_in_schema=False)
-async def serve_sitemap():
-    """Serve sitemap.xml for SEO"""
-    sitemap_file = os.path.join(os.path.dirname(__file__), "public", "sitemap.xml")
-    if os.path.exists(sitemap_file):
-        return FileResponse(sitemap_file, media_type="application/xml")
-    raise HTTPException(status_code=404, detail="sitemap.xml not found")
+@app.get("/google97a578b8ba4690c7.html", include_in_schema=False)
+async def serve_google_verification():
+    """Serve Google Search Console verification file"""
+    verification_file = os.path.join(os.path.dirname(__file__), "google97a578b8ba4690c7.html")
+    if os.path.exists(verification_file):
+        return FileResponse(verification_file, media_type="text/html")
+    raise HTTPException(status_code=404, detail="Verification file not found")
 
 @app.get("/register", include_in_schema=False)
 async def serve_register():
