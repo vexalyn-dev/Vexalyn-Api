@@ -8,3 +8,13 @@ export { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 export { Skeleton } from "./skeleton"
 export { Separator } from "./separator"
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs"
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+} from "./select"

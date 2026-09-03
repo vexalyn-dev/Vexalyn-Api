@@ -21,11 +21,18 @@ Security model for VEXALYN API, covering authentication, API keys, rate limiting
 ## Authentication (Implemented — PHASE 05)
 
 - Supabase Auth handles all auth flows
-- API key passed via `Authorization: Bearer <key>` header (Gateway PHASE 06)
-- Keys are hashed (bcrypt) before storage
+- API key passed via `Authorization: Bearer <key>` header
+- Keys are hashed (bcrypt) before storage via Supabase `generate_api_key` RPC
 - Keys can be rotated and revoked
 - Email verification enforced
 - Session persistence via Supabase cookies
+
+## Key Generation (Implemented — PHASE 08)
+
+- Cryptographically secure: `crypto.getRandomValues()` generates 256 bits of entropy
+- Format: `vx_live_<64 hex chars>` or `vx_test_<64 hex chars>`
+- Raw key displayed once, then only masked version shown
+- Only the bcrypt hash is stored in `api_keys.key_hash`
 
 ## Rate Limiting (Planned — PHASE 06)
 
@@ -77,7 +84,7 @@ Never commit real values. Use `.env.example` as reference.
 
 | Item | Status | Phase |
 | --- | --- | --- |
-| CORS policy | PLANNED | PHASE 05 |
-| Request signing | PLANNED | PHASE 05 |
-| Audit log retention | PLANNED | PHASE 06 |
-| DDoS protection | PLANNED | PHASE 06 |
+| CORS policy | PLANNED | PHASE 11 |
+| Request signing | PLANNED | PHASE 12 |
+| Audit log retention | PLANNED | PHASE 12 |
+| DDoS protection | PLANNED | PHASE 12 |

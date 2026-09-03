@@ -78,7 +78,7 @@ ORDER BY tablename, policyname;
 -- ============================================================================
 
 SELECT
-    schemaname,
+    routine_schema AS schemaname,
     routine_name,
     routine_type
 FROM information_schema.routines
