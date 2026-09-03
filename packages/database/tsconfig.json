@@ -4,6 +4,7 @@
     "module": "commonjs",
     "lib": ["ES2020"],
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "declaration": true,

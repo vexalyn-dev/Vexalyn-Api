@@ -163,8 +163,9 @@ pnpm build
 | 02 | Design system, shadcn/ui, animations |
 | 03 | Premium landing page |
 | 04 | Database schema, RLS, migrations, seed data |
-| 05 | API Gateway implementation |
-| 06 | FastAPI scraper service wrappers |
+| 05 | Authentication (Supabase Auth, middleware, SSR guards) |
+| 06 | API Gateway implementation |
+| 07 | FastAPI scraper service wrappers |
 
 ---
 

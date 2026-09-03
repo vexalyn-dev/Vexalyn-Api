@@ -18,7 +18,16 @@ Security model for VEXALYN API, covering authentication, API keys, rate limiting
 
 ---
 
-## Authentication (Planned — PHASE 05)
+## Authentication (Implemented — PHASE 05)
+
+- Supabase Auth handles all auth flows
+- API key passed via `Authorization: Bearer <key>` header (Gateway PHASE 06)
+- Keys are hashed (bcrypt) before storage
+- Keys can be rotated and revoked
+- Email verification enforced
+- Session persistence via Supabase cookies
+
+## Rate Limiting (Planned — PHASE 06)
 
 - API key passed via `Authorization: Bearer <key>` header
 - Key validated against Supabase `api_keys` table

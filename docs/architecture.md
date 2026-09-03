@@ -41,7 +41,7 @@ SCRAPERS / PROVIDERS
 - Consumes the Gateway exclusively — never calls scrapers directly
 - Shared types imported from `@vexalyn/api-types`
 
-**Phase Status:** Foundation implemented. UI completed in PHASE 02.
+**Phase Status:** Foundation implemented. UI completed in PHASE 03. Auth + SSR protection implemented in PHASE 05.
 
 ---
 
@@ -49,9 +49,9 @@ SCRAPERS / PROVIDERS
 
 - Service boundary between the web app and scraper providers
 - Handles: authentication, API key validation, rate limiting, routing, usage logging
-- Currently a placeholder; full implementation in PHASE 03
+- Currently a placeholder; full implementation in PHASE 06
 
-**Phase Status:** PLANNED — PHASE 03
+**Phase Status:** PLANNED — PHASE 06
 
 ---
 
@@ -120,3 +120,18 @@ Browser → Next.js (apps/web)
 - `packages/` — Shared TypeScript libraries (monorepo packages)
 - `supabase/` — Database migrations and seed data
 - `docs/` — Architecture and operational documentation
+
+---
+
+## Phase Roadmap
+
+| Phase | Focus |
+| --- | --- |
+| 01 | Monorepo foundation, web shell, scraper preservation |
+| 02 | Design system, shadcn/ui, animations |
+| 03 | Premium landing page |
+| 04 | Database schema, RLS, migrations, seed data |
+| 05 | Authentication (Supabase Auth, middleware, SSR guards) |
+| 06 | API Gateway implementation |
+| 07 | FastAPI scraper service wrappers |
+| 08 | Usage logging, analytics, playground |
