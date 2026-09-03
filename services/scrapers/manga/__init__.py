@@ -1,0 +1,1 @@
+"""Manga scraper providers (future)."""

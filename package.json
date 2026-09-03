@@ -1,0 +1,28 @@
+{
+  "name": "vexalyn-api",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Powerful APIs. One Simple Platform.",
+  "scripts": {
+    "dev": "pnpm --parallel run dev",
+    "build": "pnpm --recursive --filter '!./services/*' run build",
+    "typecheck": "pnpm --recursive run typecheck",
+    "lint": "pnpm --recursive run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "db:migrate": "echo 'Run Supabase migrations via CLI: supabase db push'",
+    "db:seed": "echo 'Run: supabase db reset --seed-file supabase/seed.sql'"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "dependencies": {
+    "zod": "^3.23.0"
+  }
+}

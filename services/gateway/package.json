@@ -1,0 +1,9 @@
+{
+  "name": "@vexalyn/gateway",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Gateway will be implemented in PHASE 03'",
+    "start": "echo 'Gateway will be implemented in PHASE 03'"
+  }
+}
