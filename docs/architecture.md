@@ -132,6 +132,8 @@ Browser → Next.js (apps/web)
 | 03 | Premium landing page |
 | 04 | Database schema, RLS, migrations, seed data |
 | 05 | Authentication (Supabase Auth, middleware, SSR guards) |
-| 06 | API Gateway implementation |
-| 07 | FastAPI scraper service wrappers |
-| 08 | Usage logging, analytics, playground |
+| 06 | Dashboard shell (sidebar, command palette, notifications) |
+| 07 | Project management CRUD |
+| 08 | API Gateway implementation |
+| 09 | FastAPI scraper service wrappers |
+| 10 | Usage logging, analytics, playground |

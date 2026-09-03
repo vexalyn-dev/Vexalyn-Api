@@ -1,9 +1,8 @@
 import { getSession } from "@/lib/auth/session"
 import { redirect } from "next/navigation"
-import { Navbar } from "@/components/layout/navbar"
-import { Footer } from "@/components/layout/footer"
+import { DashboardLayout } from "@/components/layout/dashboard-layout"
 
-export default async function DashboardLayout({
+export default async function DashboardShell({
   children,
 }: {
   children: React.ReactNode
@@ -14,11 +13,5 @@ export default async function DashboardLayout({
     redirect("/login")
   }
 
-  return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="pt-16">{children}</main>
-      <Footer />
-    </div>
-  )
+  return <DashboardLayout>{children}</DashboardLayout>
 }
