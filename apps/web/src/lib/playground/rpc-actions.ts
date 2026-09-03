@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/auth/client"
-import { revalidatePath } from "next/cache"
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -13,5 +12,5 @@ export async function listPlaygroundApis() {
   })
 
   if (error) return { data: [], error: error.message }
-  return { data: (data ?? []) as any[], error: null }
+  return { data: (data ?? []) as Array<{ id: string; name: string; slug: string; description: string; icon: string; endpoint_count: number }>, error: null }
 }

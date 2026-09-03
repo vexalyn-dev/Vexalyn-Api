@@ -91,18 +91,19 @@ export async function getUsageStats(filters: UsageFilters): Promise<UsageStats> 
 
   const rows = requests ?? []
   const total = rows.length
-  const successful = rows.filter((r: any) => r.status_code >= 200 && r.status_code < 400).length
-  const failed = rows.filter((r: any) => r.status_code >= 400).length
+  const successful = rows.filter((r) => (r as { status_code: number }).status_code >= 200 && (r as { status_code: number }).status_code < 400).length
+  const failed = rows.filter((r) => (r as { status_code: number }).status_code >= 400).length
   const avgLatency = total > 0
-    ? Math.round(rows.reduce((sum: number, r: any) => sum + (r.latency_ms ?? 0), 0) / total)
+    ? Math.round(rows.reduce((sum: number, r) => sum + ((r as { latency_ms: number }).latency_ms ?? 0), 0) / total)
     : 0
 
   const byApi: Record<string, number> = {}
   const byDay: Record<string, number> = {}
   for (const r of rows) {
-    const apiName = (r as any).apis?.name ?? (r as any).apis?.slug ?? "Unknown"
+    const row = r as { apis?: { name?: string; slug?: string }; created_at?: string }
+    const apiName = row.apis?.name ?? row.apis?.slug ?? "Unknown"
     byApi[apiName] = (byApi[apiName] ?? 0) + 1
-    const day = ((r as any).created_at ?? "").split("T")[0]
+    const day = (row.created_at ?? "").split("T")[0]
     if (day) byDay[day] = (byDay[day] ?? 0) + 1
   }
 
@@ -152,19 +153,25 @@ export async function getLogs(filters: UsageFilters & { page?: number; pageSize?
 
   if (error) return { data: [], total: 0, page, pageSize }
 
-  const entries: LogEntry[] = (data ?? []).map((r: any) => ({
-    id: r.id,
-    request_id: r.request_id,
-    method: r.method,
-    path: r.path,
-    status_code: r.status_code,
-    latency_ms: r.latency_ms ?? 0,
-    created_at: r.created_at,
-    api_name: r.apis?.name ?? null,
-    endpoint_path: r.api_endpoints?.path ?? null,
-    key_name: r.api_keys?.name ?? null,
-    key_prefix: r.api_keys?.prefix ?? null,
-  }))
+  const entries: LogEntry[] = (data ?? []).map((r) => {
+    const row = r as {
+      id: string; request_id: string; method: string; path: string; status_code: number; latency_ms: number; created_at: string
+      apis?: { name?: string }; api_endpoints?: { path?: string }; api_keys?: { name?: string; prefix?: string }
+    }
+    return {
+      id: row.id,
+      request_id: row.request_id,
+      method: row.method,
+      path: row.path,
+      status_code: row.status_code,
+      latency_ms: row.latency_ms ?? 0,
+      created_at: row.created_at,
+      api_name: row.apis?.name ?? null,
+      endpoint_path: row.api_endpoints?.path ?? null,
+      key_name: row.api_keys?.name ?? null,
+      key_prefix: row.api_keys?.prefix ?? null,
+    }
+  })
 
   return { data: entries, total: count ?? 0, page, pageSize }
 }
@@ -193,18 +200,21 @@ export async function getLogDetail(requestId: string): Promise<LogEntry | null> 
 
   if (error || !data) return null
 
-  const r = data as any
+  const row = data as {
+    id: string; request_id: string; method: string; path: string; status_code: number; latency_ms: number; created_at: string
+    apis?: { name?: string }; api_endpoints?: { path?: string }; api_keys?: { name?: string; prefix?: string }
+  }
   return {
-    id: r.id,
-    request_id: r.request_id,
-    method: r.method,
-    path: r.path,
-    status_code: r.status_code,
-    latency_ms: r.latency_ms ?? 0,
-    created_at: r.created_at,
-    api_name: r.apis?.name ?? null,
-    endpoint_path: r.api_endpoints?.path ?? null,
-    key_name: r.api_keys?.name ?? null,
-    key_prefix: r.api_keys?.prefix ?? null,
+    id: row.id,
+    request_id: row.request_id,
+    method: row.method,
+    path: row.path,
+    status_code: row.status_code,
+    latency_ms: row.latency_ms ?? 0,
+    created_at: row.created_at,
+    api_name: row.apis?.name ?? null,
+    endpoint_path: row.api_endpoints?.path ?? null,
+    key_name: row.api_keys?.name ?? null,
+    key_prefix: row.api_keys?.prefix ?? null,
   }
 }

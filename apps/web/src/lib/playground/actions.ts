@@ -90,15 +90,16 @@ export async function sendPlaygroundRequest(input: PlaygroundRequest): Promise<P
       data,
       error: response.ok ? null : `HTTP ${response.status} ${response.statusText}`,
     }
-  } catch (e: any) {
+  } catch (e: unknown) {
     const latencyMs = Date.now() - start
+    const err = e as { name?: string; message?: string }
     return {
       status: 0,
       statusText: "Connection Error",
       latencyMs,
       requestId,
       data: null,
-      error: e?.name === "AbortError" ? "Request timed out after 15s" : e?.message ?? "Unknown error",
+      error: err?.name === "AbortError" ? "Request timed out after 15s" : err?.message ?? "Unknown error",
     }
   }
 }
