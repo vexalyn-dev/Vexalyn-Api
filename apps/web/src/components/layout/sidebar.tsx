@@ -30,15 +30,15 @@ const sidebarSections = [
   {
     title: "API",
     items: [
-      { label: "API Catalog", href: "/dashboard/catalog", icon: Zap },
-      { label: "API Keys", href: "/dashboard/keys", icon: Key },
+      { label: "API Catalog", href: "/api", icon: Zap },
+      { label: "API Keys", href: "/dashboard/api-keys", icon: Key },
     ],
   },
   {
     title: "Development",
     items: [
       { label: "Projects", href: "/dashboard/projects", icon: ClipboardList },
-      { label: "Playground", href: "/dashboard/playground", icon: Terminal },
+      { label: "Playground", href: "/playground", icon: Terminal },
       { label: "Logs", href: "/dashboard/logs", icon: FileText },
     ],
   },
@@ -46,7 +46,6 @@ const sidebarSections = [
     title: "Analytics",
     items: [
       { label: "Usage", href: "/dashboard/usage", icon: BarChart3 },
-      { label: "Requests", href: "/dashboard/requests", icon: Zap },
     ],
   },
   {
